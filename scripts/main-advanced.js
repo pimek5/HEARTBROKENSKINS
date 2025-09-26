@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     setupFilters();
+    setupChampionSearch();
 });
 
 function updateSectionHeader(icon, title) {
@@ -58,53 +59,50 @@ function updateSectionHeader(icon, title) {
 }
 
 function setupChampionsSidebar() {
-    const sidebar = document.querySelector('.sidebar');
+    const championsList = document.getElementById('championsList');
     const champions = window.contentData || [];
     
     console.log('Setting up champions sidebar. Champions count:', champions.length);
     
-    if (!sidebar) {
-        console.log('Sidebar not found');
+    if (!championsList) {
+        console.log('Champions list container not found');
         return;
     }
     
     if (champions.length === 0) {
         console.log('No champions data available');
-        sidebar.innerHTML = '<div class="loading-champions">No champions data</div>';
+        championsList.innerHTML = '<div class="loading-champions">No champions data</div>';
         return;
     }
     
-    // Clear sidebar and add champions
-    sidebar.innerHTML = `
-        <div class="sidebar-section">
-            <h3 class="sidebar-title champions-toggle" onclick="toggleChampions()">
-                <span class="toggle-icon">${championsExpanded ? '▼' : '▶'}</span>
-                Champions (${champions.length})
-            </h3>
-            <div class="champions-list ${championsExpanded ? '' : 'collapsed'}">
-                ${champions.slice(0, 50).map(champion => `
-                    <div class="champion-item" data-champion="${champion.id}" onclick="selectChampion('${champion.id}')">
-                        <img src="${champion.image}" alt="${champion.title}" class="champion-avatar"
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
-                        <span class="champion-fallback" style="display:none;">⚔️</span>
-                        <span class="champion-name">${champion.title}</span>
-                    </div>
-                `).join('')}
-            </div>
+    // Update section title and icon
+    const sectionIcon = document.getElementById('sectionIcon');
+    const sectionTitle = document.getElementById('sectionTitle');
+    
+    if (sectionIcon) sectionIcon.textContent = '⚔️';
+    if (sectionTitle) sectionTitle.textContent = `Champions (${champions.length})`;
+    
+    // Fill champions list
+    championsList.innerHTML = champions.slice(0, 50).map(champion => `
+        <div class="champion-item" data-champion="${champion.id}" onclick="selectChampion('${champion.id}')">
+            <img src="${champion.image}" alt="${champion.title}" class="champion-avatar"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+            <span class="champion-fallback" style="display:none;">⚔️</span>
+            <span class="champion-name">${champion.title}</span>
         </div>
-    `;
+    `).join('');
     
     console.log('Champions sidebar setup complete');
 }
 
 function toggleChampions() {
-    championsExpanded = !championsExpanded;
-    const toggleIcon = document.querySelector('.toggle-icon');
-    const championsList = document.querySelector('.champions-list');
+    const chevron = document.querySelector('.chevron');
+    const championsList = document.getElementById('championsList');
     
-    if (toggleIcon) toggleIcon.textContent = championsExpanded ? '▼' : '▶';
-    if (championsList) {
-        championsList.classList.toggle('collapsed', !championsExpanded);
+    if (chevron && championsList) {
+        const isExpanded = chevron.textContent === '▲';
+        chevron.textContent = isExpanded ? '▼' : '▲';
+        championsList.style.display = isExpanded ? 'none' : 'block';
     }
 }
 
@@ -360,6 +358,27 @@ function goToPage(page) {
     if (contentGrid) {
         contentGrid.scrollIntoView({ behavior: 'smooth' });
     }
+}
+
+function setupChampionSearch() {
+    const championSearch = document.getElementById('championSearch');
+    if (!championSearch) return;
+    
+    championSearch.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase().trim();
+        const championsList = document.getElementById('championsList');
+        if (!championsList) return;
+        
+        const championItems = championsList.querySelectorAll('.champion-item');
+        championItems.forEach(item => {
+            const championName = item.querySelector('.champion-name').textContent.toLowerCase();
+            if (championName.includes(searchTerm)) {
+                item.style.display = 'flex';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
 }
 
 // Global functions for navigation
