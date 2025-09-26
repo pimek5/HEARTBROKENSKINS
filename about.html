@@ -666,40 +666,9 @@
     </style>
     
     <script>
-        // Discord Server ID and Owner ID
+        // Discord Server ID and Owner ID  
         const DISCORD_SERVER_ID = '1153027935553454191';
-        const DISCORD_OWNER_ID = '318104006385729538';
-        const TEST_USER_ID = '910539294958026752'; // ID to check
-        
-        // Function to check who owns a specific Discord ID
-        async function checkDiscordUser(userId) {
-            try {
-                const widgetResponse = await fetch(`https://discord.com/api/guilds/${DISCORD_SERVER_ID}/widget.json`);
-                
-                if (widgetResponse.ok) {
-                    const widgetData = await widgetResponse.json();
-                    
-                    if (widgetData.members) {
-                        const user = widgetData.members.find(member => member.id === userId);
-                        if (user) {
-                            console.log(`User with ID ${userId}:`, {
-                                id: user.id,
-                                username: user.username,
-                                nick: user.nick,
-                                displayName: user.nick || user.username
-                            });
-                            return user;
-                        } else {
-                            console.log(`User with ID ${userId} not found in server widget`);
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error('Error checking Discord user:', error);
-            }
-            return null;
-        }
-        
+        const DISCORD_OWNER_ID = '318104006385729538'; // PTB Discord user
         // Function to fetch Discord server stats
         async function fetchDiscordStats() {
             try {
@@ -848,9 +817,9 @@
                     console.log('Widget API failed for owner info:', e.message);
                 }
                 
-                // Fallback: Use known owner info based on the Discord profile
+                // Fallback: PTB Discord users might not appear in widget
                 updateOwnerInfo('.𝑘𝑖𝑡𝑡𝑦', null);
-                console.log('Using fallback owner info: .𝑘𝑖𝑡𝑡𝑦');
+                console.log('Using fallback owner info (PTB Discord): .𝑘𝑖𝑡𝑡𝑦');
                 
             } catch (error) {
                 console.warn('Failed to fetch owner info:', error);
@@ -992,13 +961,6 @@
                 updateDiscordCardStats(3812, 791);
             }
         }
-        
-        // Check the test user ID on page load
-        document.addEventListener('DOMContentLoaded', async () => {
-            console.log('=== CHECKING DISCORD USER ID ===');
-            await checkDiscordUser(TEST_USER_ID);
-            console.log('=== END CHECK ===');
-        });
     </script>
 </body>
 </html>
