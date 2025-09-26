@@ -8,6 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Load Discord data from GitHub Actions -->
+    <script src="scripts/discord-data.js" async defer onload="console.log('GitHub Actions Discord data loaded')"></script>
     <style>
         /* Custom icons for Ko-fi and Buy Me a Coffee */
         .rg-kofi::before {
@@ -730,8 +732,32 @@
         // Function to fetch Discord server stats
         async function fetchDiscordStats() {
             try {
-                // Try multiple approaches to get Discord stats
-                // Priority: Invite API first (more accurate for member count)
+                // Priority 1: Use GitHub Actions Discord data (most accurate and secure)
+                if (window.discordData && window.discordData.memberCount) {
+                    console.log('Using GitHub Actions Discord data:', window.discordData);
+                    const data = window.discordData;
+                    
+                    // Use comprehensive bot data
+                    updateEnhancedStats(
+                        data.memberCount,
+                        data.onlineMembers,
+                        data.totalChannels,
+                        data.onlineMembers || Math.floor(data.memberCount * 0.05), // Estimate voice users
+                        data.boostLevel
+                    );
+                    updateDiscordCardStats(data.memberCount, data.onlineMembers);
+                    
+                    // Update owner info if available
+                    if (data.ownerId) {
+                        fetchDiscordOwner();
+                    }
+                    
+                    console.log('✨ Using secure GitHub Actions Discord data');
+                    return;
+                }
+                
+                // Priority 2: Try multiple API approaches as fallback
+                console.log('GitHub Actions data not available, trying Discord APIs...');
                 
                 // Method 1: Discord Invite API (most reliable for total member count)
                 try {
