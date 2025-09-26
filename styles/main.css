@@ -391,11 +391,12 @@ body::after {
 
 /* Sidebar */
 .sidebar {
-    width: 220px;
-    background: #222;
-    padding: 1rem;
-    border-radius: 8px;
-    border: 1px solid #333;
+    width: 260px;
+    background: rgba(34, 34, 34, 0.7);
+    backdrop-filter: blur(15px);
+    padding: 1.2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     height: fit-content;
     position: sticky;
     top: 100px;
@@ -405,10 +406,10 @@ body::after {
 
 .champions-section {
     margin-bottom: 1.5rem;
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 12px;
-    backdrop-filter: blur(15px);
+    backdrop-filter: blur(20px);
     overflow: hidden;
     position: relative;
 }
