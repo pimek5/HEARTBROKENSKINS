@@ -149,19 +149,29 @@ window.PostsManager = {
     loadFromStorage: function() {
         try {
             const saved = localStorage.getItem('heartbrokenskins_posts');
+            console.log('🔍 Checking localStorage for posts...');
+            
             if (saved) {
+                console.log('📦 Found saved data in localStorage');
                 const parsedPosts = JSON.parse(saved);
-                if (Array.isArray(parsedPosts) && parsedPosts.length > 0) {
+                console.log('📊 Parsed posts:', parsedPosts.length, 'posts');
+                
+                if (Array.isArray(parsedPosts)) {
                     window.postsData = parsedPosts;
                     // Update nextId to be higher than any existing ID
-                    const maxId = Math.max(...parsedPosts.map(p => p.id));
-                    this.nextId = maxId + 1;
-                    console.log('Loaded posts from localStorage:', parsedPosts.length, 'posts');
+                    if (parsedPosts.length > 0) {
+                        const maxId = Math.max(...parsedPosts.map(p => p.id));
+                        this.nextId = maxId + 1;
+                    }
+                    console.log('✅ Successfully loaded posts from localStorage:', parsedPosts.length, 'posts');
+                    console.log('📋 Post titles:', parsedPosts.map(p => p.title));
                     return true; // Successfully loaded from storage
                 }
+            } else {
+                console.log('🔍 No saved data found in localStorage');
             }
         } catch (e) {
-            console.warn('Could not load posts from localStorage:', e);
+            console.error('❌ Could not load posts from localStorage:', e);
         }
         return false; // No data in storage, use defaults
     },
@@ -179,16 +189,13 @@ window.PostsManager = {
     }
 };
 
-// Clear any old localStorage data to ensure fresh data
-localStorage.removeItem('heartbrokenskins_posts');
-
 // Load saved posts on initialization
 const loadedFromStorage = window.PostsManager.loadFromStorage();
 
 // Only use sample data if no saved posts exist
 if (!loadedFromStorage) {
-    console.log('No saved posts found, using fresh data from file');
-    window.PostsManager.saveToStorage(); // Save fresh data to storage
+    console.log('No saved posts found, using default data');
+    window.PostsManager.saveToStorage(); // Save default data to storage
 }
 
 console.log('Posts data loaded:', window.postsData.length, 'posts');
