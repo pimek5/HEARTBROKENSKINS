@@ -143,18 +143,6 @@
                                     <span class="stat-number" id="online-count">...</span>
                                     <span class="stat-label">Online</span>
                                 </div>
-                                <div class="stat-item">
-                                    <span class="stat-number" id="active-channels">...</span>
-                                    <span class="stat-label">Active Channels</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-number" id="voice-members">...</span>
-                                    <span class="stat-label">In Voice</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-number" id="boost-level">...</span>
-                                    <span class="stat-label">Boost Level</span>
-                                </div>
                                 <div class="stat-item" id="owner-stat">
                                     <span class="stat-number" id="owner-name">...</span>
                                     <span class="stat-label">Owner</span>
@@ -861,9 +849,6 @@
         function updateEnhancedStats(memberCount, onlineCount, activeChannels, voiceMembers, boostLevel) {
             const memberElement = document.getElementById('member-count');
             const onlineElement = document.getElementById('online-count');
-            const channelsElement = document.getElementById('active-channels');
-            const voiceElement = document.getElementById('voice-members');
-            const boostElement = document.getElementById('boost-level');
             
             if (memberElement && onlineElement) {
                 // Animate the main numbers
@@ -871,27 +856,9 @@
                 animateNumber(onlineElement, onlineCount);
             }
             
-            if (channelsElement) {
-                animateNumber(channelsElement, activeChannels);
-            }
-            
-            if (voiceElement) {
-                animateNumber(voiceElement, voiceMembers);
-            }
-            
-            if (boostElement) {
-                // For boost level, show level with visual indicator
-                setTimeout(() => {
-                    boostElement.innerHTML = `${boostLevel} ⭐`.repeat(boostLevel);
-                }, 1000);
-            }
-            
             console.log('✨ Enhanced stats updated:', {
                 members: memberCount,
-                online: onlineCount, 
-                channels: activeChannels,
-                voice: voiceMembers,
-                boost: boostLevel
+                online: onlineCount
             });
         }
         
