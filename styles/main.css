@@ -412,6 +412,8 @@ body::after {
     backdrop-filter: blur(20px);
     overflow: hidden;
     position: relative;
+    /* Hidden by default - shown only when needed as fallback */
+    display: none;
 }
 
 .champions-section::before {

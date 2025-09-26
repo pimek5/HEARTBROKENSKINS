@@ -8,34 +8,28 @@ let championsExpanded = true; // Start expanded
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, initializing...');
     
-    // Try to load champions for sidebar immediately, or wait a bit
-    let retryCount = 0;
-    const maxRetries = 50;
-    
-    function tryLoadChampions() {
-        console.log(`Trying to load champions (attempt ${retryCount + 1}/${maxRetries})`);
-        console.log('Current contentData:', window.contentData ? window.contentData.length : 'not loaded');
-        
-        if (window.contentData && window.contentData.length > 0) {
-            console.log('Found champion data:', window.contentData.length, 'champions');
-            setupChampionsSidebar();
-        } else if (retryCount < maxRetries) {
-            retryCount++;
-            console.log('Champions data not ready, retrying in 200ms...');
-            setTimeout(tryLoadChampions, 200);
-        } else {
-            console.log('Failed to load champions after', maxRetries, 'attempts');
-            // Force setup with empty data to show loading message
-            setupChampionsSidebar();
-        }
-    }
-    tryLoadChampions();
-    
     // Initialize with loading message
     document.getElementById('contentGrid').innerHTML = '<div class="no-results">Loading posts...</div>';
     
+    // Try to display posts immediately if available
+    setTimeout(() => {
+        displayItems();
+    }, 100);
+    
+    // Setup filters and champion search
     setupFilters();
     setupChampionSearch();
+    
+    // Try to setup champions sidebar only if posts fail to load
+    setTimeout(() => {
+        // Only setup champions if we don't have posts
+        if (!window.contentDataManager || !window.contentDataManager.isReady || window.contentDataManager.posts.length === 0) {
+            if (!window.postsData || window.postsData.length === 0) {
+                console.log('No posts found, setting up champions as fallback...');
+                setupChampionsSidebar();
+            }
+        }
+    }, 2000);
 });
 
 // Listen for posts ready event
@@ -44,29 +38,74 @@ document.addEventListener('postsReady', function(event) {
     displayItems();
 });
 
-// Main function to display items (posts or champions)
+// Listen for content ready event (when ContentDataManager is ready)
+document.addEventListener('contentReady', function(event) {
+    console.log('📰 Content system ready, refreshing display...');
+    displayItems();
+});
+
+// Main function to display items (posts have priority over champions)
 window.displayItems = function() {
     console.log('🔄 displayItems called');
     
-    // Use new content data system that prioritizes posts over fallback champions
-    if (window.getContentData && typeof window.getContentData === 'function') {
+    // PRIORITY 1: Try to load posts first (always preferred)
+    if (window.contentDataManager && window.contentDataManager.isReady && window.contentDataManager.posts.length > 0) {
+        allItems = window.contentDataManager.getAllPosts();
+        console.log('✅ Using posts from contentDataManager:', allItems.length, 'posts');
+        updateSectionHeader('📰', 'ALL POSTS');
+        
+        // Hide champions section since we have posts
+        const championsSection = document.querySelector('.champions-section');
+        if (championsSection) {
+            championsSection.style.display = 'none';
+        }
+        
+    // PRIORITY 2: Try posts from window.postsData
+    } else if (window.postsData && window.postsData.length > 0) {
+        allItems = window.postsData;
+        console.log('✅ Using posts from postsData:', allItems.length, 'posts');
+        updateSectionHeader('📰', 'ALL POSTS');
+        
+        // Hide champions section since we have posts
+        const championsSection = document.querySelector('.champions-section');
+        if (championsSection) {
+            championsSection.style.display = 'none';
+        }
+        
+    // PRIORITY 3: Check for posts via getContentData function
+    } else if (window.getContentData && typeof window.getContentData === 'function') {
         allItems = window.getContentData();
         console.log('Using getContentData:', allItems.length, 'items');
         
-        // Check if we got posts or fallback champions
-        if (window.contentDataManager && window.contentDataManager.isReady && window.contentDataManager.posts.length > 0) {
+        // Check if these are actually posts or fallback champions
+        const hasPosts = allItems.length > 0 && (allItems[0].hasOwnProperty('date') || allItems[0].hasOwnProperty('author') || allItems[0].hasOwnProperty('createdAt'));
+        if (hasPosts) {
             updateSectionHeader('📰', 'ALL POSTS');
+            // Hide champions section since we have posts
+            const championsSection = document.querySelector('.champions-section');
+            if (championsSection) {
+                championsSection.style.display = 'none';
+            }
         } else {
             updateSectionHeader('⚔️', 'Champions');
+            // Show champions section as fallback
+            const championsSection = document.querySelector('.champions-section');
+            if (championsSection) {
+                championsSection.style.display = 'block';
+            }
         }
-    } else if (window.contentDataManager && window.contentDataManager.isReady) {
-        allItems = window.contentDataManager.getAllPosts();
-        console.log('Using contentDataManager:', allItems.length, 'posts');
-        updateSectionHeader('📰', 'ALL POSTS');
+        
+    // FALLBACK: Use champion data only if no posts available
     } else {
-        console.log('Falling back to contentData');
+        console.log('❌ No posts found, falling back to champions');
         allItems = window.contentData || [];
         updateSectionHeader('⚔️', 'Champions');
+        
+        // Show champions section as fallback
+        const championsSection = document.querySelector('.champions-section');
+        if (championsSection) {
+            championsSection.style.display = 'block';
+        }
     }
     
     filteredItems = [...allItems];
@@ -306,8 +345,9 @@ function renderItems() {
     
     contentGrid.innerHTML = pageItems.map(item => {
         // Check if this is a post or champion
-        if (item.createdAt && item.author) {
+        if ((item.date || item.createdAt) && item.author) {
             // This is a post
+            const displayDate = item.date || new Date(item.createdAt).toLocaleDateString();
             return `
                 <div class="content-card">
                     <div class="content-image">
@@ -324,8 +364,8 @@ function renderItems() {
                         <div class="content-meta">
                             <span class="content-category">📂 ${item.category}</span>
                             <span class="content-author">👤 ${item.author}</span>
-                            <span class="content-date">📅 ${new Date(item.createdAt).toLocaleDateString()}</span>
-                            <span class="content-price">${item.price ? `💰 ${item.price} ${item.currency}` : '<span class="free-icon">●</span> Free'}</span>
+                            <span class="content-date">📅 ${displayDate}</span>
+                            <span class="content-price">${item.price && item.price !== 'free' ? `💰 ${item.price}` : '<span class="free-icon">●</span> Free'}</span>
                         </div>
                         <div class="content-tags">
                             ${item.tags.slice(0, 3).map(tag => `<span class="content-tag">${tag}</span>`).join('')}

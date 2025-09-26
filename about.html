@@ -717,119 +717,57 @@
         // Discord Server ID and Owner ID  
         const DISCORD_SERVER_ID = '1153027935553454191';
         const DISCORD_OWNER_ID = '318104006385729538'; // PTB Discord user
-        // Function to fetch Discord server stats
+        // Function to fetch Discord server stats using centralized discord-data.js
         async function fetchDiscordStats() {
             try {
-                // Priority 1: Use GitHub Actions Discord data (most accurate and secure)
-                if (window.discordData && window.discordData.memberCount) {
-                    console.log('Using GitHub Actions Discord data:', window.discordData);
-                    const data = window.discordData;
+                // Use centralized Discord Data Manager
+                if (window.discordDataManager) {
+                    const data = window.discordDataManager.getData();
+                    console.log('🎮 Using Discord Data Manager:', data);
                     
-                    // Use comprehensive bot data
+                    // Use comprehensive data from Discord Data Manager
                     updateEnhancedStats(
                         data.memberCount,
                         data.onlineMembers,
-                        data.totalChannels,
-                        data.onlineMembers || Math.floor(data.memberCount * 0.05), // Estimate voice users
-                        data.boostLevel
+                        data.totalChannels || 8,
+                        Math.floor(data.onlineMembers * 0.05) || 12, // Estimate voice users
+                        data.boostLevel || 2
                     );
-                    updateDiscordCardStats(data.memberCount, data.onlineMembers);
                     
-                    // Update owner info if available
-                    if (data.ownerId) {
-                        fetchDiscordOwner();
-                    }
+                    // Register for real-time updates
+                    window.discordDataManager.onUpdate((updatedData) => {
+                        console.log('📡 Discord data updated in real-time:', updatedData);
+                        updateEnhancedStats(
+                            updatedData.memberCount,
+                            updatedData.onlineMembers,
+                            updatedData.totalChannels || 8,
+                            Math.floor(updatedData.onlineMembers * 0.05) || 12,
+                            updatedData.boostLevel || 2
+                        );
+                    });
                     
-                    console.log('✨ Using secure GitHub Actions Discord data');
+                    console.log('✅ Discord stats initialized via Discord Data Manager');
                     return;
                 }
                 
-                // Priority 2: Try multiple API approaches as fallback
-                console.log('GitHub Actions data not available, trying Discord APIs...');
+                // Fallback: Try direct Discord API if Discord Data Manager is not available
+                console.log('⚠️ Discord Data Manager not available, using direct API fallback...');
                 
-                // Method 1: Discord Invite API (most reliable for total member count)
-                try {
-                    const inviteResponse = await fetch(`https://discord.com/api/v10/invites/hexrtbrxenchromas?with_counts=true`);
-                    if (inviteResponse.ok) {
-                        const inviteData = await inviteResponse.json();
-                        const memberCount = inviteData.guild?.approximate_member_count || 0;
-                        const onlineCount = inviteData.guild?.approximate_presence_count || 0;
-                        if (memberCount > 0) {
-                            updateStats(memberCount, onlineCount);
-                            updateDiscordCardStats(memberCount, onlineCount);
-                            console.log('Discord stats updated via Invite API:', {memberCount, onlineCount});
-                            return;
-                        }
-                    }
-                } catch (e) {
-                    console.log('Invite API failed:', e.message);
+                const response = await fetch('https://discord.com/api/v10/invites/hexrtbrxenchromas?with_counts=true');
+                if (response.ok) {
+                    const data = await response.json();
+                    const memberCount = data.guild?.approximate_member_count || 3812;
+                    const onlineCount = data.guild?.approximate_presence_count || 791;
+                    
+                    updateEnhancedStats(memberCount, onlineCount, 8, 12, 2);
+                    console.log('Discord stats updated via direct API fallback:', {memberCount, onlineCount});
+                } else {
+                    throw new Error('Direct API failed');
                 }
-                
-                // Method 2: Alternative invite endpoint
-                try {
-                    const altResponse = await fetch(`https://discordapp.com/api/invites/hexrtbrxenchromas?with_counts=true`);
-                    if (altResponse.ok) {
-                        const altData = await altResponse.json();
-                        const memberCount = altData.guild?.approximate_member_count || 0;
-                        const onlineCount = altData.guild?.approximate_presence_count || 0;
-                        if (memberCount > 0) {
-                            updateEnhancedStats(memberCount, onlineCount, 5, 8, 2);
-                            updateDiscordCardStats(memberCount, onlineCount);
-                            console.log('Discord stats updated via alternative API:', {memberCount, onlineCount});
-                            return;
-                        }
-                    }
-                } catch (e) {
-                    console.log('Alternative API failed:', e.message);
-                }
-                
-                // Method 3: Discord Widget API (only for online count, less reliable for total members)
-                try {
-                    const widgetResponse = await fetch(`https://discord.com/api/guilds/${DISCORD_SERVER_ID}/widget.json`, {
-                        mode: 'cors',
-                        headers: {
-                            'Accept': 'application/json',
-                        }
-                    });
-                    if (widgetResponse.ok) {
-                        const widgetData = await widgetResponse.json();
-                        console.log('Widget API full response:', widgetData);
-                        
-                        // Extract enhanced stats from widget data
-                        const onlineCount = widgetData.presence_count || widgetData.members?.length || 0;
-                        const memberCount = 3812; // Use known server size as widget doesn't provide total
-                        
-                        // Enhanced statistics from widget
-                        const voiceMembers = widgetData.members?.filter(member => 
-                            member.channel_id || member.status === 'online'
-                        ).length || 0;
-                        
-                        const activeChannels = widgetData.channels ? widgetData.channels.length : 3;
-                        const boostLevel = widgetData.premium_tier || 1;
-                        
-                        if (onlineCount > 0) {
-                            updateEnhancedStats(memberCount, onlineCount, activeChannels, voiceMembers, boostLevel);
-                            updateDiscordCardStats(memberCount, onlineCount);
-                            console.log('Enhanced Discord stats updated via Widget API:', {
-                                memberCount, onlineCount, activeChannels, voiceMembers, boostLevel
-                            });
-                            return;
-                        }
-                    }
-                } catch (e) {
-                    console.log('Widget API failed:', e.message);
-                }
-                
-                // If all APIs fail, use fallback values with enhanced stats
-                console.log('All Discord APIs failed, using enhanced fallback values');
-                updateEnhancedStats(3812, 791, 5, 12, 2);
-                updateDiscordCardStats(3812, 791);
                 
             } catch (error) {
-                console.warn('Failed to fetch Discord stats:', error);
-                // Use fallback values
-                updateStats(3812, 791);
-                updateDiscordCardStats(3812, 791);
+                console.warn('⚠️ All Discord data sources failed, using static fallback:', error.message);
+                updateEnhancedStats(3812, 791, 8, 12, 2);
             }
         }
         
@@ -994,57 +932,35 @@
         
         // Load stats when page loads
         document.addEventListener('DOMContentLoaded', function() {
-            // Initial load of Discord stats
-            fetchDiscordStats();
+            console.log('📄 About page loaded, initializing Discord integration...');
             
-            // Fetch Discord owner info
-            fetchDiscordOwner();
-            
-            // Refresh stats every 2 minutes
-            setInterval(fetchDiscordStats, 2 * 60 * 1000);
-            
-            // Also try to fetch Discord card stats separately as backup
-            setTimeout(() => {
-                fetchDiscordCardStats();
-            }, 2000);
-            
-            // Refresh owner info every 10 minutes
-            setInterval(fetchDiscordOwner, 10 * 60 * 1000);
-        });
-        
-        // Also update the Discord card stats
-        function updateDiscordCardStats(memberCount, onlineCount) {
-            const onlineSpan = document.getElementById('discord-online-count');
-            const membersSpan = document.getElementById('discord-member-count');
-            
-            if (onlineSpan && membersSpan && memberCount && onlineCount) {
-                onlineSpan.textContent = `${onlineCount} online`;
-                membersSpan.textContent = `${memberCount} members`;
-            }
-        }
-        
-        // Alternative function to fetch Discord card stats separately
-        async function fetchDiscordCardStats() {
-            try {
-                const inviteResponse = await fetch(`https://discord.com/api/v10/invites/hexrtbrxenchromas?with_counts=true`);
-                
-                if (inviteResponse.ok) {
-                    const inviteData = await inviteResponse.json();
-                    const onlineCount = inviteData.guild?.approximate_presence_count || 791;
-                    const memberCount = inviteData.guild?.approximate_member_count || 3812;
-                    updateDiscordCardStats(memberCount, onlineCount);
-                    console.log('Discord card stats updated:', {memberCount, onlineCount});
+            // Wait for Discord Data Manager to be ready
+            const initializeDiscordStats = () => {
+                if (window.discordDataManager && window.discordDataManager.isInitialized) {
+                    console.log('✅ Discord Data Manager ready, loading stats...');
+                    fetchDiscordStats();
+                    fetchDiscordOwner();
+                    
+                    // Set up periodic refresh (Discord Data Manager handles its own updates)
+                    setInterval(fetchDiscordOwner, 10 * 60 * 1000); // Owner info every 10 minutes
                 } else {
-                    // Use fallback if API fails
-                    console.log('Discord card using fallback values');
-                    updateDiscordCardStats(3812, 791);
+                    console.log('⏳ Waiting for Discord Data Manager...');
+                    setTimeout(initializeDiscordStats, 500);
                 }
-            } catch (error) {
-                console.warn('Failed to update Discord card stats:', error);
-                // Use fallback
-                updateDiscordCardStats(3812, 791);
-            }
-        }
+            };
+            
+            // Start initialization
+            initializeDiscordStats();
+            
+            // Legacy fallback refresh (in case Discord Data Manager fails)
+            setTimeout(() => {
+                if (!window.discordDataManager) {
+                    console.log('⚠️ Discord Data Manager failed to load, using legacy fallback');
+                    fetchDiscordStats();
+                    setInterval(fetchDiscordStats, 2 * 60 * 1000);
+                }
+            }, 5000);
+        });
     </script>
 </body>
 </html>

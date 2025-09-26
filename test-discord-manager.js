@@ -1,6 +1,7 @@
-// Discord data management with real-time fetching capabilities
-// This file handles Discord server statistics and updates
+// Test the updated Discord Data Manager
+const fetch = require('node-fetch');
 
+// Mock the Discord Data Manager for testing
 class DiscordDataManager {
     constructor() {
         this.data = {
@@ -26,25 +27,6 @@ class DiscordDataManager {
         
         this.updateCallbacks = [];
         this.isInitialized = false;
-        
-        // Auto-initialize
-        this.initialize();
-    }
-    
-    // Initialize the Discord data manager
-    async initialize() {
-        console.log('🎮 Initializing Discord Data Manager...');
-        
-        // Try to fetch fresh data
-        await this.fetchDiscordData();
-        
-        // Set up periodic updates every 2 minutes
-        setInterval(() => {
-            this.fetchDiscordData();
-        }, 2 * 60 * 1000);
-        
-        this.isInitialized = true;
-        console.log('✅ Discord Data Manager initialized');
     }
     
     // Fetch Discord server data from API
@@ -87,11 +69,6 @@ class DiscordDataManager {
                         
                         console.log(`✅ Discord data updated via Widget API: ${this.data.memberCount} members, ${this.data.onlineMembers} online`);
                         
-                        // Notify callbacks if data changed
-                        if (oldMemberCount !== this.data.memberCount || oldOnlineCount !== this.data.onlineMembers) {
-                            this.notifyCallbacks();
-                        }
-                        
                         return; // Success, exit function
                     }
                 }
@@ -127,11 +104,6 @@ class DiscordDataManager {
                     
                     console.log(`✅ Discord data updated via Invite API: ${this.data.memberCount} members, ${this.data.onlineMembers} online`);
                     
-                    // Notify callbacks if data changed
-                    if (oldMemberCount !== this.data.memberCount || oldOnlineCount !== this.data.onlineMembers) {
-                        this.notifyCallbacks();
-                    }
-                    
                     return; // Success, exit function
                 }
             }
@@ -150,93 +122,32 @@ class DiscordDataManager {
         }
     }
     
-    // Get current Discord data
     getData() {
         return { ...this.data };
     }
-    
-    // Register callback for data updates
-    onUpdate(callback) {
-        if (typeof callback === 'function') {
-            this.updateCallbacks.push(callback);
-        }
-    }
-    
-    // Notify all registered callbacks
-    notifyCallbacks() {
-        this.updateCallbacks.forEach(callback => {
-            try {
-                callback(this.getData());
-            } catch (error) {
-                console.warn('Error in Discord data callback:', error);
-            }
-        });
-    }
-    
-    // Update specific DOM elements with Discord data
-    updateDOMElements() {
-        // Update member count elements
-        const memberCountElements = document.querySelectorAll('#discord-member-count, .discord-member-count');
-        memberCountElements.forEach(element => {
-            element.textContent = `${this.data.memberCount} members`;
-        });
-        
-        // Update online count elements
-        const onlineCountElements = document.querySelectorAll('#discord-online-count, .discord-online-count');
-        onlineCountElements.forEach(element => {
-            element.textContent = `${this.data.onlineMembers} online`;
-        });
-        
-        // Update server name elements
-        const serverNameElements = document.querySelectorAll('.discord-server-name');
-        serverNameElements.forEach(element => {
-            element.textContent = this.data.serverName;
-        });
-        
-        // Update status indicators
-        const statusElements = document.querySelectorAll('.discord-status');
-        statusElements.forEach(element => {
-            element.classList.toggle('real-time', this.data.isRealTime);
-            element.classList.toggle('fallback', !this.data.isRealTime);
-        });
-        
-        console.log('� Discord DOM elements updated');
-    }
-    
-    // Manual refresh function
-    async refresh() {
-        console.log('🔄 Manual Discord data refresh requested');
-        await this.fetchDiscordData();
-        this.updateDOMElements();
-    }
 }
 
-// Create global instance
-window.discordDataManager = new DiscordDataManager();
-
-// Backward compatibility - expose data directly
-Object.defineProperty(window, 'discordData', {
-    get() {
-        return window.discordDataManager.getData();
-    }
-});
-
-// Auto-update DOM when data changes
-window.discordDataManager.onUpdate((data) => {
-    window.discordDataManager.updateDOMElements();
-});
-
-// Update DOM elements once page is loaded
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(() => {
-            window.discordDataManager.updateDOMElements();
-        }, 1000);
+async function testDiscordDataManager() {
+    console.log('🧪 Testing updated Discord Data Manager...\n');
+    
+    const manager = new DiscordDataManager();
+    
+    console.log('Before fetch:', {
+        members: manager.data.memberCount,
+        online: manager.data.onlineMembers,
+        source: manager.data.dataSource
     });
-} else {
-    setTimeout(() => {
-        window.discordDataManager.updateDOMElements();
-    }, 1000);
+    
+    await manager.fetchDiscordData();
+    
+    console.log('\nAfter fetch:', {
+        members: manager.data.memberCount,
+        online: manager.data.onlineMembers,
+        source: manager.data.dataSource,
+        isRealTime: manager.data.isRealTime
+    });
+    
+    console.log('\n🏁 Test complete!');
 }
 
-console.log('📊 Discord Data Manager loaded successfully');
+testDiscordDataManager();
