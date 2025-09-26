@@ -444,13 +444,24 @@ async function handlePostSubmit(event) {
     if (!isLoggedIn) return;
     
     const formData = new FormData(event.target);
+    
+    // Validate price field if it's filled
+    const priceValue = formData.get('price');
+    if (priceValue && formData.get('type') === 'Premium') {
+        const priceNum = parseFloat(priceValue);
+        if (isNaN(priceNum) || priceNum < 0) {
+            showNotification('❌ Please enter a valid price (numbers only, e.g. 15 or 10.50)', 'error');
+            return;
+        }
+    }
+    
     const postData = {
         title: formData.get('title'),
         description: formData.get('description'),
         category: formData.get('category'),
         image: formData.get('image') || 'https://via.placeholder.com/300x200?text=No+Image',
         type: formData.get('type'),
-        price: formData.get('price') ? parseFloat(formData.get('price')) : null,
+        price: priceValue ? parseFloat(priceValue) : null,
         currency: formData.get('currency') || 'PLN',
         tags: formData.get('tags').split(',').map(tag => tag.trim()).filter(tag => tag),
         content: formData.get('content'),
