@@ -8,6 +8,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* Custom icons for Ko-fi and Buy Me a Coffee */
+        .rg-kofi::before {
+            content: "☕";
+            font-family: sans-serif;
+            font-size: 1.5rem;
+            font-style: normal;
+        }
+        
+        .rg-buymeacoffee::before {
+            content: "☕";
+            font-family: sans-serif;
+            font-size: 1.5rem;
+            font-style: normal;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -114,12 +130,35 @@
                             <h2>Creator</h2>
                             <div class="creator-info">
                                 <p><strong>Created by:</strong> p1mek</p>
-                                <div class="social-links">
-                                    <a href="https://twitter.com/p1mek" target="_blank" rel="noopener noreferrer" class="social-link">
-                                        <i class="fab fa-twitter"></i> Twitter
+                                
+                                <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+                                    <a href="https://discord.com/users/pimek" target="_blank" rel="noopener noreferrer" class="cursor-none group relative flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200 hover:scale-110">
+                                        <i class="fa-brands fa-discord fa-2xl none text-white" style="color: rgb(255, 255, 255); text-shadow: rgb(138, 0, 184) 0px 0px 4px, rgb(138, 0, 184) 0px 0px 8px, rgb(138, 0, 184) 0px 0px 12px;"></i>
+                                        <div class="absolute font-bold bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">Discord</div>
                                     </a>
-                                    <a href="https://twitch.tv/pimek532" target="_blank" rel="noopener noreferrer" class="social-link">
-                                        <i class="fab fa-twitch"></i> Twitch
+                                    <a href="https://open.spotify.com/user/31fovo3acz6luaqfftbm4oimtq4y?si=301802d62e13466a" target="_blank" rel="noopener noreferrer" class="cursor-none group relative flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200 hover:scale-110">
+                                        <i class="fa-brands fa-spotify fa-2xl none text-white" style="color: rgb(255, 255, 255); text-shadow: rgb(138, 0, 184) 0px 0px 4px, rgb(138, 0, 184) 0px 0px 8px, rgb(138, 0, 184) 0px 0px 12px;"></i>
+                                        <div class="absolute font-bold bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">Spotify</div>
+                                    </a>
+                                    <a href="https://x.com/p1mek" target="_blank" rel="noopener noreferrer" class="cursor-none group relative flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200 hover:scale-110">
+                                        <i class="fa-brands fa-x-twitter fa-2xl none text-white" style="color: rgb(255, 255, 255); text-shadow: rgb(138, 0, 184) 0px 0px 4px, rgb(138, 0, 184) 0px 0px 8px, rgb(138, 0, 184) 0px 0px 12px;"></i>
+                                        <div class="absolute font-bold bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">X</div>
+                                    </a>
+                                    <a href="https://twitch.tv/pimek532" target="_blank" rel="noopener noreferrer" class="cursor-none group relative flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200 hover:scale-110">
+                                        <i class="fa-brands fa-twitch fa-2xl none text-white" style="color: rgb(255, 255, 255); text-shadow: rgb(138, 0, 184) 0px 0px 4px, rgb(138, 0, 184) 0px 0px 8px, rgb(138, 0, 184) 0px 0px 12px;"></i>
+                                        <div class="absolute font-bold bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">Twitch</div>
+                                    </a>
+                                    <a href="https://paypal.me/p1mek" target="_blank" rel="noopener noreferrer" class="cursor-none group relative flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200 hover:scale-110">
+                                        <i class="fa-brands fa-paypal fa-2xl none text-white" style="color: rgb(255, 255, 255); text-shadow: rgb(138, 0, 184) 0px 0px 4px, rgb(138, 0, 184) 0px 0px 8px, rgb(138, 0, 184) 0px 0px 12px;"></i>
+                                        <div class="absolute font-bold bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">PayPal</div>
+                                    </a>
+                                    <a href="https://ko-fi.com/pimek" target="_blank" rel="noopener noreferrer" class="cursor-none group relative flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200 hover:scale-110">
+                                        <i class="rg-kofi fa-2xl none text-white" style="color: rgb(255, 255, 255); text-shadow: rgb(138, 0, 184) 0px 0px 4px, rgb(138, 0, 184) 0px 0px 8px, rgb(138, 0, 184) 0px 0px 12px;"></i>
+                                        <div class="absolute font-bold bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">Ko-fi</div>
+                                    </a>
+                                    <a href="https://buymeacoffee.com/p1mek" target="_blank" rel="noopener noreferrer" class="cursor-none group relative flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200 hover:scale-110">
+                                        <i class="rg-buymeacoffee fa-2xl none text-white" style="color: rgb(255, 255, 255); text-shadow: rgb(138, 0, 184) 0px 0px 4px, rgb(138, 0, 184) 0px 0px 8px, rgb(138, 0, 184) 0px 0px 12px;"></i>
+                                        <div class="absolute font-bold bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">Buy Me a Coffee</div>
                                     </a>
                                 </div>
                             </div>
@@ -439,29 +478,154 @@
             color: #e0e0e0;
         }
 
-        .social-links {
+        /* Flexbox utilities */
+        .flex {
             display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
         }
 
-        .social-link {
-            display: inline-flex;
+        .flex-wrap {
+            flex-wrap: wrap;
+        }
+
+        .items-center {
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 6px;
-            color: #fff;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(220, 20, 60, 0.3);
         }
 
-        .social-link:hover {
-            background: rgba(220, 20, 60, 0.2);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(220, 20, 60, 0.3);
+        .justify-center {
+            justify-content: center;
+        }
+
+        .gap-3 {
+            gap: 0.75rem;
+        }
+
+        .pt-2 {
+            padding-top: 0.5rem;
+        }
+
+        .h-10 {
+            height: 2.5rem;
+        }
+
+        .w-10 {
+            width: 2.5rem;
+        }
+
+        .rounded-full {
+            border-radius: 9999px;
+        }
+
+        .transition-all {
+            transition: all 0.2s ease;
+        }
+
+        .duration-200 {
+            transition-duration: 0.2s;
+        }
+
+        .hover\:scale-110:hover {
+            transform: scale(1.1);
+        }
+
+        /* Social icon styles */
+        .creator-card .flex a {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(138, 0, 184, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .creator-card .flex a:hover {
+            background: rgba(138, 0, 184, 0.2);
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(138, 0, 184, 0.4);
+        }
+
+        /* Tooltip styles */
+        .creator-card .group {
+            position: relative;
+        }
+
+        .creator-card .absolute {
+            position: absolute;
+        }
+
+        .creator-card .font-bold {
+            font-weight: bold;
+        }
+
+        .creator-card .bottom-full {
+            bottom: 100%;
+        }
+
+        .creator-card .left-1\/2 {
+            left: 50%;
+        }
+
+        .creator-card .transform {
+            transform: translateX(-50%);
+        }
+
+        .creator-card .-translate-x-1\/2 {
+            transform: translateX(-50%);
+        }
+
+        .creator-card .mb-2 {
+            margin-bottom: 0.5rem;
+        }
+
+        .creator-card .px-2 {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+
+        .creator-card .py-1 {
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+        }
+
+        .creator-card .bg-base-content {
+            background-color: #fff;
+        }
+
+        .creator-card .text-base-100 {
+            color: #000;
+        }
+
+        .creator-card .text-xs {
+            font-size: 0.75rem;
+        }
+
+        .creator-card .rounded {
+            border-radius: 0.25rem;
+        }
+
+        .creator-card .opacity-0 {
+            opacity: 0;
+        }
+
+        .creator-card .group:hover .group-hover\:opacity-100 {
+            opacity: 1;
+        }
+
+        .creator-card .transition-opacity {
+            transition: opacity 0.2s ease;
+        }
+
+        .creator-card .pointer-events-none {
+            pointer-events: none;
+        }
+
+        .creator-card .whitespace-nowrap {
+            white-space: nowrap;
+        }
+
+        .creator-card .z-10 {
+            z-index: 10;
         }
 
         @media (max-width: 768px) {
@@ -477,8 +641,18 @@
                 grid-template-columns: 1fr;
             }
 
-            .social-links {
-                flex-direction: column;
+            .creator-card .flex {
+                gap: 0.5rem;
+            }
+
+            .creator-card .h-10,
+            .creator-card .w-10 {
+                height: 2rem;
+                width: 2rem;
+            }
+
+            .creator-card .fa-2xl {
+                font-size: 1.25rem !important;
             }
         }
     </style>
@@ -590,10 +764,33 @@
                     
                     if (widgetResponse.ok) {
                         const widgetData = await widgetResponse.json();
-                        // Look for owner in the members list
-                        const ownerMember = widgetData.members?.find(member => member.id === DISCORD_OWNER_ID);
+                        console.log('Widget data:', widgetData);
+                        
+                        // Look for owner in the members list - try different approaches
+                        let ownerMember = null;
+                        
+                        if (widgetData.members && widgetData.members.length > 0) {
+                            // Try to find by ID first
+                            ownerMember = widgetData.members.find(member => member.id === DISCORD_OWNER_ID);
+                            
+                            // If not found by ID, try to find by username
+                            if (!ownerMember) {
+                                ownerMember = widgetData.members.find(member => 
+                                    member.username?.toLowerCase().includes('p1mek') || 
+                                    member.nick?.toLowerCase().includes('p1mek')
+                                );
+                            }
+                            
+                            // If still not found, check if there's a guild owner
+                            if (!ownerMember && widgetData.members[0]) {
+                                // Sometimes the first member might be the owner
+                                ownerMember = widgetData.members[0];
+                            }
+                        }
+                        
                         if (ownerMember) {
-                            updateOwnerInfo(ownerMember.username, ownerMember.avatar_url);
+                            const displayName = ownerMember.nick || ownerMember.username || 'p1mek';
+                            updateOwnerInfo(displayName, ownerMember.avatar_url);
                             console.log('Owner info updated via Widget API:', ownerMember);
                             return;
                         }
@@ -602,13 +799,9 @@
                     console.log('Widget API failed for owner info:', e.message);
                 }
                 
-                // Second try: Use Discord CDN for avatar (requires knowing avatar hash)
-                // Since we can't get the hash without auth, we'll try a generic approach
-                
-                // Fallback: Use known owner info with default avatar approach
-                const defaultAvatar = `https://cdn.discordapp.com/embed/avatars/${DISCORD_OWNER_ID % 5}.png`;
-                updateOwnerInfo('p1mek', defaultAvatar);
-                console.log('Using fallback owner info with default avatar');
+                // Fallback: Use known owner info
+                updateOwnerInfo('p1mek', null);
+                console.log('Using fallback owner info: p1mek');
                 
             } catch (error) {
                 console.warn('Failed to fetch owner info:', error);
