@@ -161,11 +161,11 @@
                                         <div class="absolute font-bold bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">PayPal</div>
                                     </a>
                                     <a href="https://ko-fi.com/pimek" target="_blank" rel="noopener noreferrer" class="cursor-none group relative flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200 hover:scale-110">
-                                        <i class="rg-kofi fa-2xl none text-white" style="color: rgb(255, 255, 255); text-shadow: rgb(138, 0, 184) 0px 0px 4px, rgb(138, 0, 184) 0px 0px 8px, rgb(138, 0, 184) 0px 0px 12px;"></i>
+                                        <i class="fa-solid fa-mug-hot fa-2xl none text-white" style="color: rgb(255, 255, 255); text-shadow: rgb(138, 0, 184) 0px 0px 4px, rgb(138, 0, 184) 0px 0px 8px, rgb(138, 0, 184) 0px 0px 12px;"></i>
                                         <div class="absolute font-bold bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">Ko-fi</div>
                                     </a>
                                     <a href="https://buymeacoffee.com/p1mek" target="_blank" rel="noopener noreferrer" class="cursor-none group relative flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200 hover:scale-110">
-                                        <i class="rg-buymeacoffee fa-2xl none text-white" style="color: rgb(255, 255, 255); text-shadow: rgb(138, 0, 184) 0px 0px 4px, rgb(138, 0, 184) 0px 0px 8px, rgb(138, 0, 184) 0px 0px 12px;"></i>
+                                        <i class="fa-solid fa-coffee fa-2xl none text-white" style="color: rgb(255, 255, 255); text-shadow: rgb(138, 0, 184) 0px 0px 4px, rgb(138, 0, 184) 0px 0px 8px, rgb(138, 0, 184) 0px 0px 12px;"></i>
                                         <div class="absolute font-bold bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">Buy Me a Coffee</div>
                                     </a>
                                 </div>
@@ -772,7 +772,17 @@
                     
                     if (widgetResponse.ok) {
                         const widgetData = await widgetResponse.json();
-                        console.log('Widget data:', widgetData);
+                        console.log('Discord Widget Data:', widgetData);
+                        console.log('Looking for owner ID:', DISCORD_OWNER_ID);
+                        
+                        // Log all members to debug
+                        if (widgetData.members) {
+                            console.log('All Discord members:', widgetData.members.map(m => ({
+                                id: m.id,
+                                username: m.username,
+                                nick: m.nick
+                            })));
+                        }
                         
                         // Look for owner in the members list - try different approaches
                         let ownerMember = null;
@@ -800,9 +810,17 @@
                         
                         if (ownerMember) {
                             const displayName = ownerMember.nick || ownerMember.username || 'pimek';
+                            console.log('Found owner member:', {
+                                id: ownerMember.id,
+                                username: ownerMember.username,
+                                nick: ownerMember.nick,
+                                displayName: displayName
+                            });
                             updateOwnerInfo(displayName, ownerMember.avatar_url);
                             console.log('Owner info updated via Widget API:', ownerMember);
                             return;
+                        } else {
+                            console.log('Owner member not found in widget data');
                         }
                     }
                 } catch (e) {
