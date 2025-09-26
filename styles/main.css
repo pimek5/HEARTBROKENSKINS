@@ -604,6 +604,23 @@ body::after {
     background: rgba(220, 20, 60, 0.1);
     border-color: rgba(220, 20, 60, 0.4);
     box-shadow: 0 0 20px rgba(220, 20, 60, 0.2);
+    position: relative;
+}
+
+.champion-item.selected::after {
+    content: "✕";
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    color: rgba(220, 20, 60, 0.7);
+    font-size: 10px;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.champion-item.selected:hover::after {
+    opacity: 1;
 }
 
 .champion-icon,

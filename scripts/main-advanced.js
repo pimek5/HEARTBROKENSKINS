@@ -118,33 +118,59 @@ function toggleChampions() {
 }
 
 function selectChampion(championName) {
-    console.log('Selected champion:', championName);
+    console.log('Champion clicked:', championName);
     
-    // Remove previous selection
-    document.querySelectorAll('.champion-item').forEach(item => {
-        item.classList.remove('selected');
-    });
-    
-    // Add selection to clicked champion
+    // Check if champion is already selected
     const selectedItem = document.querySelector(`[data-champion="${championName}"]`);
-    if (selectedItem) {
-        selectedItem.classList.add('selected');
-    }
+    const isAlreadySelected = selectedItem && selectedItem.classList.contains('selected');
     
-    // If we're showing posts, filter by champion tag
-    if (window.PostsManager && window.PostsManager.getAllPosts) {
-        const allPosts = window.PostsManager.getAllPosts();
-        filteredItems = allPosts.filter(post => 
-            post.tags && post.tags.some(tag => tag.toLowerCase().includes(championName.toLowerCase()))
-        );
+    if (isAlreadySelected) {
+        // Deselect champion - show all content
+        console.log('Deselecting champion:', championName);
+        selectedItem.classList.remove('selected');
         
-        updateSectionHeader('📰', `Posts for ${championName.toUpperCase()}`);
+        // Reset to show all posts/content
+        if (window.PostsManager && window.PostsManager.getAllPosts) {
+            filteredItems = window.PostsManager.getAllPosts();
+            updateSectionHeader('📰', 'All Posts');
+        } else {
+            filteredItems = window.contentData || [];
+            updateSectionHeader('🎮', 'All Champions');
+        }
+        
+        // Update display after deselection
+        currentPage = 1;
+        renderItems();
+        setupPagination();
     } else {
-        // If we're showing champions, filter by selected champion
-        const allChampions = window.contentData || [];
-        filteredItems = allChampions.filter(champion => champion.title === championName);
+        // Select new champion
+        console.log('Selecting champion:', championName);
         
-        updateSectionHeader('⚔️', championName);
+        // Remove previous selection
+        document.querySelectorAll('.champion-item').forEach(item => {
+            item.classList.remove('selected');
+        });
+        
+        // Add selection to clicked champion
+        if (selectedItem) {
+            selectedItem.classList.add('selected');
+        }
+        
+        // If we're showing posts, filter by champion tag
+        if (window.PostsManager && window.PostsManager.getAllPosts) {
+            const allPosts = window.PostsManager.getAllPosts();
+            filteredItems = allPosts.filter(post => 
+                post.tags && post.tags.some(tag => tag.toLowerCase().includes(championName.toLowerCase()))
+            );
+            
+            updateSectionHeader('📰', `Posts for ${championName.toUpperCase()}`);
+        } else {
+            // If we're showing champions, filter by selected champion
+            const allChampions = window.contentData || [];
+            filteredItems = allChampions.filter(champion => champion.title === championName);
+            
+            updateSectionHeader('⚔️', championName);
+        }
     }
     
     currentPage = 1;
