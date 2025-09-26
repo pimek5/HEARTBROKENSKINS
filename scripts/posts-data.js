@@ -286,6 +286,18 @@ async function initializePostsSystem() {
             window.postsContentManager.dataLoaded();
         }
         
+        // Trigger main page update if displayItems function exists
+        if (typeof window.displayItems === 'function') {
+            console.log('🔄 Triggering main page content update with posts');
+            window.displayItems();
+        }
+        
+        // Fire custom event for posts ready
+        const postsReadyEvent = new CustomEvent('postsReady', {
+            detail: { postsCount: window.postsData.length }
+        });
+        document.dispatchEvent(postsReadyEvent);
+        
         return true;
     } catch (error) {
         console.error('❌ Failed to initialize posts system:', error);

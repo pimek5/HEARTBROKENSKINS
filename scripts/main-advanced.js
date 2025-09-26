@@ -31,6 +31,23 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     tryLoadChampions();
     
+    // Initialize with loading message
+    document.getElementById('contentGrid').innerHTML = '<div class="no-results">Loading posts...</div>';
+    
+    setupFilters();
+    setupChampionSearch();
+});
+
+// Listen for posts ready event
+document.addEventListener('postsReady', function(event) {
+    console.log('📰 Posts system ready with', event.detail.postsCount, 'posts');
+    displayItems();
+});
+
+// Main function to display items (posts or champions)
+window.displayItems = function() {
+    console.log('🔄 displayItems called');
+    
     // Check if we have posts data for main content
     if (window.PostsManager && window.PostsManager.getAllPosts) {
         console.log('Found posts data, using posts for main content');
@@ -57,10 +74,21 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('contentGrid').innerHTML = '<div class="no-results">No champions found</div>';
         }
     }
+};
+        updateSectionHeader('⚔️', 'Champions');
+        
+        if (allItems.length > 0) {
+            renderItems();
+            setupPagination();
+        } else {
+            document.getElementById('contentGrid').innerHTML = '<div class="no-results">No champions found</div>';
+        }
+    }
     
+    // Setup filters and search after content is loaded
     setupFilters();
     setupChampionSearch();
-});
+}
 
 function updateSectionHeader(icon, title) {
     const sectionHeader = document.querySelector('.section-header h2');
