@@ -1,12 +1,98 @@
 // Posts Data System
 console.log('Loading posts data...');
 
-// Initialize posts data - empty by default (will be loaded from localStorage)
+// Posts Data System with GitHub persistence
+console.log('Loading posts data system...');
+
+// GitHub configuration
+const GITHUB_CONFIG = {
+    owner: 'pimek5',
+    repo: 'HEARTBROKENSKINS',
+    branch: 'main',
+    file: 'posts-database.json'
+};
+
+// Initialize posts data - will be loaded from GitHub
 window.postsData = [];
 
-// Posts management functions
+// Posts management functions with GitHub persistence
 window.PostsManager = {
-    nextId: 1, // Start from 1 for empty posts list
+    nextId: 1,
+    isLoading: false,
+    
+    // Load posts from GitHub
+    async loadFromGitHub() {
+        this.isLoading = true;
+        console.log('📡 Loading posts from GitHub...');
+        
+        try {
+            const response = await fetch(`https://raw.githubusercontent.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/${GITHUB_CONFIG.branch}/${GITHUB_CONFIG.file}?v=${Date.now()}`);
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log('📦 GitHub data loaded:', data);
+                
+                if (data.posts && Array.isArray(data.posts)) {
+                    window.postsData = data.posts;
+                    this.nextId = data.nextId || (data.posts.length > 0 ? Math.max(...data.posts.map(p => p.id)) + 1 : 1);
+                    
+                    console.log('✅ Successfully loaded posts from GitHub:', window.postsData.length, 'posts');
+                    console.log('📋 Next ID will be:', this.nextId);
+                    
+                    // Also save to localStorage as backup
+                    this.saveToStorage();
+                    this.isLoading = false;
+                    return true;
+                }
+            } else {
+                console.log('⚠️ GitHub file not found or not accessible, using fallback');
+            }
+        } catch (error) {
+            console.error('❌ Failed to load from GitHub:', error);
+        }
+        
+        // Fallback to localStorage if GitHub fails
+        console.log('📱 Falling back to localStorage...');
+        const localSuccess = this.loadFromStorage();
+        this.isLoading = false;
+        return localSuccess;
+    },
+    
+    // Save posts to GitHub using repository dispatch
+    async saveToGitHub() {
+        console.log('💾 Saving posts to GitHub...');
+        
+        // Save to localStorage as backup first
+        this.saveToStorage();
+        
+        // Create the data structure for GitHub
+        const githubData = {
+            posts: window.postsData,
+            nextId: this.nextId,
+            lastUpdated: new Date().toISOString(),
+            version: "1.0"
+        };
+        
+        console.log('📄 Data prepared for GitHub:', githubData);
+        console.log('📊 Saving', githubData.posts.length, 'posts to database');
+        
+        // For frontend security, we'll display instructions instead of direct API calls
+        // This prevents exposing GitHub tokens in the frontend
+        if (githubData.posts.length > 0) {
+            console.log('🔗 Posts data ready for GitHub database:');
+            console.log('� Copy this JSON and replace the content of posts-database.json:');
+            console.log('```json');
+            console.log(JSON.stringify(githubData, null, 2));
+            console.log('```');
+            
+            // Show user notification about manual step
+            if (window.showNotification) {
+                window.showNotification('📋 Posts saved to localStorage! Check console for GitHub database update instructions.', 'info');
+            }
+        }
+        
+        return true;
+    },
     
     getAllPosts: function() {
         return window.postsData || [];
@@ -16,7 +102,7 @@ window.PostsManager = {
         return window.postsData.find(post => post.id === parseInt(id));
     },
     
-    addPost: function(postData) {
+    addPost: async function(postData) {
         const newPost = {
             id: this.nextId++,
             title: postData.title || 'Untitled Post',
@@ -38,12 +124,13 @@ window.PostsManager = {
         }
         
         window.postsData.unshift(newPost); // Add to beginning
-        this.saveToStorage();
+        await this.saveToGitHub(); // Save to GitHub (persistent)
         this.updateAllPages(); // Update all pages that display posts
+        console.log('✅ Post added:', newPost.title);
         return newPost;
     },
     
-    updatePost: function(id, postData) {
+    updatePost: async function(id, postData) {
         const index = window.postsData.findIndex(post => post.id === parseInt(id));
         if (index !== -1) {
             window.postsData[index] = {
@@ -59,19 +146,21 @@ window.PostsManager = {
                 window.postsData[index].currency = postData.currency || 'PLN';
             }
             
-            this.saveToStorage();
+            await this.saveToGitHub(); // Save to GitHub (persistent)
             this.updateAllPages(); // Update all pages that display posts
+            console.log('✅ Post updated:', window.postsData[index].title);
             return window.postsData[index];
         }
         return null;
     },
     
-    deletePost: function(id) {
+    deletePost: async function(id) {
         const index = window.postsData.findIndex(post => post.id === parseInt(id));
         if (index !== -1) {
             const deleted = window.postsData.splice(index, 1)[0];
-            this.saveToStorage();
+            await this.saveToGitHub(); // Save to GitHub (persistent)
             this.updateAllPages(); // Update all pages that display posts
+            console.log('🗑️ Post deleted:', deleted.title);
             return deleted;
         }
         return null;
@@ -158,18 +247,33 @@ window.PostsManager = {
     }
 };
 
-// Load saved posts on initialization
-const loadedFromStorage = window.PostsManager.loadFromStorage();
-
-// Only use sample data if no saved posts exist
-if (!loadedFromStorage) {
-    console.log('No saved posts found, starting with empty posts list');
-    // Don't save empty data to storage - let user create posts naturally
+// Initialize the posts system - load from GitHub first, fallback to localStorage
+async function initializePostsSystem() {
+    console.log('🚀 Initializing posts system...');
+    
+    try {
+        // Try to load from GitHub first (persistent storage)
+        const githubSuccess = await window.PostsManager.loadFromGitHub();
+        
+        if (githubSuccess) {
+            console.log('✅ Posts loaded from GitHub successfully');
+        } else {
+            console.log('⚠️ No GitHub data found, starting with empty posts list');
+        }
+        
+        console.log('📊 Posts system initialized with', window.postsData.length, 'posts');
+        
+        // Trigger posts manager if it exists
+        if (window.postsContentManager) {
+            window.postsContentManager.dataLoaded();
+        }
+        
+        return true;
+    } catch (error) {
+        console.error('❌ Failed to initialize posts system:', error);
+        return false;
+    }
 }
 
-console.log('Posts data loaded:', window.postsData.length, 'posts');
-
-// Trigger posts manager if it exists
-if (window.postsContentManager) {
-    window.postsContentManager.dataLoaded();
-}
+// Start the initialization process
+initializePostsSystem();

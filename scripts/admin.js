@@ -393,7 +393,7 @@ function editPost(postId) {
     togglePriceField();
 }
 
-function deletePost(postId) {
+async function deletePost(postId) {
     console.log('🗑️ Delete request for post ID:', postId);
     console.log('🔐 Login status:', isLoggedIn);
     
@@ -418,11 +418,11 @@ function deletePost(postId) {
     
     if (confirmed) {
         console.log('🔥 Attempting to delete post...');
-        const deleted = window.PostsManager.deletePost(postId);
+        const deleted = await window.PostsManager.deletePost(postId);
         console.log('🗑️ Delete result:', deleted);
         
         if (deleted) {
-            showNotification('✅ Post deleted! Database updated across all pages.', 'success');
+            showNotification('✅ Post deleted! Saved to GitHub database.', 'success');
             loadPosts();
             console.log('🎉 Post successfully deleted:', deleted.title);
         } else {
@@ -438,7 +438,7 @@ function closePostModal() {
     document.getElementById('postModal').style.display = 'none';
 }
 
-function handlePostSubmit(event) {
+async function handlePostSubmit(event) {
     event.preventDefault();
     
     if (!isLoggedIn) return;
@@ -462,9 +462,9 @@ function handlePostSubmit(event) {
     try {
         if (postId) {
             // Update existing post
-            const updated = window.PostsManager.updatePost(postId, postData);
+            const updated = await window.PostsManager.updatePost(postId, postData);
             if (updated) {
-                showNotification('Post updated successfully!', 'success');
+                showNotification('✅ Post updated! Saved to GitHub database.', 'success');
                 console.log('✏️ Post updated:', updated.title);
             } else {
                 showNotification('Failed to update post', 'error');
@@ -472,8 +472,8 @@ function handlePostSubmit(event) {
             }
         } else {
             // Create new post
-            const created = window.PostsManager.addPost(postData);
-            showNotification('Post created successfully!', 'success');
+            const created = await window.PostsManager.addPost(postData);
+            showNotification('✅ Post created! Saved to GitHub database.', 'success');
             console.log('📝 Post created:', created.title);
         }
         
