@@ -788,37 +788,27 @@
                         let ownerMember = null;
                         
                         if (widgetData.members && widgetData.members.length > 0) {
-                            // Try to find by ID first
+                            // Try to find by ID first (this is the most reliable)
                             ownerMember = widgetData.members.find(member => member.id === DISCORD_OWNER_ID);
+                            console.log('Search by ID result:', ownerMember);
                             
-                            // If not found by ID, try to find by username
+                            // If not found by ID, the user might be offline or not in widget
                             if (!ownerMember) {
-                                ownerMember = widgetData.members.find(member => 
-                                    member.username?.toLowerCase().includes('p1mek') || 
-                                    member.nick?.toLowerCase().includes('p1mek') ||
-                                    member.username?.toLowerCase().includes('pimek') || 
-                                    member.nick?.toLowerCase().includes('pimek')
-                                );
-                            }
-                            
-                            // If still not found, check if there's a guild owner
-                            if (!ownerMember && widgetData.members[0]) {
-                                // Sometimes the first member might be the owner
-                                ownerMember = widgetData.members[0];
+                                console.log('Owner not found by ID, user might be offline');
                             }
                         }
                         
                         if (ownerMember) {
-                            // Always display "pimek" regardless of Discord nickname
-                            const displayName = 'pimek';
+                            // Use the actual Discord username/nickname
+                            const displayName = ownerMember.nick || ownerMember.username || 'Unknown';
                             console.log('Found owner member:', {
                                 id: ownerMember.id,
                                 username: ownerMember.username,
                                 nick: ownerMember.nick,
-                                forcedDisplayName: displayName
+                                displayName: displayName
                             });
                             updateOwnerInfo(displayName, ownerMember.avatar_url);
-                            console.log('Owner info updated with forced name: pimek');
+                            console.log('Owner info updated with Discord data:', ownerMember);
                             return;
                         } else {
                             console.log('Owner member not found in widget data');
@@ -828,13 +818,13 @@
                     console.log('Widget API failed for owner info:', e.message);
                 }
                 
-                // Fallback: Use known owner info
-                updateOwnerInfo('pimek', null);
-                console.log('Using fallback owner info: pimek');
+                // Fallback: Use known owner info based on the Discord profile
+                updateOwnerInfo('.𝑘𝑖𝑡𝑡𝑦', null);
+                console.log('Using fallback owner info: .𝑘𝑖𝑡𝑡𝑦');
                 
             } catch (error) {
                 console.warn('Failed to fetch owner info:', error);
-                updateOwnerInfo('pimek', null);
+                updateOwnerInfo('.𝑘𝑖𝑡𝑡𝑦', null);
             }
         }
         
