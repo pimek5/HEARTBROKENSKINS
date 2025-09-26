@@ -32,13 +32,50 @@
             background-position: center;
         }
         
-        /* Additional button style for current page */
-        .btn-accent {
-            background: linear-gradient(45deg, #8a2be2, #dc143c);
-            color: white;
-            border: 1px solid rgba(138, 43, 226, 0.3);
-            opacity: 0.8;
-            pointer-events: none;
+        /* Modern navigation buttons */
+        .nav-buttons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .nav-btn {
+            position: relative;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            padding: 12px 24px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .nav-btn:hover {
+            border-color: rgba(220, 20, 60, 0.5);
+            color: #dc143c;
+            transform: translateY(-2px);
+        }
+        
+        .nav-btn.active {
+            border-color: #dc143c;
+            color: #dc143c;
+            position: relative;
+        }
+        
+        .nav-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #dc143c, #ff6b6b);
+            border-radius: 1px;
         }
     </style>
 </head>
@@ -63,9 +100,9 @@
                     </div>
                 </a>
                 <div class="nav-buttons">
-                    <a href="https://pimek5.github.io/HEARTBROKENSKINS/index.html" class="btn btn-primary">Home</a>
-                    <a href="https://pimek5.github.io/HEARTBROKENSKINS/admin.html" class="btn btn-secondary">Admin Panel</a>
-                    <a href="https://pimek5.github.io/HEARTBROKENSKINS/about.html" class="btn btn-accent">About</a>
+                    <a href="https://pimek5.github.io/HEARTBROKENSKINS/index.html" class="nav-btn">HOME</a>
+                    <a href="https://pimek5.github.io/HEARTBROKENSKINS/about.html" class="nav-btn active">ABOUT</a>
+                    <a href="https://pimek5.github.io/HEARTBROKENSKINS/admin.html" class="nav-btn">CONTACT</a>
                 </div>
             </div>
         </header>
