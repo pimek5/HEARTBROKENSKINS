@@ -394,23 +394,43 @@ function editPost(postId) {
 }
 
 function deletePost(postId) {
-    if (!isLoggedIn) return;
+    console.log('🗑️ Delete request for post ID:', postId);
+    console.log('🔐 Login status:', isLoggedIn);
+    
+    if (!isLoggedIn) {
+        console.log('❌ Delete blocked: User not logged in');
+        showNotification('You must be logged in to delete posts', 'error');
+        return;
+    }
     
     const post = window.PostsManager.getPostById(postId);
+    console.log('📄 Found post:', post);
+    
     if (!post) {
+        console.log('❌ Post not found for ID:', postId);
         showNotification('Post not found', 'error');
         return;
     }
     
-    if (confirm(`Are you sure you want to delete "${post.title}"?`)) {
+    console.log('❓ Showing confirmation dialog for:', post.title);
+    const confirmed = confirm(`Are you sure you want to delete "${post.title}"?`);
+    console.log('✅ User confirmed deletion:', confirmed);
+    
+    if (confirmed) {
+        console.log('🔥 Attempting to delete post...');
         const deleted = window.PostsManager.deletePost(postId);
+        console.log('🗑️ Delete result:', deleted);
+        
         if (deleted) {
             showNotification('✅ Post deleted! Database updated across all pages.', 'success');
             loadPosts();
-            console.log('🗑️ Post deleted:', deleted.title);
+            console.log('🎉 Post successfully deleted:', deleted.title);
         } else {
+            console.log('❌ Delete failed');
             showNotification('Failed to delete post', 'error');
         }
+    } else {
+        console.log('❌ User cancelled deletion');
     }
 }
 
