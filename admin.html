@@ -238,30 +238,28 @@
                         </div>
                     </div>
                     
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="postType">Type</label>
-                            <select id="postType" name="type" onchange="togglePriceField()">
-                                <option value="free">Free</option>
-                                <option value="premium">Premium</option>
-                                <option value="featured">Featured</option>
+                    <div class="form-group">
+                        <label for="postType">Type</label>
+                        <select id="postType" name="type" onchange="togglePriceField()">
+                            <option value="free">Free</option>
+                            <option value="premium">Premium</option>
+                            <option value="featured">Featured</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group price-field" style="display: none;">
+                        <label for="postPrice">Price</label>
+                        <div class="price-input-group">
+                            <input type="text" id="postPrice" name="price" placeholder="Enter price (e.g. 15, 10.50, 25.99)" 
+                                   class="price-input-large" pattern="[0-9]+([.][0-9]{1,2})?" 
+                                   title="Enter a valid price (numbers only, max 2 decimal places)">
+                            <select id="postCurrency" name="currency" class="currency-select">
+                                <option value="PLN">PLN</option>
+                                <option value="EUR">EUR</option>
+                                <option value="USD">$</option>
                             </select>
                         </div>
-                        
-                        <div class="form-group price-field" style="display: none;">
-                            <label for="postPrice">Price</label>
-                            <div class="price-input-group">
-                                <input type="text" id="postPrice" name="price" placeholder="Enter price (e.g. 15, 10.50, 25.99)" 
-                                       class="price-input-large" pattern="[0-9]+([.][0-9]{1,2})?" 
-                                       title="Enter a valid price (numbers only, max 2 decimal places)">
-                                <select id="postCurrency" name="currency" class="currency-select">
-                                    <option value="PLN">PLN</option>
-                                    <option value="EUR">EUR</option>
-                                    <option value="USD">$</option>
-                                </select>
-                            </div>
-                            <small>💰 Enter the price for premium content (e.g. 15, 10.50, 25.99)</small>
-                        </div>
+                        <small>💰 Enter the price for premium content (e.g. 15, 10.50, 25.99)</small>
                     </div>
                     
                     <div class="form-row">
