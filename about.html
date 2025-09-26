@@ -475,31 +475,9 @@
         async function fetchDiscordStats() {
             try {
                 // Try multiple approaches to get Discord stats
+                // Priority: Invite API first (more accurate for member count)
                 
-                // Method 1: Discord Widget API (requires widget to be enabled)
-                try {
-                    const widgetResponse = await fetch(`https://discord.com/api/guilds/${DISCORD_SERVER_ID}/widget.json`, {
-                        mode: 'cors',
-                        headers: {
-                            'Accept': 'application/json',
-                        }
-                    });
-                    if (widgetResponse.ok) {
-                        const widgetData = await widgetResponse.json();
-                        const memberCount = widgetData.members?.length || 0;
-                        const onlineCount = widgetData.presence_count || 0;
-                        if (memberCount > 0) {
-                            updateStats(memberCount, onlineCount);
-                            updateDiscordCardStats(memberCount, onlineCount);
-                            console.log('Discord stats updated via Widget API');
-                            return;
-                        }
-                    }
-                } catch (e) {
-                    console.log('Widget API failed:', e.message);
-                }
-                
-                // Method 2: Discord Invite API
+                // Method 1: Discord Invite API (most reliable for total member count)
                 try {
                     const inviteResponse = await fetch(`https://discord.com/api/v10/invites/hexrtbrxenchromas?with_counts=true`);
                     if (inviteResponse.ok) {
@@ -509,15 +487,15 @@
                         if (memberCount > 0) {
                             updateStats(memberCount, onlineCount);
                             updateDiscordCardStats(memberCount, onlineCount);
-                            console.log('Discord stats updated via Invite API');
+                            console.log('Discord stats updated via Invite API:', {memberCount, onlineCount});
                             return;
                         }
                     }
                 } catch (e) {
-                    console.log('Invite API failed, using fallback...');
+                    console.log('Invite API failed:', e.message);
                 }
                 
-                // Method 3: Alternative invite endpoint
+                // Method 2: Alternative invite endpoint
                 try {
                     const altResponse = await fetch(`https://discordapp.com/api/invites/hexrtbrxenchromas?with_counts=true`);
                     if (altResponse.ok) {
@@ -527,24 +505,50 @@
                         if (memberCount > 0) {
                             updateStats(memberCount, onlineCount);
                             updateDiscordCardStats(memberCount, onlineCount);
-                            console.log('Discord stats updated via alternative API');
+                            console.log('Discord stats updated via alternative API:', {memberCount, onlineCount});
                             return;
                         }
                     }
                 } catch (e) {
-                    console.log('Alternative API failed');
+                    console.log('Alternative API failed:', e.message);
+                }
+                
+                // Method 3: Discord Widget API (only for online count, less reliable for total members)
+                try {
+                    const widgetResponse = await fetch(`https://discord.com/api/guilds/${DISCORD_SERVER_ID}/widget.json`, {
+                        mode: 'cors',
+                        headers: {
+                            'Accept': 'application/json',
+                        }
+                    });
+                    if (widgetResponse.ok) {
+                        const widgetData = await widgetResponse.json();
+                        // Widget API gives us online members list, not total server members
+                        const onlineCount = widgetData.presence_count || widgetData.members?.length || 0;
+                        // For total members, we'll use last known good value or estimate
+                        const memberCount = 3812; // Use known server size as widget doesn't provide total
+                        
+                        if (onlineCount > 0) {
+                            updateStats(memberCount, onlineCount);
+                            updateDiscordCardStats(memberCount, onlineCount);
+                            console.log('Discord stats updated via Widget API (estimated total):', {memberCount, onlineCount});
+                            return;
+                        }
+                    }
+                } catch (e) {
+                    console.log('Widget API failed:', e.message);
                 }
                 
                 // If all APIs fail, use fallback values
                 console.log('All Discord APIs failed, using fallback values');
-                updateStats(3811, 791);
-                updateDiscordCardStats(3811, 791);
+                updateStats(3812, 791);
+                updateDiscordCardStats(3812, 791);
                 
             } catch (error) {
                 console.warn('Failed to fetch Discord stats:', error);
                 // Use fallback values
-                updateStats(3811, 791);
-                updateDiscordCardStats(3811, 791);
+                updateStats(3812, 791);
+                updateDiscordCardStats(3812, 791);
             }
         }
         
@@ -617,6 +621,11 @@
                     const onlineCount = inviteData.guild?.approximate_presence_count || 791;
                     const memberCount = inviteData.guild?.approximate_member_count || 3812;
                     updateDiscordCardStats(memberCount, onlineCount);
+                    console.log('Discord card stats updated:', {memberCount, onlineCount});
+                } else {
+                    // Use fallback if API fails
+                    console.log('Discord card using fallback values');
+                    updateDiscordCardStats(3812, 791);
                 }
             } catch (error) {
                 console.warn('Failed to update Discord card stats:', error);
