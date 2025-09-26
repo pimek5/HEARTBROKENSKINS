@@ -9,13 +9,24 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, initializing...');
     
     // Try to load champions for sidebar immediately, or wait a bit
+    let retryCount = 0;
+    const maxRetries = 50;
+    
     function tryLoadChampions() {
+        console.log(`Trying to load champions (attempt ${retryCount + 1}/${maxRetries})`);
+        console.log('Current contentData:', window.contentData ? window.contentData.length : 'not loaded');
+        
         if (window.contentData && window.contentData.length > 0) {
             console.log('Found champion data:', window.contentData.length, 'champions');
             setupChampionsSidebar();
+        } else if (retryCount < maxRetries) {
+            retryCount++;
+            console.log('Champions data not ready, retrying in 200ms...');
+            setTimeout(tryLoadChampions, 200);
         } else {
-            console.log('Champions data not ready, retrying in 100ms...');
-            setTimeout(tryLoadChampions, 100);
+            console.log('Failed to load champions after', maxRetries, 'attempts');
+            // Force setup with empty data to show loading message
+            setupChampionsSidebar();
         }
     }
     tryLoadChampions();
@@ -82,11 +93,11 @@ function setupChampionsSidebar() {
     if (sectionIcon) sectionIcon.textContent = '⚔️';
     if (sectionTitle) sectionTitle.textContent = `Champions (${champions.length})`;
     
-    // Fill champions list
+    // Fill champions list using the same method as admin.html
     championsList.innerHTML = champions.map(champion => `
-        <div class="champion-item" data-champion="${champion.id}" onclick="selectChampion('${champion.id}')">
+        <div class="champion-item" data-champion="${champion.id || champion.title}" onclick="selectChampion('${champion.id || champion.title}')">
             <img src="${champion.image}" alt="${champion.title}" class="champion-avatar"
-                 onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+                 onerror="this.src='https://via.placeholder.com/24x24?text=⚔️'">
             <span class="champion-fallback" style="display:none;">⚔️</span>
             <span class="champion-name">${champion.title}</span>
         </div>
