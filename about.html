@@ -765,65 +765,49 @@
         // Function to fetch Discord owner info
         async function fetchDiscordOwner() {
             try {
-                // First try: Widget API to get current username/status
+                // Use manual owner data since Discord API might not return correct info
+                const ownerData = {
+                    id: '318104006385729538',
+                    username: 'pimek',
+                    displayName: 'RĪŦƚЩÂĿҚЄR',
+                    avatar_url: 'https://cdn.discordapp.com/avatars/318104006385729538/b81f9550ab9d145bbd9f81799f19b3ba.webp?size=1024'
+                };
+                
+                console.log('Using manual owner data:', ownerData);
+                updateOwnerInfo(ownerData.displayName, ownerData.avatar_url);
+                
+                // Still try Discord API in background for verification
                 try {
                     const widgetResponse = await fetch(`https://discord.com/api/guilds/${DISCORD_SERVER_ID}/widget.json`);
                     
                     if (widgetResponse.ok) {
                         const widgetData = await widgetResponse.json();
-                        console.log('Discord Widget Data:', widgetData);
-                        console.log('Looking for owner ID:', DISCORD_OWNER_ID);
+                        console.log('Discord Widget Data (for verification):', widgetData);
                         
-                        // Log all members to debug
+                        // Log all members to see what API actually returns
                         if (widgetData.members) {
-                            console.log('All Discord members:', widgetData.members.map(m => ({
+                            console.log('All Discord members found:', widgetData.members.map(m => ({
                                 id: m.id,
                                 username: m.username,
                                 nick: m.nick
                             })));
-                        }
-                        
-                        // Look for owner in the members list - try different approaches
-                        let ownerMember = null;
-                        
-                        if (widgetData.members && widgetData.members.length > 0) {
-                            // Try to find by ID first (this is the most reliable)
-                            ownerMember = widgetData.members.find(member => member.id === DISCORD_OWNER_ID);
-                            console.log('Search by ID result:', ownerMember);
                             
-                            // If not found by ID, the user might be offline or not in widget
-                            if (!ownerMember) {
-                                console.log('Owner not found by ID, user might be offline');
+                            const ownerMember = widgetData.members.find(member => member.id === DISCORD_OWNER_ID);
+                            if (ownerMember) {
+                                console.log('API found owner member:', ownerMember);
+                            } else {
+                                console.log('Owner not found in API (using manual data instead)');
                             }
-                        }
-                        
-                        if (ownerMember) {
-                            // Use the actual Discord username/nickname
-                            const displayName = ownerMember.nick || ownerMember.username || 'Unknown';
-                            console.log('Found owner member:', {
-                                id: ownerMember.id,
-                                username: ownerMember.username,
-                                nick: ownerMember.nick,
-                                displayName: displayName
-                            });
-                            updateOwnerInfo(displayName, ownerMember.avatar_url);
-                            console.log('Owner info updated with Discord data:', ownerMember);
-                            return;
-                        } else {
-                            console.log('Owner member not found in widget data');
                         }
                     }
                 } catch (e) {
-                    console.log('Widget API failed for owner info:', e.message);
+                    console.log('Widget API verification failed:', e.message);
                 }
-                
-                // Fallback: PTB Discord users might not appear in widget
-                updateOwnerInfo('.𝑘𝑖𝑡𝑡𝑦', null);
-                console.log('Using fallback owner info (PTB Discord): .𝑘𝑖𝑡𝑡𝑦');
                 
             } catch (error) {
                 console.warn('Failed to fetch owner info:', error);
-                updateOwnerInfo('.𝑘𝑖𝑡𝑡𝑦', null);
+                // Fallback to manual data
+                updateOwnerInfo('RĪŦƚЩÂĿҚЄR', 'https://cdn.discordapp.com/avatars/318104006385729538/b81f9550ab9d145bbd9f81799f19b3ba.webp?size=1024');
             }
         }
         
