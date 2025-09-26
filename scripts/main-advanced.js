@@ -95,7 +95,7 @@ function setupChampionsSidebar() {
     
     // Fill champions list using the same method as admin.html
     championsList.innerHTML = champions.map(champion => `
-        <div class="champion-item" data-champion="${champion.id || champion.title}" onclick="selectChampion('${champion.id || champion.title}')">
+        <div class="champion-item" data-champion="${champion.title}" onclick="selectChampion('${champion.title}')">
             <img src="${champion.image}" alt="${champion.title}" class="champion-avatar"
                  onerror="this.src='https://via.placeholder.com/24x24?text=⚔️'">
             <span class="champion-fallback" style="display:none;">⚔️</span>
@@ -117,8 +117,8 @@ function toggleChampions() {
     }
 }
 
-function selectChampion(championId) {
-    console.log('Selected champion:', championId);
+function selectChampion(championName) {
+    console.log('Selected champion:', championName);
     
     // Remove previous selection
     document.querySelectorAll('.champion-item').forEach(item => {
@@ -126,7 +126,7 @@ function selectChampion(championId) {
     });
     
     // Add selection to clicked champion
-    const selectedItem = document.querySelector(`[data-champion="${championId}"]`);
+    const selectedItem = document.querySelector(`[data-champion="${championName}"]`);
     if (selectedItem) {
         selectedItem.classList.add('selected');
     }
@@ -135,16 +135,16 @@ function selectChampion(championId) {
     if (window.PostsManager && window.PostsManager.getAllPosts) {
         const allPosts = window.PostsManager.getAllPosts();
         filteredItems = allPosts.filter(post => 
-            post.tags && post.tags.some(tag => tag.toLowerCase().includes(championId.toLowerCase()))
+            post.tags && post.tags.some(tag => tag.toLowerCase().includes(championName.toLowerCase()))
         );
         
-        updateSectionHeader('📰', `Posts for ${championId}`);
+        updateSectionHeader('📰', `Posts for ${championName.toUpperCase()}`);
     } else {
         // If we're showing champions, filter by selected champion
         const allChampions = window.contentData || [];
-        filteredItems = allChampions.filter(champion => champion.id === championId);
+        filteredItems = allChampions.filter(champion => champion.title === championName);
         
-        updateSectionHeader('⚔️', championId);
+        updateSectionHeader('⚔️', championName);
     }
     
     currentPage = 1;
