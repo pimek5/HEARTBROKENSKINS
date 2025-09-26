@@ -33,16 +33,34 @@ window.PostsManager = {
                 console.log('📦 GitHub data loaded:', data);
                 
                 if (data.posts && Array.isArray(data.posts)) {
-                    window.postsData = data.posts;
-                    this.nextId = data.nextId || (data.posts.length > 0 ? Math.max(...data.posts.map(p => p.id)) + 1 : 1);
-                    
-                    console.log('✅ Successfully loaded posts from GitHub:', window.postsData.length, 'posts');
-                    console.log('📋 Next ID will be:', this.nextId);
-                    
-                    // Also save to localStorage as backup
-                    this.saveToStorage();
-                    this.isLoading = false;
-                    return true;
+                    // If GitHub has posts, use them
+                    if (data.posts.length > 0) {
+                        window.postsData = data.posts;
+                        this.nextId = data.nextId || (Math.max(...data.posts.map(p => p.id)) + 1);
+                        
+                        console.log('✅ Successfully loaded posts from GitHub:', window.postsData.length, 'posts');
+                        console.log('📋 Next ID will be:', this.nextId);
+                        
+                        // Also save to localStorage as backup
+                        this.saveToStorage();
+                        this.isLoading = false;
+                        return true;
+                    } else {
+                        // GitHub has empty posts array, check localStorage for existing posts
+                        console.log('📱 GitHub has empty posts, checking localStorage...');
+                        const localSuccess = this.loadFromStorage();
+                        if (localSuccess && window.postsData.length > 0) {
+                            console.log('✅ Found posts in localStorage, using local data');
+                            this.isLoading = false;
+                            return true;
+                        } else {
+                            console.log('📋 No posts in localStorage either, starting fresh');
+                            window.postsData = [];
+                            this.nextId = 1;
+                            this.isLoading = false;
+                            return true;
+                        }
+                    }
                 }
             } else {
                 console.log('⚠️ GitHub file not found or not accessible, using fallback');
