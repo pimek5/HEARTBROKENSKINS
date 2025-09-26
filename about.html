@@ -809,15 +809,16 @@
                         }
                         
                         if (ownerMember) {
-                            const displayName = ownerMember.nick || ownerMember.username || 'pimek';
+                            // Always display "pimek" regardless of Discord nickname
+                            const displayName = 'pimek';
                             console.log('Found owner member:', {
                                 id: ownerMember.id,
                                 username: ownerMember.username,
                                 nick: ownerMember.nick,
-                                displayName: displayName
+                                forcedDisplayName: displayName
                             });
                             updateOwnerInfo(displayName, ownerMember.avatar_url);
-                            console.log('Owner info updated via Widget API:', ownerMember);
+                            console.log('Owner info updated with forced name: pimek');
                             return;
                         } else {
                             console.log('Owner member not found in widget data');
