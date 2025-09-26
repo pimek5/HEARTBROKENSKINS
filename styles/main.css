@@ -605,10 +605,11 @@ body::after {
     box-shadow: 0 0 20px rgba(220, 20, 60, 0.2);
 }
 
-.champion-icon {
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
+.champion-icon,
+.champion-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
     object-fit: cover;
     border: 1px solid rgba(255, 255, 255, 0.1);
     flex-shrink: 0;
@@ -616,7 +617,8 @@ body::after {
     transition: all 0.3s ease;
 }
 
-.champion-item:hover .champion-icon {
+.champion-item:hover .champion-icon,
+.champion-item:hover .champion-avatar {
     filter: brightness(1.1);
     box-shadow: 0 0 10px rgba(220, 20, 60, 0.3);
 }

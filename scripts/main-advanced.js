@@ -83,7 +83,7 @@ function setupChampionsSidebar() {
     if (sectionTitle) sectionTitle.textContent = `Champions (${champions.length})`;
     
     // Fill champions list
-    championsList.innerHTML = champions.slice(0, 50).map(champion => `
+    championsList.innerHTML = champions.map(champion => `
         <div class="champion-item" data-champion="${champion.id}" onclick="selectChampion('${champion.id}')">
             <img src="${champion.image}" alt="${champion.title}" class="champion-avatar"
                  onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
