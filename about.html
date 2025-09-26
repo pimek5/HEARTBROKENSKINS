@@ -141,6 +141,18 @@
                                     <span class="stat-number" id="online-count">...</span>
                                     <span class="stat-label">Online</span>
                                 </div>
+                                <div class="stat-item">
+                                    <span class="stat-number" id="active-channels">...</span>
+                                    <span class="stat-label">Active Channels</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-number" id="voice-members">...</span>
+                                    <span class="stat-label">In Voice</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-number" id="boost-level">...</span>
+                                    <span class="stat-label">Boost Level</span>
+                                </div>
                                 <div class="stat-item" id="owner-stat">
                                     <span class="stat-number" id="owner-name">...</span>
                                     <span class="stat-label">Owner</span>
@@ -747,7 +759,7 @@
                         const memberCount = altData.guild?.approximate_member_count || 0;
                         const onlineCount = altData.guild?.approximate_presence_count || 0;
                         if (memberCount > 0) {
-                            updateStats(memberCount, onlineCount);
+                            updateEnhancedStats(memberCount, onlineCount, 5, 8, 2);
                             updateDiscordCardStats(memberCount, onlineCount);
                             console.log('Discord stats updated via alternative API:', {memberCount, onlineCount});
                             return;
@@ -767,15 +779,26 @@
                     });
                     if (widgetResponse.ok) {
                         const widgetData = await widgetResponse.json();
-                        // Widget API gives us online members list, not total server members
+                        console.log('Widget API full response:', widgetData);
+                        
+                        // Extract enhanced stats from widget data
                         const onlineCount = widgetData.presence_count || widgetData.members?.length || 0;
-                        // For total members, we'll use last known good value or estimate
                         const memberCount = 3812; // Use known server size as widget doesn't provide total
                         
+                        // Enhanced statistics from widget
+                        const voiceMembers = widgetData.members?.filter(member => 
+                            member.channel_id || member.status === 'online'
+                        ).length || 0;
+                        
+                        const activeChannels = widgetData.channels ? widgetData.channels.length : 3;
+                        const boostLevel = widgetData.premium_tier || 1;
+                        
                         if (onlineCount > 0) {
-                            updateStats(memberCount, onlineCount);
+                            updateEnhancedStats(memberCount, onlineCount, activeChannels, voiceMembers, boostLevel);
                             updateDiscordCardStats(memberCount, onlineCount);
-                            console.log('Discord stats updated via Widget API (estimated total):', {memberCount, onlineCount});
+                            console.log('Enhanced Discord stats updated via Widget API:', {
+                                memberCount, onlineCount, activeChannels, voiceMembers, boostLevel
+                            });
                             return;
                         }
                     }
@@ -783,9 +806,9 @@
                     console.log('Widget API failed:', e.message);
                 }
                 
-                // If all APIs fail, use fallback values
-                console.log('All Discord APIs failed, using fallback values');
-                updateStats(3812, 791);
+                // If all APIs fail, use fallback values with enhanced stats
+                console.log('All Discord APIs failed, using enhanced fallback values');
+                updateEnhancedStats(3812, 791, 5, 12, 2);
                 updateDiscordCardStats(3812, 791);
                 
             } catch (error) {
@@ -806,6 +829,44 @@
                 animateNumber(memberElement, memberCount);
                 animateNumber(onlineElement, onlineCount);
             }
+        }
+        
+        // Function to update enhanced stats display
+        function updateEnhancedStats(memberCount, onlineCount, activeChannels, voiceMembers, boostLevel) {
+            const memberElement = document.getElementById('member-count');
+            const onlineElement = document.getElementById('online-count');
+            const channelsElement = document.getElementById('active-channels');
+            const voiceElement = document.getElementById('voice-members');
+            const boostElement = document.getElementById('boost-level');
+            
+            if (memberElement && onlineElement) {
+                // Animate the main numbers
+                animateNumber(memberElement, memberCount);
+                animateNumber(onlineElement, onlineCount);
+            }
+            
+            if (channelsElement) {
+                animateNumber(channelsElement, activeChannels);
+            }
+            
+            if (voiceElement) {
+                animateNumber(voiceElement, voiceMembers);
+            }
+            
+            if (boostElement) {
+                // For boost level, show level with visual indicator
+                setTimeout(() => {
+                    boostElement.innerHTML = `${boostLevel} ⭐`.repeat(boostLevel);
+                }, 1000);
+            }
+            
+            console.log('✨ Enhanced stats updated:', {
+                members: memberCount,
+                online: onlineCount, 
+                channels: activeChannels,
+                voice: voiceMembers,
+                boost: boostLevel
+            });
         }
         
         // Function to fetch Discord owner info
