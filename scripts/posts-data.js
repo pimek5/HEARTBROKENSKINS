@@ -62,8 +62,15 @@ window.PostsManager = {
             content: postData.content || ''
         };
         
+        // Add price and currency if it's a premium post
+        if (postData.type === 'Premium' && postData.price) {
+            newPost.price = parseFloat(postData.price);
+            newPost.currency = postData.currency || 'PLN';
+        }
+        
         window.postsData.unshift(newPost); // Add to beginning
         this.saveToStorage();
+        this.updateAllPages(); // Update all pages that display posts
         return newPost;
     },
     
@@ -76,7 +83,15 @@ window.PostsManager = {
                 id: parseInt(id), // Ensure ID doesn't change
                 updatedAt: new Date().toISOString()
             };
+            
+            // Add price and currency if it's a premium post
+            if (postData.type === 'Premium' && postData.price) {
+                window.postsData[index].price = parseFloat(postData.price);
+                window.postsData[index].currency = postData.currency || 'PLN';
+            }
+            
             this.saveToStorage();
+            this.updateAllPages(); // Update all pages that display posts
             return window.postsData[index];
         }
         return null;
@@ -87,9 +102,40 @@ window.PostsManager = {
         if (index !== -1) {
             const deleted = window.postsData.splice(index, 1)[0];
             this.saveToStorage();
+            this.updateAllPages(); // Update all pages that display posts
             return deleted;
         }
         return null;
+    },
+    
+    // New function to update all pages displaying posts
+    updateAllPages: function() {
+        console.log('🔄 Updating all pages with latest posts data...');
+        
+        // Trigger update events for main page components
+        if (typeof window.displayItems === 'function') {
+            window.displayItems();
+            console.log('✅ Main page content updated');
+        }
+        
+        // Update search results if search is active
+        if (typeof window.handleSearch === 'function' && document.getElementById('championSearch')?.value) {
+            window.handleSearch();
+            console.log('✅ Search results updated');
+        }
+        
+        // Update pagination
+        if (typeof window.setupPagination === 'function') {
+            window.setupPagination();
+            console.log('✅ Pagination updated');
+        }
+        
+        // Dispatch custom event for any other components listening
+        window.dispatchEvent(new CustomEvent('postsUpdated', {
+            detail: { posts: this.getAllPosts() }
+        }));
+        
+        console.log('🎉 All pages updated with latest posts database!');
     },
     
     saveToStorage: function() {

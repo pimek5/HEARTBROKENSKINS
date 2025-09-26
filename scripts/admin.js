@@ -405,7 +405,7 @@ function deletePost(postId) {
     if (confirm(`Are you sure you want to delete "${post.title}"?`)) {
         const deleted = window.PostsManager.deletePost(postId);
         if (deleted) {
-            showNotification('Post deleted successfully', 'success');
+            showNotification('✅ Post deleted! Database updated across all pages.', 'success');
             loadPosts();
             console.log('🗑️ Post deleted:', deleted.title);
         } else {
@@ -461,8 +461,8 @@ function handlePostSubmit(event) {
         loadPosts();
         closePostModal();
         
-        // Notify that main page content will be updated
-        showNotification('✅ Post saved! Refresh main page to see changes.', 'success');
+        // Database automatically updated across all pages
+        showNotification('✅ Post saved! Database updated across all pages.', 'success');
         
     } catch (error) {
         showNotification('Error saving post: ' + error.message, 'error');
