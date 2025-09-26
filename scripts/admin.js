@@ -692,6 +692,46 @@ function togglePriceField() {
     }
 }
 
+// Debug function to open debug storage panel
+function openDebugPanel() {
+    console.log('🔍 Opening debug storage panel...');
+    
+    try {
+        // Open debug-storage.html in a new tab
+        window.open('debug-storage.html', '_blank', 'width=1200,height=800,scrollbars=yes,resizable=yes');
+        showNotification('🔍 Debug panel opened in new tab!', 'success');
+    } catch (error) {
+        console.error('❌ Error opening debug panel:', error);
+        showNotification('❌ Could not open debug panel. Check console for details.', 'error');
+    }
+}
+
+// Alternative debug function for inline debugging (optional)
+function showDebugInfo() {
+    console.log('📊 DEBUG INFO:');
+    console.log('Posts in memory:', window.postsData);
+    console.log('PostsManager nextId:', window.PostsManager ? window.PostsManager.nextId : 'undefined');
+    console.log('LocalStorage posts:', localStorage.getItem('heartbrokenskins_posts'));
+    
+    // Show modal with debug info
+    const debugInfo = {
+        postsInMemory: window.postsData ? window.postsData.length : 0,
+        nextId: window.PostsManager ? window.PostsManager.nextId : 'undefined',
+        localStorageSize: localStorage.getItem('heartbrokenskins_posts') ? localStorage.getItem('heartbrokenskins_posts').length : 0
+    };
+    
+    const debugMessage = `
+🔍 Debug Information:
+• Posts in Memory: ${debugInfo.postsInMemory}
+• Next ID: ${debugInfo.nextId}  
+• LocalStorage Size: ${debugInfo.localStorageSize} characters
+
+Check browser console for full details.
+    `;
+    
+    alert(debugMessage);
+}
+
 // Setup price field toggle
 document.addEventListener('DOMContentLoaded', function() {
     const typeSelect = document.getElementById('postType');

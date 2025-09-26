@@ -348,6 +348,29 @@
     border-color: rgba(100, 100, 100, 0.6);
 }
 
+/* Debug button styling */
+.admin-btn.debug-btn {
+    background: rgba(255, 165, 0, 0.15);
+    border-color: rgba(255, 165, 0, 0.4);
+    color: #ffa500;
+    position: relative;
+}
+
+.admin-btn.debug-btn:hover {
+    background: rgba(255, 165, 0, 0.25);
+    border-color: rgba(255, 165, 0, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 165, 0, 0.3);
+}
+
+.admin-btn.debug-btn::before {
+    background: linear-gradient(45deg, rgba(255, 165, 0, 0.2), rgba(255, 140, 0, 0.2));
+}
+
+.admin-btn.debug-btn:hover::before {
+    background: linear-gradient(45deg, rgba(255, 165, 0, 0.3), rgba(255, 140, 0, 0.3));
+}
+
 /* Posts List */
 .posts-list {
     margin-top: 1.5rem;
