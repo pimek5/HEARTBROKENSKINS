@@ -64,11 +64,11 @@
                             <h2>Community Stats</h2>
                             <div class="stats-grid">
                                 <div class="stat-item">
-                                    <span class="stat-number">3,811</span>
+                                    <span class="stat-number" id="member-count">...</span>
                                     <span class="stat-label">Members</span>
                                 </div>
                                 <div class="stat-item">
-                                    <span class="stat-number">686</span>
+                                    <span class="stat-number" id="online-count">...</span>
                                     <span class="stat-label">Online</span>
                                 </div>
                                 <div class="stat-item">
@@ -92,11 +92,11 @@
                                         <div class="flex items-center gap-4 text-sm text-base-content/70">
                                             <div class="flex items-center gap-1">
                                                 <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                                                <span>791 online</span>
+                                                <span id="discord-online-count">791 online</span>
                                             </div>
                                             <div class="flex items-center gap-1">
                                                 <div class="w-2 h-2 bg-base-content/40 rounded-full"></div>
-                                                <span>3812 members</span>
+                                                <span id="discord-member-count">3812 members</span>
                                             </div>
                                         </div>
                                     </div>
@@ -466,5 +466,164 @@
             }
         }
     </style>
+    
+    <script>
+        // Discord Server ID
+        const DISCORD_SERVER_ID = '1153027935553454191';
+        
+        // Function to fetch Discord server stats
+        async function fetchDiscordStats() {
+            try {
+                // Try multiple approaches to get Discord stats
+                
+                // Method 1: Discord Widget API (requires widget to be enabled)
+                try {
+                    const widgetResponse = await fetch(`https://discord.com/api/guilds/${DISCORD_SERVER_ID}/widget.json`, {
+                        mode: 'cors',
+                        headers: {
+                            'Accept': 'application/json',
+                        }
+                    });
+                    if (widgetResponse.ok) {
+                        const widgetData = await widgetResponse.json();
+                        const memberCount = widgetData.members?.length || 0;
+                        const onlineCount = widgetData.presence_count || 0;
+                        if (memberCount > 0) {
+                            updateStats(memberCount, onlineCount);
+                            updateDiscordCardStats(memberCount, onlineCount);
+                            console.log('Discord stats updated via Widget API');
+                            return;
+                        }
+                    }
+                } catch (e) {
+                    console.log('Widget API failed:', e.message);
+                }
+                
+                // Method 2: Discord Invite API
+                try {
+                    const inviteResponse = await fetch(`https://discord.com/api/v10/invites/hexrtbrxenchromas?with_counts=true`);
+                    if (inviteResponse.ok) {
+                        const inviteData = await inviteResponse.json();
+                        const memberCount = inviteData.guild?.approximate_member_count || 0;
+                        const onlineCount = inviteData.guild?.approximate_presence_count || 0;
+                        if (memberCount > 0) {
+                            updateStats(memberCount, onlineCount);
+                            updateDiscordCardStats(memberCount, onlineCount);
+                            console.log('Discord stats updated via Invite API');
+                            return;
+                        }
+                    }
+                } catch (e) {
+                    console.log('Invite API failed, using fallback...');
+                }
+                
+                // Method 3: Alternative invite endpoint
+                try {
+                    const altResponse = await fetch(`https://discordapp.com/api/invites/hexrtbrxenchromas?with_counts=true`);
+                    if (altResponse.ok) {
+                        const altData = await altResponse.json();
+                        const memberCount = altData.guild?.approximate_member_count || 0;
+                        const onlineCount = altData.guild?.approximate_presence_count || 0;
+                        if (memberCount > 0) {
+                            updateStats(memberCount, onlineCount);
+                            updateDiscordCardStats(memberCount, onlineCount);
+                            console.log('Discord stats updated via alternative API');
+                            return;
+                        }
+                    }
+                } catch (e) {
+                    console.log('Alternative API failed');
+                }
+                
+                // If all APIs fail, use fallback values
+                console.log('All Discord APIs failed, using fallback values');
+                updateStats(3811, 791);
+                updateDiscordCardStats(3811, 791);
+                
+            } catch (error) {
+                console.warn('Failed to fetch Discord stats:', error);
+                // Use fallback values
+                updateStats(3811, 791);
+                updateDiscordCardStats(3811, 791);
+            }
+        }
+        
+        // Function to update the stats display
+        function updateStats(memberCount, onlineCount) {
+            const memberElement = document.getElementById('member-count');
+            const onlineElement = document.getElementById('online-count');
+            
+            if (memberElement && onlineElement) {
+                // Animate the numbers
+                animateNumber(memberElement, memberCount);
+                animateNumber(onlineElement, onlineCount);
+            }
+        }
+        
+        // Function to animate number counting
+        function animateNumber(element, targetNumber) {
+            const duration = 2000; // 2 seconds
+            const startTime = Date.now();
+            const startNumber = 0;
+            
+            function updateNumber() {
+                const currentTime = Date.now();
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                const currentNumber = Math.floor(startNumber + (targetNumber - startNumber) * progress);
+                element.textContent = currentNumber.toLocaleString();
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateNumber);
+                }
+            }
+            
+            requestAnimationFrame(updateNumber);
+        }
+        
+        // Load stats when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initial load of Discord stats
+            fetchDiscordStats();
+            
+            // Refresh stats every 2 minutes
+            setInterval(fetchDiscordStats, 2 * 60 * 1000);
+            
+            // Also try to fetch Discord card stats separately as backup
+            setTimeout(() => {
+                fetchDiscordCardStats();
+            }, 2000);
+        });
+        
+        // Also update the Discord card stats
+        function updateDiscordCardStats(memberCount, onlineCount) {
+            const onlineSpan = document.getElementById('discord-online-count');
+            const membersSpan = document.getElementById('discord-member-count');
+            
+            if (onlineSpan && membersSpan && memberCount && onlineCount) {
+                onlineSpan.textContent = `${onlineCount} online`;
+                membersSpan.textContent = `${memberCount} members`;
+            }
+        }
+        
+        // Alternative function to fetch Discord card stats separately
+        async function fetchDiscordCardStats() {
+            try {
+                const inviteResponse = await fetch(`https://discord.com/api/v10/invites/hexrtbrxenchromas?with_counts=true`);
+                
+                if (inviteResponse.ok) {
+                    const inviteData = await inviteResponse.json();
+                    const onlineCount = inviteData.guild?.approximate_presence_count || 791;
+                    const memberCount = inviteData.guild?.approximate_member_count || 3812;
+                    updateDiscordCardStats(memberCount, onlineCount);
+                }
+            } catch (error) {
+                console.warn('Failed to update Discord card stats:', error);
+                // Use fallback
+                updateDiscordCardStats(3812, 791);
+            }
+        }
+    </script>
 </body>
 </html>
