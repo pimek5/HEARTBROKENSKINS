@@ -669,6 +669,36 @@
         // Discord Server ID and Owner ID
         const DISCORD_SERVER_ID = '1153027935553454191';
         const DISCORD_OWNER_ID = '318104006385729538';
+        const TEST_USER_ID = '910539294958026752'; // ID to check
+        
+        // Function to check who owns a specific Discord ID
+        async function checkDiscordUser(userId) {
+            try {
+                const widgetResponse = await fetch(`https://discord.com/api/guilds/${DISCORD_SERVER_ID}/widget.json`);
+                
+                if (widgetResponse.ok) {
+                    const widgetData = await widgetResponse.json();
+                    
+                    if (widgetData.members) {
+                        const user = widgetData.members.find(member => member.id === userId);
+                        if (user) {
+                            console.log(`User with ID ${userId}:`, {
+                                id: user.id,
+                                username: user.username,
+                                nick: user.nick,
+                                displayName: user.nick || user.username
+                            });
+                            return user;
+                        } else {
+                            console.log(`User with ID ${userId} not found in server widget`);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking Discord user:', error);
+            }
+            return null;
+        }
         
         // Function to fetch Discord server stats
         async function fetchDiscordStats() {
@@ -962,6 +992,13 @@
                 updateDiscordCardStats(3812, 791);
             }
         }
+        
+        // Check the test user ID on page load
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('=== CHECKING DISCORD USER ID ===');
+            await checkDiscordUser(TEST_USER_ID);
+            console.log('=== END CHECK ===');
+        });
     </script>
 </body>
 </html>
