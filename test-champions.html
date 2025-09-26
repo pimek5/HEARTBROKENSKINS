@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Champions Search - HEARTBROKENSKINS</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="container">
+        <header class="main-header">
+            <a href="index.html" class="logo logo-link">
+                <img src="assets/logo1.png" alt="HEARTBROKENSKINS Logo" class="logo-image">
+                <span class="logo-text">HEARTBROKENSKINS</span>
+            </a>
+            <div class="search-container">
+                <input type="text" id="championSearch" placeholder="Search champions...">
+            </div>
+        </header>
+        
+        <div class="content-wrapper">
+            <aside class="sidebar">
+                <div class="section-header" id="championsHeader">
+                    <div class="section-header-content">
+                        <span class="section-icon">👑</span>
+                        <h2 class="section-title">Champions</h2>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                </div>
+                <div class="champions-list" id="championsList">
+                    <!-- Champions will be loaded here -->
+                </div>
+            </aside>
+            
+            <main class="main-content">
+                <div class="content-grid" id="contentGrid">
+                    <div style="text-align: center; padding: 20px;">
+                        <h2>Champions Search Test</h2>
+                        <p>Use the search box to test champion filtering.</p>
+                        <p>Click on a champion to test selection.</p>
+                        <div id="selectionResult" style="margin-top: 20px; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 8px;">
+                            <h3>Selection Result:</h3>
+                            <p id="selectedChampionInfo">No champion selected</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="scripts/all-champions-data.js"></script>
+    <script>
+        // Override selectChampion for testing
+        function selectChampion(index) {
+            const champion = window.contentData[index];
+            console.log('Selected champion:', champion);
+            
+            const resultDiv = document.getElementById('selectedChampionInfo');
+            if (resultDiv && champion) {
+                resultDiv.innerHTML = `
+                    <strong>${champion.title}</strong> - ${champion.description}<br>
+                    Index: ${index}, ID: ${champion.id}<br>
+                    Tags: ${champion.tags.join(', ')}
+                `;
+            }
+        }
+
+        // Test functions
+        function setupChampionsSidebar() {
+            const championsList = document.getElementById('championsList');
+            if (!championsList || !window.contentData) return;
+            
+            console.log('Setting up champions sidebar with', window.contentData.length, 'champions');
+            
+            championsList.innerHTML = window.contentData.map((champion, index) => `
+                <div class="champion-item" onclick="selectChampion(${index})">
+                    <img src="${champion.image}" alt="${champion.title}" class="champion-icon"
+                         onerror="this.src='https://via.placeholder.com/32x32?text=⚔️'">
+                    <div class="champion-info">
+                        <div class="champion-name">${champion.title}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterChampions(searchTerm) {
+            const championsList = document.getElementById('championsList');
+            if (!championsList || !window.contentData) return;
+            
+            const filteredChampions = window.contentData
+                .map((champion, originalIndex) => ({...champion, originalIndex}))
+                .filter(champion => {
+                    return searchTerm === '' || 
+                        champion.title.toLowerCase().includes(searchTerm) ||
+                        champion.description.toLowerCase().includes(searchTerm) ||
+                        champion.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+                });
+            
+            championsList.innerHTML = filteredChampions.map((champion) => `
+                <div class="champion-item" onclick="selectChampion(${champion.originalIndex})">
+                    <img src="${champion.image}" alt="${champion.title}" class="champion-icon"
+                         onerror="this.src='https://via.placeholder.com/32x32?text=⚔️'">
+                    <div class="champion-info">
+                        <div class="champion-name">${champion.title}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function setupSearch() {
+            const searchInput = document.getElementById('championSearch');
+            if (searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    const searchTerm = e.target.value.toLowerCase();
+                    filterChampions(searchTerm);
+                });
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing...');
+            
+            if (window.contentData && window.contentData.length > 0) {
+                console.log('Found champion data:', window.contentData.length, 'champions');
+                setupChampionsSidebar();
+                setupSearch();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<svg width="200" height="80" viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#dc143c;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#8a2be2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#dc143c;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="200" height="80" rx="10" fill="rgba(0,0,0,0.8)" stroke="url(#logoGradient)" stroke-width="2"/>
+  
+  <!-- Main text -->
+  <text x="100" y="35" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" 
+        text-anchor="middle" fill="url(#logoGradient)" filter="url(#glow)">
+    HEARTBROKENSKINS
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="100" y="55" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="400" 
+        text-anchor="middle" fill="rgba(255,255,255,0.8)">
+    HEXRTBRXENCHROMAS
+  </text>
+  
+  <!-- Decorative elements -->
+  <circle cx="15" cy="15" r="3" fill="#dc143c" opacity="0.8"/>
+  <circle cx="185" cy="15" r="3" fill="#8a2be2" opacity="0.8"/>
+  <circle cx="15" cy="65" r="3" fill="#8a2be2" opacity="0.8"/>
+  <circle cx="185" cy="65" r="3" fill="#dc143c" opacity="0.8"/>
+</svg>

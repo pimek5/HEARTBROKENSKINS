@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEARTBROKENSKINS - Test</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="container">
+        <main class="main-content">
+            <header class="header">
+                <h1>HEARTBROKENSKINS</h1>
+                <p>League of Legends Champions Collection</p>
+            </header>
+
+            <!-- Content Grid -->
+            <div class="content-container">
+                <div id="contentGrid" class="content-grid">
+                    <!-- Test content will be rendered here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Simple test script
+        console.log('Loading test page...');
+        
+        const testData = [
+            {
+                id: 1,
+                title: "Jinx",
+                description: "The Loose Cannon",
+                image: "https://ddragon.leagueoflegends.com/cdn/13.24.1/img/champion/Jinx.png",
+                tags: ["marksman", "chaos"],
+                championData: { title: "The Loose Cannon" }
+            },
+            {
+                id: 2,
+                title: "Yasuo",
+                description: "The Unforgiven",
+                image: "https://ddragon.leagueoflegends.com/cdn/13.24.1/img/champion/Yasuo.png",
+                tags: ["fighter", "wind"],
+                championData: { title: "The Unforgiven" }
+            }
+        ];
+
+        function renderTestContent() {
+            const contentGrid = document.getElementById('contentGrid');
+            console.log('Rendering test content...', testData.length, 'items');
+            
+            contentGrid.innerHTML = testData.map(item => `
+                <div class="content-card">
+                    <div class="content-image">
+                        <img src="${item.image}" alt="${item.title}" class="champion-card-image">
+                    </div>
+                    <div class="content-info">
+                        <h3 class="content-title">${item.title}</h3>
+                        <p class="champion-subtitle">${item.championData.title}</p>
+                        <p class="content-description">${item.description}</p>
+                        <div class="content-tags">
+                            ${item.tags.map(tag => `<span class="content-tag">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render when page loads
+        document.addEventListener('DOMContentLoaded', renderTestContent);
+    </script>
+</body>
+</html>
