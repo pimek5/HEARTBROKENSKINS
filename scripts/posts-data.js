@@ -1,43 +1,12 @@
 // Posts Data System
 console.log('Loading posts data...');
 
-// Initialize posts data - with your posts as default
-window.postsData = [
-    {
-        id: 1,
-        title: "Chibi Lulu",
-        description: "Cute chibi version of Lulu champion skin",
-        category: "Champion Mod",
-        type: "Premium",
-        price: 10.00,
-        currency: "PLN",
-        tags: ["Lulu", "Chibi", "Skin"],
-        image: "https://ddragon.leagueoflegends.com/cdn/15.19.1/img/champion/Lulu.png",
-        author: "Admin",
-        createdAt: "2025-09-26T08:00:00Z",
-        updatedAt: "2025-09-26T08:00:00Z",
-        content: "Adorable chibi-style Lulu skin modification."
-    },
-    {
-        id: 2,
-        title: "Cinnamoroll Kassadin",
-        description: "Kawaii Cinnamoroll-themed Kassadin skin",
-        category: "Champion Mod", 
-        type: "Premium",
-        price: 15,
-        currency: "$",
-        tags: ["Kassadin", "Cinnamoroll", "Kawaii"],
-        image: "https://ddragon.leagueoflegends.com/cdn/15.19.1/img/champion/Kassadin.png",
-        author: "Admin",
-        createdAt: "2025-09-26T08:30:00Z",
-        updatedAt: "2025-09-26T08:30:00Z",
-        content: "Cute Cinnamoroll-themed skin for Kassadin with special effects."
-    }
-];
+// Initialize posts data - empty by default (will be loaded from localStorage)
+window.postsData = [];
 
 // Posts management functions
 window.PostsManager = {
-    nextId: 3, // Start from 3 after your 2 posts
+    nextId: 1, // Start from 1 for empty posts list
     
     getAllPosts: function() {
         return window.postsData || [];
@@ -194,8 +163,8 @@ const loadedFromStorage = window.PostsManager.loadFromStorage();
 
 // Only use sample data if no saved posts exist
 if (!loadedFromStorage) {
-    console.log('No saved posts found, using default data');
-    window.PostsManager.saveToStorage(); // Save default data to storage
+    console.log('No saved posts found, starting with empty posts list');
+    // Don't save empty data to storage - let user create posts naturally
 }
 
 console.log('Posts data loaded:', window.postsData.length, 'posts');
