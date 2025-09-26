@@ -20,16 +20,11 @@ document.addEventListener('DOMContentLoaded', function() {
     setupFilters();
     setupChampionSearch();
     
-    // Try to setup champions sidebar only if posts fail to load
+    // Always setup champions sidebar
     setTimeout(() => {
-        // Only setup champions if we don't have posts
-        if (!window.contentDataManager || !window.contentDataManager.isReady || window.contentDataManager.posts.length === 0) {
-            if (!window.postsData || window.postsData.length === 0) {
-                console.log('No posts found, setting up champions as fallback...');
-                setupChampionsSidebar();
-            }
-        }
-    }, 2000);
+        console.log('Setting up champions sidebar...');
+        setupChampionsSidebar();
+    }, 1000);
 });
 
 // Listen for posts ready event
@@ -54,23 +49,11 @@ window.displayItems = function() {
         console.log('✅ Using posts from contentDataManager:', allItems.length, 'posts');
         updateSectionHeader('📰', 'ALL POSTS');
         
-        // Hide champions section since we have posts
-        const championsSection = document.querySelector('.champions-section');
-        if (championsSection) {
-            championsSection.style.display = 'none';
-        }
-        
     // PRIORITY 2: Try posts from window.postsData
     } else if (window.postsData && window.postsData.length > 0) {
         allItems = window.postsData;
         console.log('✅ Using posts from postsData:', allItems.length, 'posts');
         updateSectionHeader('📰', 'ALL POSTS');
-        
-        // Hide champions section since we have posts
-        const championsSection = document.querySelector('.champions-section');
-        if (championsSection) {
-            championsSection.style.display = 'none';
-        }
         
     // PRIORITY 3: Check for posts via getContentData function
     } else if (window.getContentData && typeof window.getContentData === 'function') {
@@ -81,18 +64,8 @@ window.displayItems = function() {
         const hasPosts = allItems.length > 0 && (allItems[0].hasOwnProperty('date') || allItems[0].hasOwnProperty('author') || allItems[0].hasOwnProperty('createdAt'));
         if (hasPosts) {
             updateSectionHeader('📰', 'ALL POSTS');
-            // Hide champions section since we have posts
-            const championsSection = document.querySelector('.champions-section');
-            if (championsSection) {
-                championsSection.style.display = 'none';
-            }
         } else {
             updateSectionHeader('⚔️', 'Champions');
-            // Show champions section as fallback
-            const championsSection = document.querySelector('.champions-section');
-            if (championsSection) {
-                championsSection.style.display = 'block';
-            }
         }
         
     // FALLBACK: Use champion data only if no posts available
@@ -100,12 +73,6 @@ window.displayItems = function() {
         console.log('❌ No posts found, falling back to champions');
         allItems = window.contentData || [];
         updateSectionHeader('⚔️', 'Champions');
-        
-        // Show champions section as fallback
-        const championsSection = document.querySelector('.champions-section');
-        if (championsSection) {
-            championsSection.style.display = 'block';
-        }
     }
     
     filteredItems = [...allItems];
