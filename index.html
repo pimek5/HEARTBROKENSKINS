@@ -59,6 +59,20 @@
                         
                         <div class="search-section">
                             <input type="text" id="championSearch" placeholder="Search champions..." class="search-input">
+                            
+                            <!-- Champion Tags Helper -->
+                            <div class="champion-tags-helper">
+                                <button type="button" class="champion-tag-btn" onclick="toggleChampionDropdown()">
+                                    👑 Add Champion Tag
+                                </button>
+                                <div class="champion-dropdown" id="championDropdown" style="display: none;">
+                                    <input type="text" id="championTagSearch" placeholder="Search champions..." 
+                                           oninput="filterChampionTags(this.value)">
+                                    <div class="champion-tag-list" id="championTagList">
+                                        <!-- Champion options will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="champions-list" id="championsList">

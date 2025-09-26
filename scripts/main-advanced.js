@@ -48,47 +48,40 @@ document.addEventListener('postsReady', function(event) {
 window.displayItems = function() {
     console.log('🔄 displayItems called');
     
-    // Check if we have posts data for main content
-    if (window.PostsManager && window.PostsManager.getAllPosts) {
-        console.log('Found posts data, using posts for main content');
-        allItems = window.PostsManager.getAllPosts();
-        filteredItems = [...allItems];
-        updateSectionHeader('📰', 'Posts');
+    // Use new content data system that prioritizes posts over fallback champions
+    if (window.getContentData && typeof window.getContentData === 'function') {
+        allItems = window.getContentData();
+        console.log('Using getContentData:', allItems.length, 'items');
         
-        if (allItems.length > 0) {
-            renderItems();
-            setupPagination();
+        // Check if we got posts or fallback champions
+        if (window.contentDataManager && window.contentDataManager.isReady && window.contentDataManager.posts.length > 0) {
+            updateSectionHeader('📰', 'ALL POSTS');
         } else {
-            document.getElementById('contentGrid').innerHTML = '<div class="no-results">No posts found</div>';
+            updateSectionHeader('⚔️', 'Champions');
         }
+    } else if (window.contentDataManager && window.contentDataManager.isReady) {
+        allItems = window.contentDataManager.getAllPosts();
+        console.log('Using contentDataManager:', allItems.length, 'posts');
+        updateSectionHeader('📰', 'ALL POSTS');
     } else {
-        console.log('No posts data found, using champions for main content');
+        console.log('Falling back to contentData');
         allItems = window.contentData || [];
-        filteredItems = [...allItems];
         updateSectionHeader('⚔️', 'Champions');
-        
-        if (allItems.length > 0) {
-            renderItems();
-            setupPagination();
-        } else {
-            document.getElementById('contentGrid').innerHTML = '<div class="no-results">No champions found</div>';
-        }
     }
-};
-        updateSectionHeader('⚔️', 'Champions');
-        
-        if (allItems.length > 0) {
-            renderItems();
-            setupPagination();
-        } else {
-            document.getElementById('contentGrid').innerHTML = '<div class="no-results">No champions found</div>';
-        }
+    
+    filteredItems = [...allItems];
+    
+    if (allItems.length > 0) {
+        renderItems();
+        setupPagination();
+    } else {
+        document.getElementById('contentGrid').innerHTML = '<div class="no-results">No content available</div>';
     }
     
     // Setup filters and search after content is loaded
     setupFilters();
     setupChampionSearch();
-}
+};
 
 function updateSectionHeader(icon, title) {
     const sectionHeader = document.querySelector('.section-header h2');
