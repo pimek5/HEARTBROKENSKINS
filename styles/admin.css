@@ -738,7 +738,7 @@
 }
 
 .price-input-group input {
-    flex: 1;
+    flex: 3; /* Price input takes 3/4 of space */
     min-width: 0;
 }
 
@@ -747,13 +747,14 @@
     background: rgba(0, 0, 0, 0.4);
     border: 2px solid rgba(138, 43, 226, 0.3);
     color: #fff;
-    padding: 1rem 1.2rem;
+    padding: 1.2rem 1.5rem;
     border-radius: 10px;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-weight: 500;
     transition: all 0.3s ease;
     box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2);
-    min-width: 200px;
+    min-width: 250px;
+    flex: 3; /* Takes more space */
 }
 
 .price-input-large:focus {
@@ -773,11 +774,13 @@
     background: rgba(0, 0, 0, 0.4);
     border: 2px solid rgba(220, 20, 60, 0.3);
     color: #fff;
-    padding: 1rem 1.2rem;
+    padding: 1.2rem 0.8rem;
     border-radius: 10px;
     font-size: 1rem;
     font-weight: 600;
-    min-width: 100px;
+    min-width: 80px;
+    max-width: 90px; /* Smaller currency selector */
+    flex: 1; /* Takes less space */
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2);
