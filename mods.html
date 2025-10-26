@@ -39,7 +39,12 @@
                 
                 <!-- Login button po prawej -->
                 <div class="header-right">
-                    <a href="login.html" class="login-btn">LOGIN</a>
+                    <a href="login.html" class="login-btn" id="loginBtn">LOGIN</a>
+                    <div class="user-profile" id="userProfile" style="display: none;">
+                        <img src="" alt="User Avatar" class="user-avatar" id="userAvatar">
+                        <span class="user-name" id="userName"></span>
+                        <button class="logout-btn" id="logoutBtn">Logout</button>
+                    </div>
                 </div>
             </div>
         </header>
@@ -448,5 +453,6 @@
             console.log('Paid only:', paidOnlyActive);
         });
     </script>
+    <script src="scripts/auth-handler.js"></script>
 </body>
 </html>
