@@ -24,8 +24,8 @@ body {
 .mods-layout {
     display: flex;
     gap: 2rem;
-    padding: 2rem;
-    margin: 0 auto;
+    padding: 2rem 1rem;
+    margin: 0;
     min-height: calc(100vh - 160px);
 }
 
