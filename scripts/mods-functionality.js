@@ -50,21 +50,41 @@ class ModsPageManager {
     }
     
     loadChampions() {
+        // Wait for champions data to be loaded
+        if (!window.contentData || window.contentData.length === 0) {
+            console.log('Waiting for champions data...');
+            setTimeout(() => this.loadChampions(), 100);
+            return;
+        }
+        
         // Get champions from contentData
-        const champions = window.contentData || [];
+        const champions = window.contentData;
         
-        // Find the champions list container
-        const championsContainer = document.querySelector('.sidebar-content:has(input[placeholder*="Search champions"])');
-        if (!championsContainer) return;
+        // Find the champions list container - use parent div structure
+        const championsSection = Array.from(document.querySelectorAll('.sidebar-content')).find(el => {
+            return el.querySelector('input[placeholder*="Search champions"]');
+        });
         
-        const championsListDiv = championsContainer.querySelector('.p-3');
-        if (!championsListDiv) return;
+        if (!championsSection) {
+            console.error('Champions container not found');
+            return;
+        }
+        
+        const championsListDiv = championsSection.querySelector('.p-3');
+        if (!championsListDiv) {
+            console.error('Champions list div not found');
+            return;
+        }
         
         // Keep the search input
         const searchDiv = championsListDiv.querySelector('.mb-3');
+        if (!searchDiv) {
+            console.error('Search div not found');
+            return;
+        }
         
         // Sort champions alphabetically
-        const sortedChampions = champions.sort((a, b) => a.title.localeCompare(b.title));
+        const sortedChampions = [...champions].sort((a, b) => a.title.localeCompare(b.title));
         
         // Create champion buttons
         let championsHTML = '';
