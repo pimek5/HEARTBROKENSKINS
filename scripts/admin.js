@@ -740,4 +740,184 @@ document.addEventListener('DOMContentLoaded', function() {
         // Initial toggle
         setTimeout(togglePriceField, 100);
     }
+    
+    // Sync color inputs
+    const roleColor = document.getElementById('roleColor');
+    const roleColorHex = document.getElementById('roleColorHex');
+    if (roleColor && roleColorHex) {
+        roleColor.addEventListener('input', (e) => {
+            roleColorHex.value = e.target.value;
+        });
+        roleColorHex.addEventListener('input', (e) => {
+            if (/^#[0-9A-Fa-f]{6}$/.test(e.target.value)) {
+                roleColor.value = e.target.value;
+            }
+        });
+    }
+    
+    loadRoles();
 });
+
+// ========== ROLE MANAGEMENT ==========
+
+let allRoles = [
+    { id: 'customer', name: 'CUSTOMER', color: '#8a2be2', description: 'Access to purchase and download skins', permissions: ['download', 'comment'] },
+    { id: 'artist', name: 'ARTIST', color: '#4299e1', description: 'Upload and manage custom skins', permissions: ['upload', 'download', 'comment'] },
+    { id: 'supporter', name: 'SUPPORTER', color: '#48bb78', description: 'Support the community', permissions: ['download', 'comment'] },
+    { id: 'vip', name: 'VIP', color: '#f6ad55', description: 'Premium perks and features', permissions: ['upload', 'download', 'comment'] }
+];
+
+let allUsers = [
+    { id: '1', username: 'pimek', discordId: '318104006385729538', roles: ['customer', 'artist'], isAdmin: true },
+    { id: '2', username: 'testuser', discordId: '123456789', roles: ['customer'], isAdmin: false }
+];
+
+function showCreateRoleModal() {
+    document.getElementById('createRoleModal').style.display = 'flex';
+}
+
+function closeCreateRoleModal() {
+    document.getElementById('createRoleModal').style.display = 'none';
+    document.querySelector('#createRoleModal form').reset();
+}
+
+function handleCreateRole(event) {
+    event.preventDefault();
+    
+    const name = document.getElementById('roleName').value.toUpperCase();
+    const color = document.getElementById('roleColor').value;
+    const description = document.getElementById('roleDescription').value;
+    const permissions = [];
+    
+    if (document.getElementById('permUpload').checked) permissions.push('upload');
+    if (document.getElementById('permDownload').checked) permissions.push('download');
+    if (document.getElementById('permComment').checked) permissions.push('comment');
+    if (document.getElementById('permAdmin').checked) permissions.push('admin');
+    
+    const newRole = {
+        id: name.toLowerCase().replace(/\s+/g, '_'),
+        name: name,
+        color: color,
+        description: description,
+        permissions: permissions
+    };
+    
+    allRoles.push(newRole);
+    
+    // Save to localStorage
+    localStorage.setItem('customRoles', JSON.stringify(allRoles));
+    
+    showNotification(`✨ Role "${name}" created successfully!`, 'success');
+    closeCreateRoleModal();
+    loadRoles();
+}
+
+function showManageRolesModal() {
+    document.getElementById('manageRolesModal').style.display = 'flex';
+    renderUsersList();
+}
+
+function closeManageRolesModal() {
+    document.getElementById('manageRolesModal').style.display = 'none';
+}
+
+function filterUsers(searchTerm) {
+    const filtered = allUsers.filter(user => 
+        user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.discordId.includes(searchTerm)
+    );
+    renderUsersList(filtered);
+}
+
+function renderUsersList(users = allUsers) {
+    const container = document.getElementById('usersList');
+    container.innerHTML = users.map(user => `
+        <div style="padding: 1.5rem; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 12px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem;">
+                        ${user.username.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                        <div style="color: #fff; font-weight: 600; font-size: 1.1rem;">${user.username}</div>
+                        <div style="color: rgba(255, 255, 255, 0.5); font-size: 0.85rem;">ID: ${user.discordId}</div>
+                    </div>
+                </div>
+                ${user.isAdmin ? '<span style="padding: 0.3rem 0.75rem; background: rgba(255, 0, 0, 0.2); color: #ff0000; border-radius: 6px; font-size: 0.8rem; font-weight: 600;">ADMIN</span>' : ''}
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                ${allRoles.map(role => `
+                    <label style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: ${user.roles.includes(role.id) ? role.color + '40' : 'rgba(255, 255, 255, 0.05)'}; border: 1px solid ${user.roles.includes(role.id) ? role.color : 'rgba(255, 255, 255, 0.1)'}; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+                        <input type="checkbox" ${user.roles.includes(role.id) ? 'checked' : ''} onchange="toggleUserRole('${user.id}', '${role.id}', this.checked)" style="cursor: pointer;">
+                        <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: ${role.color};"></span>
+                        <span style="color: #fff; font-weight: 500; font-size: 0.9rem;">${role.name}</span>
+                    </label>
+                `).join('')}
+            </div>
+        </div>
+    `).join('');
+}
+
+function toggleUserRole(userId, roleId, isEnabled) {
+    const user = allUsers.find(u => u.id === userId);
+    const role = allRoles.find(r => r.id === roleId);
+    
+    if (isEnabled) {
+        if (!user.roles.includes(roleId)) {
+            user.roles.push(roleId);
+            showNotification(`✅ ${role.name} role assigned to ${user.username}`, 'success');
+        }
+    } else {
+        user.roles = user.roles.filter(r => r !== roleId);
+        showNotification(`❌ ${role.name} role removed from ${user.username}`, 'warning');
+    }
+    
+    // Save to localStorage
+    localStorage.setItem('users', JSON.stringify(allUsers));
+    
+    renderUsersList();
+}
+
+function loadRoles() {
+    const saved = localStorage.getItem('customRoles');
+    if (saved) {
+        allRoles = JSON.parse(saved);
+    }
+    
+    const savedUsers = localStorage.getItem('users');
+    if (savedUsers) {
+        allUsers = JSON.parse(savedUsers);
+    }
+    
+    renderRolesList();
+}
+
+function renderRolesList() {
+    const container = document.getElementById('rolesList');
+    if (!container) return;
+    
+    container.innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;">
+            ${allRoles.map(role => `
+                <div style="padding: 1.5rem; background: rgba(0, 0, 0, 0.3); border: 1px solid ${role.color}40; border-radius: 12px;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                        <div style="width: 20px; height: 20px; border-radius: 50%; background: ${role.color};"></div>
+                        <h4 style="color: #fff; margin: 0; font-size: 1.1rem; font-weight: 600;">${role.name}</h4>
+                    </div>
+                    <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; margin-bottom: 1rem;">${role.description}</p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                        ${role.permissions.map(perm => `
+                            <span style="padding: 0.3rem 0.75rem; background: rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.8); border-radius: 6px; font-size: 0.75rem; font-weight: 500;">${perm}</span>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+function refreshUsers() {
+    showNotification('🔄 Refreshing users list...', 'info');
+    loadRoles();
+    renderUsersList();
+}

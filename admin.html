@@ -194,6 +194,27 @@
                         </div>
 
                         <div class="admin-section">
+                            <h3>👥 User & Role Management</h3>
+                            <div class="admin-tools">
+                                <button class="admin-btn primary" onclick="showCreateRoleModal()">
+                                    ✨ Create New Role
+                                </button>
+                                <button class="admin-btn" onclick="showManageRolesModal()">
+                                    🎭 Manage User Roles
+                                </button>
+                                <button class="admin-btn" onclick="refreshUsers()">
+                                    🔄 Refresh Users
+                                </button>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                                <div id="rolesList" style="grid-column: 1 / -1;">
+                                    <!-- Roles will be displayed here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="admin-section">
                             <h3>⚙️ System Controls</h3>
                             <div class="system-controls">
                                 <button class="admin-btn danger" onclick="clearCache()">
@@ -313,6 +334,80 @@
                     
                     <input type="hidden" id="postId" name="id">
                 </form>
+            </div>
+        </div>
+
+        <!-- Create Role Modal -->
+        <div class="modal" id="createRoleModal" style="display: none;">
+            <div class="modal-content" style="max-width: 500px;">
+                <div class="modal-header">
+                    <h2>✨ Create New Role</h2>
+                    <button type="button" class="close-modal" onclick="closeCreateRoleModal()">×</button>
+                </div>
+                <form onsubmit="handleCreateRole(event)" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div class="form-group">
+                        <label for="roleName">Role Name</label>
+                        <input type="text" id="roleName" placeholder="Enter role name (e.g., VIP, ARTIST)" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="roleColor">Role Color</label>
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <input type="color" id="roleColor" value="#8a2be2" style="width: 60px; height: 40px; border: none; border-radius: 8px; cursor: pointer;">
+                            <input type="text" id="roleColorHex" value="#8a2be2" placeholder="#8a2be2" pattern="^#[0-9A-Fa-f]{6}$" style="flex: 1;">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="roleDescription">Description</label>
+                        <textarea id="roleDescription" rows="3" placeholder="Role description and permissions..." required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Permissions</label>
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem; padding: 1rem; background: rgba(0, 0, 0, 0.3); border-radius: 8px;">
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" id="permUpload" style="cursor: pointer;">
+                                <span>Can upload skins</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" id="permDownload" style="cursor: pointer;" checked>
+                                <span>Can download skins</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" id="permComment" style="cursor: pointer;" checked>
+                                <span>Can comment</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" id="permAdmin" style="cursor: pointer;">
+                                <span>Admin access</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button type="button" class="admin-btn secondary" onclick="closeCreateRoleModal()">Cancel</button>
+                        <button type="submit" class="admin-btn primary">Create Role</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Manage User Roles Modal -->
+        <div class="modal" id="manageRolesModal" style="display: none;">
+            <div class="modal-content" style="max-width: 700px;">
+                <div class="modal-header">
+                    <h2>🎭 Manage User Roles</h2>
+                    <button type="button" class="close-modal" onclick="closeManageRolesModal()">×</button>
+                </div>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <input type="text" id="userSearch" placeholder="Search users by username or ID..." style="width: 100%; padding: 1rem; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 0, 0, 0.3); border-radius: 8px; color: #fff;" oninput="filterUsers(this.value)">
+                </div>
+                
+                <div id="usersList" style="max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem;">
+                    <!-- Users will be displayed here -->
+                </div>
             </div>
         </div>
 
