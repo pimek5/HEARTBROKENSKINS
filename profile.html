@@ -6,32 +6,34 @@
     <title>Profile - HEARTBROKENSKINS</title>
     <link rel="icon" type="image/png" href="assets/logo1.png">
     <link rel="stylesheet" href="styles/main.css">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="site-wrapper">
-        <!-- Header -->
-        <header class="site-header">
-            <nav class="nav-container">
-                <div class="nav-logo">
-                    <a href="index.html">
-                        <img src="assets/logo1.png" alt="Logo" style="height: 40px;">
-                    </a>
-                </div>
-                <ul class="nav-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="index.html#mods">Mods</a></li>
-                    <li><a href="about.html">About</a></li>
-                </ul>
-                <div class="nav-actions">
-                    <button id="loginBtn" class="login-btn" onclick="window.location.href='login.html'">Login</button>
-                    <div id="userProfile" class="user-profile" style="display: none;">
-                        <img id="userAvatar" class="user-avatar" src="" alt="User Avatar">
-                        <span id="userName" class="user-name"></span>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <a href="home.html" class="logo-section logo-link">
+                    <img src="assets/logo1.png" alt="HEARTBROKENSKINS" class="logo-image">
+                    <div class="logo-text">
+                        <div class="main-logo">HEARTBROKENSKINS</div>
                     </div>
-                    <button id="logoutBtn" class="logout-btn" style="display: none;">Logout</button>
+                </a>
+                
+                <div class="nav-buttons">
+                    <a href="home.html" class="nav-btn">HOME</a>
+                    <a href="mods.html" class="nav-btn">MODS</a>
+                    <a href="about.html" class="nav-btn">ABOUT</a>
                 </div>
-            </nav>
+                
+                <div class="header-right">
+                    <a href="login.html" class="login-btn" id="loginBtn">LOGIN</a>
+                    <div class="user-profile" id="userProfile" style="display: none;">
+                        <img src="" alt="User Avatar" class="user-avatar" id="userAvatar">
+                        <span class="user-name" id="userName"></span>
+                        <button class="logout-btn" id="logoutBtn">Logout</button>
+                    </div>
+                </div>
+            </div>
         </header>
 
         <main class="main-content" style="padding: 4rem 2rem; min-height: calc(100vh - 200px);">
@@ -72,73 +74,113 @@
                     </div>
                 </div>
 
-                <!-- Tabs -->
-                <div style="display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 2px solid rgba(255, 0, 0, 0.2);">
-                    <button class="profile-tab active" data-tab="uploads" style="padding: 1rem 2rem; background: none; border: none; color: rgba(255, 255, 255, 0.6); font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s ease;">
-                        Uploads
-                    </button>
-                    <button class="profile-tab" data-tab="favorites" style="padding: 1rem 2rem; background: none; border: none; color: rgba(255, 255, 255, 0.6); font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s ease;">
-                        Favorites
-                    </button>
-                </div>
-
-                <!-- Content -->
-                <div id="uploadsTab" class="tab-content">
-                    <div style="background: rgba(18, 18, 18, 0.6); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 15px; padding: 3rem; text-align: center;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="rgba(255, 255, 255, 0.3)" stroke-width="2" style="margin: 0 auto 1rem;">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                            <polyline points="17 8 12 3 7 8"></polyline>
-                            <line x1="12" y1="3" x2="12" y2="15"></line>
-                        </svg>
-                        <p style="color: rgba(255, 255, 255, 0.6); font-size: 1.1rem;">No uploads yet</p>
+                <!-- About and Connect Section -->
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                    <!-- About -->
+                    <div style="background: rgba(18, 18, 18, 0.6); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 15px; padding: 2rem;">
+                        <h3 style="color: #fff; font-size: 1.2rem; margin-bottom: 1rem; font-weight: 600;">About</h3>
+                        <p id="profileAbout" style="color: rgba(255, 255, 255, 0.6); line-height: 1.6;">discord.gg/heartbrxnchromas</p>
+                    </div>
+                    
+                    <!-- Connect -->
+                    <div style="background: rgba(18, 18, 18, 0.6); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 15px; padding: 2rem;">
+                        <h3 style="color: #fff; font-size: 1.2rem; margin-bottom: 1rem; font-weight: 600;">Connect</h3>
+                        <a href="#" style="display: flex; align-items: center; gap: 0.75rem; color: rgba(255, 255, 255, 0.7); text-decoration: none; padding: 0.75rem; border-radius: 8px; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255, 0, 0, 0.1)'; this.style.color='#fff'" onmouseout="this.style.background='transparent'; this.style.color='rgba(255, 255, 255, 0.7)'">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                            </svg>
+                            <span style="font-size: 0.95rem;">Twitter</span>
+                        </a>
                     </div>
                 </div>
 
-                <div id="favoritesTab" class="tab-content" style="display: none;">
-                    <div style="background: rgba(18, 18, 18, 0.6); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 15px; padding: 3rem; text-align: center;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="rgba(255, 255, 255, 0.3)" stroke-width="2" style="margin: 0 auto 1rem;">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                        </svg>
-                        <p style="color: rgba(255, 255, 255, 0.6); font-size: 1.1rem;">No favorites yet</p>
+                <!-- All Works Header -->
+                <div style="margin-bottom: 2rem;">
+                    <h2 style="font-size: 2rem; color: #fff; margin-bottom: 1.5rem; font-weight: 700;">All Works</h2>
+                    
+                    <!-- Filters and Search -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="work-filter active" data-filter="all" style="padding: 0.75rem 1.5rem; background: #ff0000; color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                                All
+                            </button>
+                            <button class="work-filter" data-filter="free" style="padding: 0.75rem 1.5rem; background: rgba(255, 255, 255, 0.05); color: rgba(255, 255, 255, 0.7); border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                                Free
+                            </button>
+                            <button class="work-filter" data-filter="paid" style="padding: 0.75rem 1.5rem; background: rgba(255, 255, 255, 0.05); color: rgba(255, 255, 255, 0.7); border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                                Paid
+                            </button>
+                        </div>
+                        
+                        <div style="position: relative;">
+                            <input type="text" placeholder="Search skins..." style="padding: 0.75rem 1rem 0.75rem 2.5rem; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #fff; width: 250px; transition: all 0.3s ease;" onfocus="this.style.borderColor='rgba(255, 0, 0, 0.5)'; this.style.background='rgba(255, 255, 255, 0.08)'" onblur="this.style.borderColor='rgba(255, 255, 255, 0.1)'; this.style.background='rgba(255, 255, 255, 0.05)'">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255, 255, 255, 0.5)" stroke-width="2" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                            </svg>
+                        </div>
+                        
+                        <select style="padding: 0.75rem 2.5rem 0.75rem 1rem; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: rgba(255, 255, 255, 0.7); cursor: pointer; appearance: none; background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2712%27 height=%2712%27 viewBox=%270 0 12 12%27%3e%3cpath fill=%27%23fff%27 d=%27M6 9L1 4h10z%27/%3e%3c/svg%3e'); background-repeat: no-repeat; background-position: right 0.75rem center; background-size: 12px;">
+                            <option>Newest First</option>
+                            <option>Oldest First</option>
+                            <option>Most Popular</option>
+                        </select>
                     </div>
+                </div>
+
+                <!-- Works Content -->
+                <div style="background: rgba(18, 18, 18, 0.6); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 15px; padding: 4rem; text-align: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="rgba(255, 255, 255, 0.3)" stroke-width="1.5" style="margin: 0 auto 1.5rem; opacity: 0.6;">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                    </svg>
+                    <h3 style="color: rgba(255, 255, 255, 0.8); font-size: 1.3rem; margin-bottom: 0.75rem; font-weight: 600;">No skins found</h3>
+                    <p style="color: rgba(255, 255, 255, 0.5); font-size: 1rem; max-width: 500px; margin: 0 auto;">You haven't created any skins yet. Start creating to see them here!</p>
                 </div>
             </div>
         </main>
 
-        <!-- Footer -->
-        <footer class="site-footer">
-            <p>&copy; 2025 HEARTBROKENSKINS. All rights reserved.</p>
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2025 HEARTBROKENSKINS. All rights reserved.</p>
+            </div>
         </footer>
     </div>
 
     <script src="scripts/auth-handler.js"></script>
     <script>
-        // Tab switching
-        document.querySelectorAll('.profile-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                const tabName = tab.getAttribute('data-tab');
-                
-                // Update active tab
-                document.querySelectorAll('.profile-tab').forEach(t => {
-                    t.classList.remove('active');
-                    t.style.color = 'rgba(255, 255, 255, 0.6)';
-                    t.style.borderBottomColor = 'transparent';
+        // Work filter switching
+        document.querySelectorAll('.work-filter').forEach(filter => {
+            filter.addEventListener('click', () => {
+                // Update active filter
+                document.querySelectorAll('.work-filter').forEach(f => {
+                    f.classList.remove('active');
+                    f.style.background = 'rgba(255, 255, 255, 0.05)';
+                    f.style.color = 'rgba(255, 255, 255, 0.7)';
                 });
-                tab.classList.add('active');
-                tab.style.color = '#ff0000';
-                tab.style.borderBottomColor = '#ff0000';
+                filter.classList.add('active');
+                filter.style.background = '#ff0000';
+                filter.style.color = '#fff';
                 
-                // Show corresponding content
-                document.querySelectorAll('.tab-content').forEach(content => {
-                    content.style.display = 'none';
-                });
-                document.getElementById(tabName + 'Tab').style.display = 'block';
+                // Filter works (to be implemented)
+                const filterType = filter.getAttribute('data-filter');
+                console.log('Filter by:', filterType);
+            });
+            
+            // Hover effects
+            filter.addEventListener('mouseenter', () => {
+                if (!filter.classList.contains('active')) {
+                    filter.style.background = 'rgba(255, 0, 0, 0.2)';
+                    filter.style.color = '#fff';
+                }
+            });
+            
+            filter.addEventListener('mouseleave', () => {
+                if (!filter.classList.contains('active')) {
+                    filter.style.background = 'rgba(255, 255, 255, 0.05)';
+                    filter.style.color = 'rgba(255, 255, 255, 0.7)';
+                }
             });
         });
-
-        // Set active tab styling
-        document.querySelector('.profile-tab.active').style.color = '#ff0000';
-        document.querySelector('.profile-tab.active').style.borderBottomColor = '#ff0000';
 
         // Load profile data
         const API_URL = 'https://heartbrokenskins-logging.up.railway.app';
