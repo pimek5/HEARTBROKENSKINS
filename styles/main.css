@@ -793,6 +793,7 @@ body::after {
 }
 
 .logout-btn {
+    display: none; /* Hidden - logout is now in dropdown menu */
     background: rgba(255, 0, 0, 0.2);
     border: 1px solid rgba(255, 0, 0, 0.3);
     color: #fff;

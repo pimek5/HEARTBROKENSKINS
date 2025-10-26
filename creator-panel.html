@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creator Panel - HEARTBROKENSKINS</title>
+    <link rel="icon" type="image/png" href="assets/logo1.png">
+    <link rel="stylesheet" href="styles/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <a href="home.html" class="logo-section logo-link">
+                    <img src="assets/logo1.png" alt="HEARTBROKENSKINS" class="logo-image">
+                    <div class="logo-text">
+                        <div class="main-logo">HEARTBROKENSKINS</div>
+                    </div>
+                </a>
+                
+                <div class="nav-buttons">
+                    <a href="home.html" class="nav-btn">HOME</a>
+                    <a href="mods.html" class="nav-btn">MODS</a>
+                    <a href="about.html" class="nav-btn">ABOUT</a>
+                </div>
+                
+                <div class="header-right">
+                    <a href="login.html" class="login-btn" id="loginBtn">LOGIN</a>
+                    <div class="user-profile" id="userProfile" style="display: none;">
+                        <img src="" alt="User Avatar" class="user-avatar" id="userAvatar">
+                        <span class="user-name" id="userName"></span>
+                        <button class="logout-btn" id="logoutBtn">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content" style="padding: 4rem 2rem; min-height: calc(100vh - 200px);">
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <h1 style="font-size: 2.5rem; margin-bottom: 2rem; color: #fff;">Creator Panel</h1>
+                
+                <div style="background: rgba(18, 18, 18, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 2rem;">
+                    <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: #fff;">Upload Your Mods</h2>
+                    <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 2rem;">
+                        Share your custom skins and chromas with the community. Creator tools coming soon!
+                    </p>
+                    <a href="admin.html" style="display: inline-block; padding: 0.75rem 2rem; background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%); color: #fff; text-decoration: none; border-radius: 8px; font-weight: 600;">
+                        Admin Panel →
+                    </a>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2025 HEARTBROKENSKINS. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="scripts/auth-handler.js"></script>
+</body>
+</html>
