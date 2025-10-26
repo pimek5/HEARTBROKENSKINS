@@ -614,18 +614,25 @@
             try {
                 console.log('📡 Fetching Discord statistics...');
                 
-                // Try Widget API first
+                // Try PTB Widget API first (primary source)
                 try {
-                    const widgetResponse = await fetch(`https://discord.com/api/guilds/${DISCORD_SERVER_ID}/widget.json`);
+                    const widgetResponse = await fetch(`https://ptb.discord.com/api/guilds/${DISCORD_SERVER_ID}/widget.json`);
                     if (widgetResponse.ok) {
                         const widgetData = await widgetResponse.json();
                         const onlineCount = widgetData.presence_count || 0;
+                        const memberCount = widgetData.members?.length || 0;
                         
-                        // Estimate total members based on online count (assuming ~20% are online)
-                        const estimatedMembers = Math.round(onlineCount / 0.2);
+                        // If we have both stats, use them
+                        if (memberCount > 0) {
+                            updateDiscordStats(memberCount, onlineCount);
+                            console.log('✅ Stats from PTB Widget API (full data)');
+                            return;
+                        }
                         
+                        // Otherwise estimate total members (online count is usually ~50% of total)
+                        const estimatedMembers = Math.round(onlineCount * 2);
                         updateDiscordStats(estimatedMembers, onlineCount);
-                        console.log('✅ Stats from Widget API');
+                        console.log('✅ Stats from PTB Widget API (estimated members)');
                         return;
                     }
                 } catch (e) {
