@@ -74,7 +74,7 @@
                         
                         <div>
                             <label style="display: block; color: rgba(255, 255, 255, 0.9); font-weight: 500; margin-bottom: 0.5rem; font-size: 0.9rem;">Upload Files</label>
-                            <input type="file" id="fileInput" accept=".zip,.rar" style="display: none;">
+                            <input type="file" id="fileInput" accept=".fantome,.zip,.rar" style="display: none;">
                             <div id="uploadArea" style="border: 2px dashed rgba(255, 0, 0, 0.3); border-radius: 12px; padding: 3rem; text-align: center; background: rgba(0, 0, 0, 0.2); cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.borderColor='rgba(255, 0, 0, 0.6)'; this.style.background='rgba(255, 0, 0, 0.05)'" onmouseout="this.style.borderColor='rgba(255, 0, 0, 0.3)'; this.style.background='rgba(0, 0, 0, 0.2)'">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ff0000" stroke-width="2" style="margin: 0 auto 1rem;">
                                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -82,7 +82,8 @@
                                     <line x1="12" y1="3" x2="12" y2="15"></line>
                                 </svg>
                                 <p style="color: #fff; font-weight: 600; margin-bottom: 0.5rem;">Click to upload or drag and drop</p>
-                                <p style="color: rgba(255, 255, 255, 0.5); font-size: 0.9rem;">ZIP, RAR files up to 50MB</p>
+                                <p style="color: rgba(255, 255, 255, 0.5); font-size: 0.9rem;">FANTOME, ZIP, RAR files up to 50MB</p>
+                                <p style="color: rgba(255, 0, 0, 0.8); font-size: 0.85rem; margin-top: 0.5rem; font-weight: 500;">💎 .fantome files recommended for LoL custom skins</p>
                             </div>
                             <div id="filePreview" style="display: none; margin-top: 1rem; padding: 1rem; background: rgba(255, 0, 0, 0.1); border: 1px solid rgba(255, 0, 0, 0.3); border-radius: 8px;"></div>
                         </div>
@@ -203,11 +204,11 @@
             if (!file) return;
             
             // Validate file type
-            const validTypes = ['application/zip', 'application/x-zip-compressed', 'application/x-rar-compressed'];
+            const validTypes = ['application/zip', 'application/x-zip-compressed', 'application/x-rar-compressed', 'application/octet-stream'];
             const fileName = file.name.toLowerCase();
             
-            if (!validTypes.includes(file.type) && !fileName.endsWith('.zip') && !fileName.endsWith('.rar')) {
-                alert('Please upload only ZIP or RAR files.');
+            if (!validTypes.includes(file.type) && !fileName.endsWith('.zip') && !fileName.endsWith('.rar') && !fileName.endsWith('.fantome')) {
+                alert('Please upload only FANTOME, ZIP or RAR files.');
                 return;
             }
             
@@ -219,18 +220,32 @@
             
             selectedFile = file;
             
+            // Determine file icon and color based on extension
+            let fileIcon = '📁';
+            let fileColor = '#ff0000';
+            if (fileName.endsWith('.fantome')) {
+                fileIcon = '💎';
+                fileColor = '#9333ea';
+            } else if (fileName.endsWith('.zip')) {
+                fileIcon = '📦';
+                fileColor = '#3b82f6';
+            } else if (fileName.endsWith('.rar')) {
+                fileIcon = '📦';
+                fileColor = '#f59e0b';
+            }
+            
             // Show preview
             filePreview.style.display = 'block';
             filePreview.innerHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div style="display: flex; align-items: center; gap: 1rem;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff0000" stroke-width="2">
-                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
-                            <polyline points="13 2 13 9 20 9"></polyline>
-                        </svg>
+                        <div style="font-size: 2rem;">${fileIcon}</div>
                         <div>
                             <p style="color: #fff; font-weight: 600; margin: 0;">${file.name}</p>
-                            <p style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem; margin: 0.25rem 0 0 0;">${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                            <p style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem; margin: 0.25rem 0 0 0;">
+                                ${(file.size / 1024 / 1024).toFixed(2)} MB
+                                ${fileName.endsWith('.fantome') ? '<span style="color: #9333ea; font-weight: 600; margin-left: 0.5rem;">• League of Legends Custom Skin</span>' : ''}
+                            </p>
                         </div>
                     </div>
                     <button type="button" onclick="clearFile()" style="padding: 0.5rem 1rem; background: rgba(255, 0, 0, 0.2); color: #ff0000; border: 1px solid rgba(255, 0, 0, 0.3); border-radius: 6px; cursor: pointer; font-weight: 500; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 0, 0, 0.3)'" onmouseout="this.style.background='rgba(255, 0, 0, 0.2)'">Remove</button>
