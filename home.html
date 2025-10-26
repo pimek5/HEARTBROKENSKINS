@@ -294,6 +294,19 @@
             color: #fff;
             margin-bottom: 2rem;
         }
+        
+        /* Discord Widget Card */
+        .discord-widget-card:hover {
+            background: rgba(255,255,255,0.08) !important;
+            border-color: rgba(255,0,0,0.4) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255,0,0,0.2);
+        }
+        
+        .discord-widget-card:hover svg {
+            color: rgba(255,0,0,1) !important;
+            transform: translate(2px, -2px);
+        }
     </style>
 </head>
 <body>
@@ -465,6 +478,56 @@
             </div>
         </section>
 
+        <!-- Discord Server Section -->
+        <section class="section" style="background: rgba(0,0,0,0.3);">
+            <div class="section-header">
+                <h2 class="section-title">Join Our Discord Server</h2>
+                <p class="section-subtitle">Connect with the community and get support</p>
+            </div>
+            <div style="max-width: 600px; margin: 0 auto;">
+                <a href="https://discord.gg/hexrtbrxenchromas" target="_blank" rel="noopener noreferrer" 
+                   class="discord-widget-card"
+                   style="display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.05); 
+                          border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1.5rem; 
+                          transition: all 0.3s ease; text-decoration: none; position: relative; overflow: hidden;">
+                    <div style="flex-shrink: 0;">
+                        <img alt="𝐇𝐄𝐗𝐑𝐓𝐁𝐑𝐗𝐄𝐍 𝐂𝐇𝐑𝐎𝐌𝐀𝐒" 
+                             loading="lazy" 
+                             width="64" 
+                             height="64" 
+                             class="rounded-lg" 
+                             src="https://cdn.discordapp.com/icons/1153027935553454191/a_b71a953066903ae6f6312e80b6f32f6e.png" 
+                             style="border-radius: 12px; display: block;">
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <h3 style="font-size: 1.125rem; font-weight: 600; color: white; margin: 0 0 0.5rem 0; 
+                                   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                            𝐇𝐄𝐗𝐑𝐓𝐁𝐑𝐗𝐄𝐍 𝐂𝐇𝐑𝐎𝐌𝐀𝐒
+                        </h3>
+                        <div style="display: flex; align-items: center; gap: 1.5rem; font-size: 0.875rem; color: rgba(255,255,255,0.7);">
+                            <div style="display: flex; align-items: center; gap: 0.375rem;">
+                                <div style="width: 8px; height: 8px; background: #22c55e; border-radius: 50%;"></div>
+                                <span id="discord-widget-online">1990 online</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.375rem;">
+                                <div style="width: 8px; height: 8px; background: rgba(255,255,255,0.4); border-radius: 50%;"></div>
+                                <span id="discord-widget-members">4073 members</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="position: absolute; top: 1rem; right: 1rem; color: rgba(255,0,0,0.6); 
+                               font-size: 1.25rem; transition: all 0.3s ease;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                            <polyline points="15 3 21 3 21 9"></polyline>
+                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
+                    </div>
+                </a>
+            </div>
+        </section>
+
         <!-- CTA Section -->
         <section class="cta-section">
             <h2 class="cta-title">What are you waiting for?</h2>
@@ -527,12 +590,20 @@
         function updateDiscordStats(memberCount, onlineCount) {
             const membersElement = document.getElementById('stat-members');
             const onlineElement = document.getElementById('stat-online');
+            const widgetOnlineElement = document.getElementById('discord-widget-online');
+            const widgetMembersElement = document.getElementById('discord-widget-members');
             
             if (membersElement) {
                 membersElement.textContent = formatNumber(memberCount);
             }
             if (onlineElement) {
                 onlineElement.textContent = formatNumber(onlineCount);
+            }
+            if (widgetOnlineElement) {
+                widgetOnlineElement.textContent = `${onlineCount} online`;
+            }
+            if (widgetMembersElement) {
+                widgetMembersElement.textContent = `${memberCount} members`;
             }
             
             console.log(`📊 Stats updated: ${memberCount} members, ${onlineCount} online`);
@@ -577,8 +648,8 @@
                 
             } catch (error) {
                 console.warn('⚠️ Failed to fetch Discord stats:', error.message);
-                // Use fallback data
-                updateDiscordStats(3800, 800);
+                // Use real fallback data from Discord server
+                updateDiscordStats(4073, 1990);
             }
         }
 
