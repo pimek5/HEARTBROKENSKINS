@@ -2232,3 +2232,25 @@ aside input:focus {
     border-color: #783CB5;
     box-shadow: 0 0 0 1px #783CB5;
 }
+
+/* Sidebar collapsible sections */
+.sidebar-content {
+    max-height: 1000px;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out, opacity 0.2s ease-in-out;
+    opacity: 1;
+}
+
+.sidebar-content.hidden {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+}
+
+.collapse-arrow {
+    transition: transform 0.3s ease;
+}
+
+.sidebar-toggle {
+    cursor: pointer;
+}
