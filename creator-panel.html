@@ -37,17 +37,68 @@
         </header>
 
         <main class="main-content" style="padding: 4rem 2rem; min-height: calc(100vh - 200px);">
-            <div style="max-width: 1200px; margin: 0 auto;">
-                <h1 style="font-size: 2.5rem; margin-bottom: 2rem; color: #fff;">Creator Panel</h1>
+            <div style="max-width: 1400px; margin: 0 auto;">
+                <h1 style="font-size: 2.5rem; margin-bottom: 1rem; color: #fff;">Creator Panel</h1>
+                <p style="color: rgba(255, 255, 255, 0.6); margin-bottom: 3rem;">Upload and manage your custom skins</p>
                 
-                <div style="background: rgba(18, 18, 18, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 2rem;">
-                    <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: #fff;">Upload Your Mods</h2>
-                    <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 2rem;">
-                        Share your custom skins and chromas with the community. Creator tools coming soon!
+                <!-- Upload Section -->
+                <div style="background: rgba(18, 18, 18, 0.6); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 15px; padding: 2rem; margin-bottom: 2rem;">
+                    <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: #fff; display: flex; align-items: center; gap: 0.5rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        Upload New Skin
+                    </h2>
+                    
+                    <form id="uploadForm" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        <div>
+                            <label style="display: block; color: rgba(255, 255, 255, 0.9); font-weight: 500; margin-bottom: 0.5rem; font-size: 0.9rem;">Skin Name</label>
+                            <input type="text" placeholder="Enter skin name..." style="width: 100%; padding: 1rem; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 8px; color: #fff; font-size: 1rem; transition: all 0.3s ease;" onfocus="this.style.borderColor='rgba(255, 0, 0, 0.5)'" onblur="this.style.borderColor='rgba(255, 0, 0, 0.2)'">
+                        </div>
+                        
+                        <div>
+                            <label style="display: block; color: rgba(255, 255, 255, 0.9); font-weight: 500; margin-bottom: 0.5rem; font-size: 0.9rem;">Champion</label>
+                            <select style="width: 100%; padding: 1rem; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 8px; color: #fff; font-size: 1rem; cursor: pointer;">
+                                <option>Select champion...</option>
+                                <option>Ahri</option>
+                                <option>Yasuo</option>
+                                <option>Lux</option>
+                                <option>Ezreal</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label style="display: block; color: rgba(255, 255, 255, 0.9); font-weight: 500; margin-bottom: 0.5rem; font-size: 0.9rem;">Description</label>
+                            <textarea placeholder="Describe your skin..." rows="4" style="width: 100%; padding: 1rem; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 8px; color: #fff; font-size: 1rem; resize: vertical; font-family: inherit;" onfocus="this.style.borderColor='rgba(255, 0, 0, 0.5)'" onblur="this.style.borderColor='rgba(255, 0, 0, 0.2)'"></textarea>
+                        </div>
+                        
+                        <div>
+                            <label style="display: block; color: rgba(255, 255, 255, 0.9); font-weight: 500; margin-bottom: 0.5rem; font-size: 0.9rem;">Upload Files</label>
+                            <div style="border: 2px dashed rgba(255, 0, 0, 0.3); border-radius: 12px; padding: 3rem; text-align: center; background: rgba(0, 0, 0, 0.2); cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.borderColor='rgba(255, 0, 0, 0.6)'; this.style.background='rgba(255, 0, 0, 0.05)'" onmouseout="this.style.borderColor='rgba(255, 0, 0, 0.3)'; this.style.background='rgba(0, 0, 0, 0.2)'">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ff0000" stroke-width="2" style="margin: 0 auto 1rem;">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="17 8 12 3 7 8"></polyline>
+                                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                                </svg>
+                                <p style="color: #fff; font-weight: 600; margin-bottom: 0.5rem;">Click to upload or drag and drop</p>
+                                <p style="color: rgba(255, 255, 255, 0.5); font-size: 0.9rem;">ZIP, RAR files up to 50MB</p>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" style="padding: 1rem 2rem; background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%); color: #fff; border: none; border-radius: 8px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(255, 0, 0, 0.5)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(255, 0, 0, 0.3)'">
+                            Upload Skin
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- My Uploads -->
+                <div style="background: rgba(18, 18, 18, 0.6); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 15px; padding: 2rem;">
+                    <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: #fff;">My Uploads</h2>
+                    <p style="color: rgba(255, 255, 255, 0.6); text-align: center; padding: 3rem;">
+                        No uploads yet. Upload your first skin above!
                     </p>
-                    <a href="admin.html" style="display: inline-block; padding: 0.75rem 2rem; background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%); color: #fff; text-decoration: none; border-radius: 8px; font-weight: 600;">
-                        Admin Panel →
-                    </a>
                 </div>
             </div>
         </main>

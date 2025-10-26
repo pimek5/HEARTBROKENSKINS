@@ -150,6 +150,15 @@ function createProfileDropdown(user) {
                     <span style="font-size: 13px; font-weight: 500;">Activity</span>
                 </div>
             </a>
+            <a href="profile.html" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; color: rgba(255, 255, 255, 0.9); text-decoration: none; transition: all 0.2s; border-radius: 8px; margin-bottom: 8px;" onmouseover="this.style.background='rgba(255, 0, 0, 0.1)'; this.style.color='#fff'" onmouseout="this.style.background='transparent'; this.style.color='rgba(255, 255, 255, 0.9)'">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span style="font-size: 13px; font-weight: 500;">Creator Profile</span>
+                </div>
+            </a>
             <div style="border-top: 1px solid rgba(255, 0, 0, 0.1); margin: 12px 0;"></div>
             <a href="creator-panel.html" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; color: rgba(255, 255, 255, 0.9); text-decoration: none; transition: all 0.2s; border-radius: 8px; margin-bottom: 8px;" onmouseover="this.style.background='rgba(255, 0, 0, 0.1)'; this.style.color='#fff'" onmouseout="this.style.background='transparent'; this.style.color='rgba(255, 255, 255, 0.9)'">
                 <div style="display: flex; align-items: center; gap: 16px;">
