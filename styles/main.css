@@ -915,6 +915,44 @@ body::after {
     width: 80%;
 }
 
+/* Navigation Buttons */
+.nav-buttons {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.nav-btn {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    position: relative;
+    background: transparent;
+    border: 2px solid rgba(255, 0, 0, 0.3);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+.nav-btn:hover {
+    color: #fff;
+    background: rgba(255, 0, 0, 0.1);
+    border-color: rgba(255, 0, 0, 0.6);
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+    transform: translateY(-2px);
+}
+
+.nav-btn.active {
+    color: #fff;
+    background: rgba(255, 0, 0, 0.15);
+    border-color: #ff0000;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+}
+
 /* Main content */
 .main {
     flex: 1;
