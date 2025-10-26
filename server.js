@@ -11,10 +11,30 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
+// CORS configuration
+const allowedOrigins = [
+    'https://pimek5.github.io',
+    'https://pimek5.github.io/HEARTBROKENSKINS',
+    'http://localhost:8000',
+    'http://localhost:5500'
+];
+
 // Middleware
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:8000',
-    credentials: true
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        
+        // Check if origin is in allowed list or matches pattern
+        if (allowedOrigins.includes(origin) || origin.startsWith('https://pimek5.github.io')) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json());
