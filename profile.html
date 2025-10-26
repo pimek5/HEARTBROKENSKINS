@@ -39,8 +39,21 @@
         <main class="main-content" style="padding: 4rem 2rem; min-height: calc(100vh - 200px);">
             <div style="max-width: 1200px; margin: 0 auto;">
                 <!-- Profile Header -->
-                <div style="background: rgba(18, 18, 18, 0.6); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 15px; padding: 3rem; margin-bottom: 2rem; position: relative; overflow: hidden;">
-                    <div style="position: absolute; top: 0; left: 0; right: 0; height: 150px; background: linear-gradient(135deg, rgba(255, 0, 0, 0.1) 0%, rgba(139, 0, 0, 0.1) 100%); z-index: 0;"></div>
+                <div id="profileHeader" style="background: rgba(18, 18, 18, 0.6); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 15px; padding: 3rem; margin-bottom: 2rem; position: relative; overflow: hidden;">
+                    <!-- Background Theme -->
+                    <div id="profileTheme" style="position: absolute; top: 0; left: 0; right: 0; height: 150px; background: linear-gradient(135deg, rgba(255, 0, 0, 0.1) 0%, rgba(139, 0, 0, 0.1) 100%); z-index: 0;"></div>
+                    
+                    <!-- Edit Theme Button (top right corner) -->
+                    <button id="editThemeBtn" style="display: none; position: absolute; top: 1rem; right: 1rem; padding: 0.5rem 1rem; background: rgba(0, 0, 0, 0.5); color: rgba(255, 255, 255, 0.8); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; z-index: 2; transition: all 0.3s ease; display: flex; align-items: center; gap: 0.5rem;" onmouseover="this.style.background='rgba(255, 0, 0, 0.3)'; this.style.borderColor='rgba(255, 0, 0, 0.5)'" onmouseout="this.style.background='rgba(0, 0, 0, 0.5)'; this.style.borderColor='rgba(255, 255, 255, 0.2)'">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle>
+                            <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle>
+                            <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle>
+                            <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle>
+                            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path>
+                        </svg>
+                        Edit Theme
+                    </button>
                     
                     <div style="position: relative; z-index: 1; display: flex; align-items: flex-end; gap: 2rem;">
                         <img id="profileAvatar" src="" alt="Profile Avatar" style="width: 120px; height: 120px; border-radius: 50%; border: 4px solid rgba(255, 0, 0, 0.5); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);">
@@ -55,7 +68,7 @@
                             <div style="display: flex; gap: 2rem; margin-top: 1.5rem;">
                                 <div>
                                     <div style="font-size: 1.5rem; font-weight: 700; color: #fff;">0</div>
-                                    <div style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.5);">Uploads</div>
+                                    <div style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.5);">Views</div>
                                 </div>
                                 <div>
                                     <div style="font-size: 1.5rem; font-weight: 700; color: #fff;">0</div>
@@ -64,6 +77,10 @@
                                 <div>
                                     <div style="font-size: 1.5rem; font-weight: 700; color: #fff;">0</div>
                                     <div style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.5);">Followers</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: #fff;">0</div>
+                                    <div style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.5);">Skins</div>
                                 </div>
                             </div>
                         </div>
@@ -139,6 +156,52 @@
             </div>
         </main>
 
+        <!-- Theme Editor Modal -->
+        <div id="themeModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8); z-index: 9999; align-items: center; justify-content: center;">
+            <div style="background: rgba(18, 18, 18, 0.95); border: 1px solid rgba(255, 0, 0, 0.3); border-radius: 15px; padding: 2rem; width: 90%; max-width: 600px; position: relative;">
+                <button id="closeModal" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: rgba(255, 255, 255, 0.6); cursor: pointer; font-size: 1.5rem; padding: 0.5rem;" onmouseover="this.style.color='#ff0000'" onmouseout="this.style.color='rgba(255, 255, 255, 0.6)'">
+                    ×
+                </button>
+                
+                <h2 style="color: #fff; font-size: 1.8rem; margin-bottom: 1.5rem; font-weight: 700;">Edit Profile Theme</h2>
+                
+                <div style="margin-bottom: 2rem;">
+                    <label style="display: block; color: rgba(255, 255, 255, 0.9); font-weight: 500; margin-bottom: 1rem; font-size: 0.95rem;">Choose a theme color:</label>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem;">
+                        <button class="theme-option" data-theme="red" style="width: 100%; aspect-ratio: 1; border-radius: 12px; border: 3px solid rgba(255, 255, 255, 0.2); background: linear-gradient(135deg, rgba(255, 0, 0, 0.3) 0%, rgba(139, 0, 0, 0.3) 100%); cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.1)'; this.style.borderColor='#ff0000'" onmouseout="this.style.transform='scale(1)'; this.style.borderColor='rgba(255, 255, 255, 0.2)'"></button>
+                        
+                        <button class="theme-option" data-theme="purple" style="width: 100%; aspect-ratio: 1; border-radius: 12px; border: 3px solid rgba(255, 255, 255, 0.2); background: linear-gradient(135deg, rgba(138, 43, 226, 0.3) 0%, rgba(75, 0, 130, 0.3) 100%); cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.1)'; this.style.borderColor='#8a2be2'" onmouseout="this.style.transform='scale(1)'; this.style.borderColor='rgba(255, 255, 255, 0.2)'"></button>
+                        
+                        <button class="theme-option" data-theme="blue" style="width: 100%; aspect-ratio: 1; border-radius: 12px; border: 3px solid rgba(255, 255, 255, 0.2); background: linear-gradient(135deg, rgba(0, 123, 255, 0.3) 0%, rgba(0, 86, 179, 0.3) 100%); cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.1)'; this.style.borderColor='#007bff'" onmouseout="this.style.transform='scale(1)'; this.style.borderColor='rgba(255, 255, 255, 0.2)'"></button>
+                        
+                        <button class="theme-option" data-theme="green" style="width: 100%; aspect-ratio: 1; border-radius: 12px; border: 3px solid rgba(255, 255, 255, 0.2); background: linear-gradient(135deg, rgba(40, 167, 69, 0.3) 0%, rgba(25, 135, 84, 0.3) 100%); cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.1)'; this.style.borderColor='#28a745'" onmouseout="this.style.transform='scale(1)'; this.style.borderColor='rgba(255, 255, 255, 0.2)'"></button>
+                        
+                        <button class="theme-option" data-theme="orange" style="width: 100%; aspect-ratio: 1; border-radius: 12px; border: 3px solid rgba(255, 255, 255, 0.2); background: linear-gradient(135deg, rgba(255, 140, 0, 0.3) 0%, rgba(204, 85, 0, 0.3) 100%); cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.1)'; this.style.borderColor='#ff8c00'" onmouseout="this.style.transform='scale(1)'; this.style.borderColor='rgba(255, 255, 255, 0.2)'"></button>
+                        
+                        <button class="theme-option" data-theme="pink" style="width: 100%; aspect-ratio: 1; border-radius: 12px; border: 3px solid rgba(255, 255, 255, 0.2); background: linear-gradient(135deg, rgba(255, 20, 147, 0.3) 0%, rgba(199, 21, 133, 0.3) 100%); cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.1)'; this.style.borderColor='#ff1493'" onmouseout="this.style.transform='scale(1)'; this.style.borderColor='rgba(255, 255, 255, 0.2)'"></button>
+                        
+                        <button class="theme-option" data-theme="cyan" style="width: 100%; aspect-ratio: 1; border-radius: 12px; border: 3px solid rgba(255, 255, 255, 0.2); background: linear-gradient(135deg, rgba(0, 255, 255, 0.3) 0%, rgba(0, 139, 139, 0.3) 100%); cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.1)'; this.style.borderColor='#00ffff'" onmouseout="this.style.transform='scale(1)'; this.style.borderColor='rgba(255, 255, 255, 0.2)'"></button>
+                        
+                        <button class="theme-option" data-theme="yellow" style="width: 100%; aspect-ratio: 1; border-radius: 12px; border: 3px solid rgba(255, 255, 255, 0.2); background: linear-gradient(135deg, rgba(255, 215, 0, 0.3) 0%, rgba(218, 165, 32, 0.3) 100%); cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.1)'; this.style.borderColor='#ffd700'" onmouseout="this.style.transform='scale(1)'; this.style.borderColor='rgba(255, 255, 255, 0.2)'"></button>
+                        
+                        <button class="theme-option" data-theme="dark" style="width: 100%; aspect-ratio: 1; border-radius: 12px; border: 3px solid rgba(255, 255, 255, 0.2); background: linear-gradient(135deg, rgba(50, 50, 50, 0.3) 0%, rgba(20, 20, 20, 0.3) 100%); cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.1)'; this.style.borderColor='#666'" onmouseout="this.style.transform='scale(1)'; this.style.borderColor='rgba(255, 255, 255, 0.2)'"></button>
+                        
+                        <button class="theme-option" data-theme="gold" style="width: 100%; aspect-ratio: 1; border-radius: 12px; border: 3px solid rgba(255, 255, 255, 0.2); background: linear-gradient(135deg, rgba(255, 215, 0, 0.3) 0%, rgba(184, 134, 11, 0.3) 100%); cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.1)'; this.style.borderColor='#ffd700'" onmouseout="this.style.transform='scale(1)'; this.style.borderColor='rgba(255, 255, 255, 0.2)'"></button>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button id="cancelTheme" style="padding: 0.75rem 1.5rem; background: rgba(255, 255, 255, 0.05); color: rgba(255, 255, 255, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255, 255, 255, 0.1)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.05)'">
+                        Cancel
+                    </button>
+                    <button id="saveTheme" style="padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%); color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(255, 0, 0, 0.5)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(255, 0, 0, 0.3)'">
+                        Save Theme
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <footer class="footer">
             <div class="footer-content">
                 <p>&copy; 2025 HEARTBROKENSKINS. All rights reserved.</p>
@@ -185,11 +248,28 @@
         // Load profile data
         const API_URL = 'https://heartbrokenskins-logging.up.railway.app';
         
+        // Theme color mappings
+        const themes = {
+            red: { gradient: 'linear-gradient(135deg, rgba(255, 0, 0, 0.1) 0%, rgba(139, 0, 0, 0.1) 100%)' },
+            purple: { gradient: 'linear-gradient(135deg, rgba(138, 43, 226, 0.1) 0%, rgba(75, 0, 130, 0.1) 100%)' },
+            blue: { gradient: 'linear-gradient(135deg, rgba(0, 123, 255, 0.1) 0%, rgba(0, 86, 179, 0.1) 100%)' },
+            green: { gradient: 'linear-gradient(135deg, rgba(40, 167, 69, 0.1) 0%, rgba(25, 135, 84, 0.1) 100%)' },
+            orange: { gradient: 'linear-gradient(135deg, rgba(255, 140, 0, 0.1) 0%, rgba(204, 85, 0, 0.1) 100%)' },
+            pink: { gradient: 'linear-gradient(135deg, rgba(255, 20, 147, 0.1) 0%, rgba(199, 21, 133, 0.1) 100%)' },
+            cyan: { gradient: 'linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(0, 139, 139, 0.1) 100%)' },
+            yellow: { gradient: 'linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(218, 165, 32, 0.1) 100%)' },
+            dark: { gradient: 'linear-gradient(135deg, rgba(50, 50, 50, 0.1) 0%, rgba(20, 20, 20, 0.1) 100%)' },
+            gold: { gradient: 'linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(184, 134, 11, 0.1) 100%)' }
+        };
+        
+        let selectedTheme = 'red';
+        let currentUser = null;
+        
         async function loadProfile() {
             const token = localStorage.getItem('authToken');
             
             if (!token) {
-                // Show logged out state
+                // Show logged out state - could redirect to login
                 return;
             }
 
@@ -202,22 +282,115 @@
 
                 if (response.ok) {
                     const user = await response.json();
+                    currentUser = user;
+                    
+                    // Fetch fresh Discord avatar
+                    let avatarUrl = user.avatar || 'assets/default-avatar.png';
+                    
+                    // If user has discordId, fetch latest avatar from Discord API
+                    if (user.discordId) {
+                        try {
+                            const discordResponse = await fetch(`https://discord.com/api/v10/users/${user.discordId}`, {
+                                headers: {
+                                    'Authorization': `Bot ${process.env.DISCORD_BOT_TOKEN || ''}`
+                                }
+                            });
+                            
+                            if (discordResponse.ok) {
+                                const discordData = await discordResponse.json();
+                                if (discordData.avatar) {
+                                    const isAnimated = discordData.avatar.startsWith('a_');
+                                    const extension = isAnimated ? 'gif' : 'png';
+                                    avatarUrl = `https://cdn.discordapp.com/avatars/${user.discordId}/${discordData.avatar}.${extension}?size=1024`;
+                                }
+                            }
+                        } catch (error) {
+                            console.log('Using cached avatar:', error);
+                            // Fall back to cached avatar
+                        }
+                    }
                     
                     // Update profile info
-                    document.getElementById('profileAvatar').src = user.avatar || 'assets/default-avatar.png';
+                    document.getElementById('profileAvatar').src = avatarUrl;
                     document.getElementById('profileUsername').textContent = user.username || 'User';
                     
                     if (user.isAdmin) {
                         document.getElementById('adminBadge').style.display = 'inline-block';
                     }
                     
-                    // Show edit button if viewing own profile
+                    // Show edit buttons for own profile
                     document.getElementById('editProfileBtn').style.display = 'block';
+                    document.getElementById('editThemeBtn').style.display = 'flex';
+                    
+                    // Load saved theme
+                    const savedTheme = localStorage.getItem(`profileTheme_${user.username}`) || 'red';
+                    selectedTheme = savedTheme;
+                    applyTheme(savedTheme);
                 }
             } catch (error) {
                 console.error('Error loading profile:', error);
             }
         }
+
+        function applyTheme(themeName) {
+            const themeElement = document.getElementById('profileTheme');
+            if (themes[themeName]) {
+                themeElement.style.background = themes[themeName].gradient;
+            }
+        }
+
+        // Theme editor modal
+        document.getElementById('editThemeBtn').addEventListener('click', () => {
+            document.getElementById('themeModal').style.display = 'flex';
+        });
+
+        document.getElementById('closeModal').addEventListener('click', () => {
+            document.getElementById('themeModal').style.display = 'none';
+        });
+
+        document.getElementById('cancelTheme').addEventListener('click', () => {
+            document.getElementById('themeModal').style.display = 'none';
+        });
+
+        // Theme selection
+        document.querySelectorAll('.theme-option').forEach(option => {
+            option.addEventListener('click', function() {
+                selectedTheme = this.getAttribute('data-theme');
+                
+                // Update active state
+                document.querySelectorAll('.theme-option').forEach(opt => {
+                    opt.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                    opt.style.transform = 'scale(1)';
+                });
+                this.style.borderColor = '#ff0000';
+                this.style.transform = 'scale(1.1)';
+                
+                // Preview theme
+                applyTheme(selectedTheme);
+            });
+        });
+
+        document.getElementById('saveTheme').addEventListener('click', () => {
+            if (currentUser) {
+                localStorage.setItem(`profileTheme_${currentUser.username}`, selectedTheme);
+                applyTheme(selectedTheme);
+                document.getElementById('themeModal').style.display = 'none';
+                
+                // Show success message
+                const successMsg = document.createElement('div');
+                successMsg.textContent = 'Theme saved successfully!';
+                successMsg.style.cssText = 'position: fixed; top: 2rem; right: 2rem; background: rgba(40, 167, 69, 0.9); color: #fff; padding: 1rem 2rem; border-radius: 8px; z-index: 10000; animation: slideIn 0.3s ease;';
+                document.body.appendChild(successMsg);
+                setTimeout(() => successMsg.remove(), 3000);
+            }
+        });
+
+        // Close modal on outside click
+        document.getElementById('themeModal').addEventListener('click', (e) => {
+            if (e.target.id === 'themeModal') {
+                document.getElementById('themeModal').style.display = 'none';
+            }
+        });
 
         loadProfile();
     </script>
