@@ -758,7 +758,30 @@
         // Function to fetch Discord owner info
         async function fetchDiscordOwner() {
             try {
-                // Use manual owner data since Discord API might not return correct info
+                // Try to fetch live Discord user data
+                const response = await fetch(`https://discord.com/api/v10/users/${DISCORD_OWNER_ID}`, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const userData = await response.json();
+                    const avatarHash = userData.avatar;
+                    const avatarUrl = avatarHash 
+                        ? `https://cdn.discordapp.com/avatars/${DISCORD_OWNER_ID}/${avatarHash}.${avatarHash.startsWith('a_') ? 'gif' : 'webp'}?size=1024`
+                        : `https://cdn.discordapp.com/embed/avatars/${parseInt(userData.discriminator || '0') % 5}.png`;
+                    
+                    const displayName = userData.global_name || userData.username;
+                    console.log('✅ Fetched live Discord user data:', displayName);
+                    updateOwnerInfo(displayName, avatarUrl);
+                    return;
+                }
+                
+                throw new Error('Failed to fetch Discord user data');
+            } catch (error) {
+                console.warn('⚠️ Could not fetch live data, using fallback');
+                // Use manual owner data as fallback
                 const ownerData = {
                     id: '318104006385729538',
                     username: 'pimek',
@@ -768,39 +791,6 @@
                 
                 console.log('Using manual owner data:', ownerData);
                 updateOwnerInfo(ownerData.displayName, ownerData.avatar_url);
-                
-                // Still try Discord API in background for verification
-                try {
-                    const widgetResponse = await fetch(`https://discord.com/api/guilds/${DISCORD_SERVER_ID}/widget.json`);
-                    
-                    if (widgetResponse.ok) {
-                        const widgetData = await widgetResponse.json();
-                        console.log('Discord Widget Data (for verification):', widgetData);
-                        
-                        // Log all members to see what API actually returns
-                        if (widgetData.members) {
-                            console.log('All Discord members found:', widgetData.members.map(m => ({
-                                id: m.id,
-                                username: m.username,
-                                nick: m.nick
-                            })));
-                            
-                            const ownerMember = widgetData.members.find(member => member.id === DISCORD_OWNER_ID);
-                            if (ownerMember) {
-                                console.log('API found owner member:', ownerMember);
-                            } else {
-                                console.log('Owner not found in API (using manual data instead)');
-                            }
-                        }
-                    }
-                } catch (e) {
-                    console.log('Widget API verification failed:', e.message);
-                }
-                
-            } catch (error) {
-                console.warn('Failed to fetch owner info:', error);
-                // Fallback to manual data
-                updateOwnerInfo('RĪŦƚЩÂĿҚЄR', 'https://cdn.discordapp.com/avatars/318104006385729538/b81f9550ab9d145bbd9f81799f19b3ba.webp?size=1024');
             }
         }
         
