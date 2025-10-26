@@ -287,42 +287,12 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <!-- Grid/List View Toggle -->
-                                <div class="bg-[#0d0d0d] border border-[#1c1c1c] rounded p-1.5 flex items-center w-full sm:w-auto justify-center">
-                                    <button 
-                                        id="gridViewBtn"
-                                        class="p-1.5 rounded flex-1 sm:flex-none bg-[#121212] text-[#ff0000] transition-all duration-200" 
-                                        aria-label="Grid view"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <rect x="3" y="3" width="7" height="7"></rect>
-                                            <rect x="14" y="3" width="7" height="7"></rect>
-                                            <rect x="3" y="14" width="7" height="7"></rect>
-                                            <rect x="14" y="14" width="7" height="7"></rect>
-                                        </svg>
-                                    </button>
-                                    <button 
-                                        id="listViewBtn"
-                                        class="p-1.5 rounded flex-1 sm:flex-none text-[#999] hover:text-white transition-all duration-200" 
-                                        aria-label="List view"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <line x1="8" y1="6" x2="21" y2="6"></line>
-                                            <line x1="8" y1="12" x2="21" y2="12"></line>
-                                            <line x1="8" y1="18" x2="21" y2="18"></line>
-                                            <line x1="3" y1="6" x2="3.01" y2="6"></line>
-                                            <line x1="3" y1="12" x2="3.01" y2="12"></line>
-                                            <line x1="3" y1="18" x2="3.01" y2="18"></line>
-                                        </svg>
-                                    </button>
-                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Mods Grid -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-8" id="modsGrid">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 sm:gap-4 mb-8" id="modsGrid">
                         <!-- Mods will be loaded dynamically -->
                     </div>
 
@@ -480,28 +450,6 @@
             }
             
             console.log('Paid only:', paidOnlyActive);
-        });
-        
-        // Grid/List view toggle
-        const gridViewBtn = document.getElementById('gridViewBtn');
-        const listViewBtn = document.getElementById('listViewBtn');
-        
-        gridViewBtn?.addEventListener('click', () => {
-            gridViewBtn.classList.add('bg-[#121212]', 'text-[#ff0000]');
-            gridViewBtn.classList.remove('text-[#999]');
-            listViewBtn.classList.remove('bg-[#121212]', 'text-[#ff0000]');
-            listViewBtn.classList.add('text-[#999]');
-            
-            console.log('Grid view');
-        });
-        
-        listViewBtn?.addEventListener('click', () => {
-            listViewBtn.classList.add('bg-[#121212]', 'text-[#ff0000]');
-            listViewBtn.classList.remove('text-[#999]');
-            gridViewBtn.classList.remove('bg-[#121212]', 'text-[#ff0000]');
-            gridViewBtn.classList.add('text-[#999]');
-            
-            console.log('List view');
         });
     </script>
 </body>
