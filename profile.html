@@ -7,6 +7,18 @@
     <link rel="icon" type="image/png" href="assets/logo1.png">
     <link rel="stylesheet" href="styles/main.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -85,7 +97,11 @@
                             </div>
                         </div>
                         
-                        <button id="editProfileBtn" style="display: none; padding: 0.75rem 2rem; background: rgba(255, 0, 0, 0.1); color: #ff0000; border: 1px solid rgba(255, 0, 0, 0.3); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255, 0, 0, 0.2)'" onmouseout="this.style.background='rgba(255, 0, 0, 0.1)'">
+                        <button id="editProfileBtn" style="display: none; padding: 0.75rem 2rem; background: rgba(255, 0, 0, 0.1); color: #ff0000; border: 1px solid rgba(255, 0, 0, 0.3); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 0.5rem;" onmouseover="this.style.background='rgba(255, 0, 0, 0.2)'" onmouseout="this.style.background='rgba(255, 0, 0, 0.1)'">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"></path>
+                            </svg>
                             Edit Profile
                         </button>
                     </div>
@@ -96,18 +112,15 @@
                     <!-- About -->
                     <div style="background: rgba(18, 18, 18, 0.6); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 15px; padding: 2rem;">
                         <h3 style="color: #fff; font-size: 1.2rem; margin-bottom: 1rem; font-weight: 600;">About</h3>
-                        <p id="profileAbout" style="color: rgba(255, 255, 255, 0.6); line-height: 1.6;">discord.gg/heartbrxnchromas</p>
+                        <p id="profileBio" style="color: rgba(255, 255, 255, 0.6); line-height: 1.6;">League of Legends skin creator</p>
                     </div>
                     
                     <!-- Connect -->
                     <div style="background: rgba(18, 18, 18, 0.6); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 15px; padding: 2rem;">
                         <h3 style="color: #fff; font-size: 1.2rem; margin-bottom: 1rem; font-weight: 600;">Connect</h3>
-                        <a href="#" style="display: flex; align-items: center; gap: 0.75rem; color: rgba(255, 255, 255, 0.7); text-decoration: none; padding: 0.75rem; border-radius: 8px; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255, 0, 0, 0.1)'; this.style.color='#fff'" onmouseout="this.style.background='transparent'; this.style.color='rgba(255, 255, 255, 0.7)'">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                            </svg>
-                            <span style="font-size: 0.95rem;">Twitter</span>
-                        </a>
+                        <div id="connectSection">
+                            <p style="color: rgba(255, 255, 255, 0.5); font-size: 0.9rem;">No social links added</p>
+                        </div>
                     </div>
                 </div>
 
@@ -225,6 +238,44 @@
                         Save Theme
                     </button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Edit Profile Modal -->
+        <div id="editProfileModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8); z-index: 9999; align-items: center; justify-content: center;">
+            <div style="background: rgba(18, 18, 18, 0.95); border: 1px solid rgba(255, 0, 0, 0.3); border-radius: 15px; padding: 2rem; width: 90%; max-width: 600px; position: relative; max-height: 90vh; overflow-y: auto;">
+                <button id="closeEditModal" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: rgba(255, 255, 255, 0.6); cursor: pointer; font-size: 1.5rem; padding: 0.5rem;" onmouseover="this.style.color='#ff0000'" onmouseout="this.style.color='rgba(255, 255, 255, 0.6)'">
+                    ×
+                </button>
+                
+                <h2 style="color: #fff; font-size: 1.8rem; margin-bottom: 1.5rem; font-weight: 700;">Edit Profile</h2>
+                
+                <form id="editProfileForm" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div>
+                        <label style="display: block; color: rgba(255, 255, 255, 0.9); font-weight: 500; margin-bottom: 0.5rem; font-size: 0.9rem;">Username</label>
+                        <input type="text" id="editUsername" style="width: 100%; padding: 1rem; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 8px; color: #fff; font-size: 1rem;" placeholder="Your username">
+                    </div>
+                    
+                    <div>
+                        <label style="display: block; color: rgba(255, 255, 255, 0.9); font-weight: 500; margin-bottom: 0.5rem; font-size: 0.9rem;">Bio</label>
+                        <textarea id="editBio" rows="3" style="width: 100%; padding: 1rem; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 8px; color: #fff; font-size: 1rem; resize: vertical; font-family: inherit;" placeholder="Tell us about yourself..."></textarea>
+                    </div>
+                    
+                    <div>
+                        <label style="display: block; color: rgba(255, 255, 255, 0.9); font-weight: 500; margin-bottom: 0.5rem; font-size: 0.9rem;">Social Links</label>
+                        <input type="url" id="editTwitter" style="width: 100%; padding: 1rem; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 8px; color: #fff; font-size: 1rem; margin-bottom: 0.75rem;" placeholder="Twitter URL (https://twitter.com/username)">
+                        <input type="url" id="editYoutube" style="width: 100%; padding: 1rem; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 8px; color: #fff; font-size: 1rem;" placeholder="YouTube URL (https://youtube.com/@username)">
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1rem;">
+                        <button type="button" id="cancelEdit" style="padding: 0.75rem 1.5rem; background: rgba(255, 255, 255, 0.05); color: rgba(255, 255, 255, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255, 255, 255, 0.1)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.05)'">
+                            Cancel
+                        </button>
+                        <button type="submit" style="padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%); color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(255, 0, 0, 0.5)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(255, 0, 0, 0.3)'">
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
 
@@ -350,6 +401,14 @@
                         selectedTheme = 'red';
                         applyTheme('red');
                     }
+                    
+                    // Load saved bio and social links
+                    const savedBio = localStorage.getItem(`profileBio_${user.username}`) || 'League of Legends skin creator';
+                    const savedTwitter = localStorage.getItem(`profileTwitter_${user.username}`) || '';
+                    const savedYoutube = localStorage.getItem(`profileYoutube_${user.username}`) || '';
+                    
+                    document.getElementById('profileBio').textContent = savedBio;
+                    updateSocialLinks(savedTwitter, savedYoutube);
                 }
             } catch (error) {
                 console.error('Error loading profile:', error);
@@ -483,6 +542,97 @@
                 document.getElementById('themeModal').style.display = 'none';
             }
         });
+
+        // ========== EDIT PROFILE MODAL ==========
+        document.getElementById('editProfileBtn').addEventListener('click', () => {
+            if (currentUser) {
+                // Load current profile data
+                document.getElementById('editUsername').value = currentUser.username || '';
+                document.getElementById('editBio').value = localStorage.getItem(`profileBio_${currentUser.username}`) || 'League of Legends skin creator';
+                document.getElementById('editTwitter').value = localStorage.getItem(`profileTwitter_${currentUser.username}`) || '';
+                document.getElementById('editYoutube').value = localStorage.getItem(`profileYoutube_${currentUser.username}`) || '';
+                
+                document.getElementById('editProfileModal').style.display = 'flex';
+            }
+        });
+
+        document.getElementById('closeEditModal').addEventListener('click', () => {
+            document.getElementById('editProfileModal').style.display = 'none';
+        });
+
+        document.getElementById('cancelEdit').addEventListener('click', () => {
+            document.getElementById('editProfileModal').style.display = 'none';
+        });
+
+        document.getElementById('editProfileForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            if (currentUser) {
+                const bio = document.getElementById('editBio').value;
+                const twitter = document.getElementById('editTwitter').value;
+                const youtube = document.getElementById('editYoutube').value;
+                
+                // Save to localStorage
+                localStorage.setItem(`profileBio_${currentUser.username}`, bio);
+                localStorage.setItem(`profileTwitter_${currentUser.username}`, twitter);
+                localStorage.setItem(`profileYoutube_${currentUser.username}`, youtube);
+                
+                // Update display
+                document.getElementById('profileBio').textContent = bio;
+                updateSocialLinks(twitter, youtube);
+                
+                document.getElementById('editProfileModal').style.display = 'none';
+                
+                // Show success message
+                showSuccessMessage('Profile updated successfully!');
+            }
+        });
+
+        // Close edit modal on outside click
+        document.getElementById('editProfileModal').addEventListener('click', (e) => {
+            if (e.target.id === 'editProfileModal') {
+                document.getElementById('editProfileModal').style.display = 'none';
+            }
+        });
+
+        // Helper function to show success messages
+        function showSuccessMessage(message) {
+            const successMsg = document.createElement('div');
+            successMsg.textContent = message;
+            successMsg.style.cssText = 'position: fixed; top: 2rem; right: 2rem; background: rgba(40, 167, 69, 0.9); color: #fff; padding: 1rem 2rem; border-radius: 8px; z-index: 10000; animation: slideIn 0.3s ease;';
+            document.body.appendChild(successMsg);
+            setTimeout(() => successMsg.remove(), 3000);
+        }
+
+        // Update social links in About section
+        function updateSocialLinks(twitter, youtube) {
+            const connectDiv = document.querySelector('#connectSection');
+            if (!connectDiv) return;
+            
+            let linksHTML = '';
+            if (twitter) {
+                linksHTML += `
+                    <a href="${twitter}" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 0.75rem; color: rgba(255, 255, 255, 0.7); text-decoration: none; padding: 0.75rem; border-radius: 8px; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255, 0, 0, 0.1)'; this.style.color='#fff'" onmouseout="this.style.background='transparent'; this.style.color='rgba(255, 255, 255, 0.7)'">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
+                        <span style="font-size: 0.95rem;">Twitter</span>
+                    </a>
+                `;
+            }
+            if (youtube) {
+                linksHTML += `
+                    <a href="${youtube}" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 0.75rem; color: rgba(255, 255, 255, 0.7); text-decoration: none; padding: 0.75rem; border-radius: 8px; transition: all 0.3s ease; margin-top: 0.5rem;" onmouseover="this.style.background='rgba(255, 0, 0, 0.1)'; this.style.color='#fff'" onmouseout="this.style.background='transparent'; this.style.color='rgba(255, 255, 255, 0.7)'">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                        </svg>
+                        <span style="font-size: 0.95rem;">YouTube</span>
+                    </a>
+                `;
+            }
+            
+            connectDiv.innerHTML = linksHTML || '<p style="color: rgba(255, 255, 255, 0.5); font-size: 0.9rem;">No social links added</p>';
+        }
 
         loadProfile();
     </script>
