@@ -37,6 +37,7 @@ class ModsPageManager {
         
         this.setupEventListeners();
         this.setupSidebarToggles();
+        this.loadChampions();
     }
     
     loadMods() {
@@ -46,6 +47,62 @@ class ModsPageManager {
         
         // Apply filters and render
         this.applyFilters();
+    }
+    
+    loadChampions() {
+        // Get champions from contentData
+        const champions = window.contentData || [];
+        
+        // Find the champions list container
+        const championsContainer = document.querySelector('.sidebar-content:has(input[placeholder*="Search champions"])');
+        if (!championsContainer) return;
+        
+        const championsListDiv = championsContainer.querySelector('.p-3');
+        if (!championsListDiv) return;
+        
+        // Keep the search input
+        const searchDiv = championsListDiv.querySelector('.mb-3');
+        
+        // Sort champions alphabetically
+        const sortedChampions = champions.sort((a, b) => a.title.localeCompare(b.title));
+        
+        // Create champion buttons
+        let championsHTML = '';
+        sortedChampions.forEach(champion => {
+            championsHTML += `
+                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white flex items-center gap-2" data-champion="${champion.title.toLowerCase()}">
+                    <img src="${champion.image}" alt="${champion.title}" class="w-6 h-6 rounded" onerror="this.style.display='none'">
+                    <span>${champion.title}</span>
+                </button>
+            `;
+        });
+        
+        // Update the container (keep search, add champions)
+        championsListDiv.innerHTML = searchDiv.outerHTML + championsHTML;
+        
+        // Setup champion search
+        this.setupChampionSearch();
+        
+        console.log('Loaded champions:', sortedChampions.length);
+    }
+    
+    setupChampionSearch() {
+        const searchInput = document.querySelector('input[placeholder*="Search champions"]');
+        if (!searchInput) return;
+        
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const championButtons = document.querySelectorAll('button[data-champion]');
+            
+            championButtons.forEach(button => {
+                const championName = button.dataset.champion;
+                if (championName.includes(query)) {
+                    button.style.display = 'flex';
+                } else {
+                    button.style.display = 'none';
+                }
+            });
+        });
     }
     
     setupEventListeners() {
