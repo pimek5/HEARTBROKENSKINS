@@ -709,7 +709,6 @@ body::after {
 }
 
 .header-content {
-    max-width: 1600px;
     margin: 0 auto;
     padding: 0 2rem;
     display: grid;
@@ -1730,7 +1729,6 @@ body::after {
 }
 
 .footer-content {
-    max-width: 1400px;
     margin: 0 auto;
     padding: 0 2rem;
     display: flex;
