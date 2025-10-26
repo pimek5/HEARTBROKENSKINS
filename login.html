@@ -378,31 +378,115 @@
     </div>
 
     <script>
+        const API_URL = 'http://localhost:3000';
+        
+        // Check if user logged in via OAuth
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+            const success = urlParams.get('success');
+            
+            if (token && success) {
+                // Save token
+                localStorage.setItem('authToken', token);
+                // Redirect to home
+                window.location.href = 'home.html';
+            }
+            
+            // Check if already logged in
+            const existingToken = localStorage.getItem('authToken');
+            if (existingToken) {
+                // Verify token
+                verifyToken(existingToken);
+            }
+        });
+        
+        // Verify token function
+        async function verifyToken(token) {
+            try {
+                const response = await fetch(`${API_URL}/api/auth/me`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    // Token is valid, redirect to home
+                    window.location.href = 'home.html';
+                } else {
+                    // Token invalid, remove it
+                    localStorage.removeItem('authToken');
+                }
+            } catch (error) {
+                console.error('Token verification error:', error);
+                localStorage.removeItem('authToken');
+            }
+        }
+        
         // Handle login form submission
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const email = document.getElementById('email').value;
+            const username = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const remember = document.getElementById('remember').checked;
             
-            // TODO: Implement actual login logic with backend
-            console.log('Login attempt:', { email, remember });
-            alert('Login functionality coming soon!');
+            const submitButton = this.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Logging in...';
+            
+            try {
+                const response = await fetch(`${API_URL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Save token
+                    if (remember) {
+                        localStorage.setItem('authToken', data.token);
+                    } else {
+                        sessionStorage.setItem('authToken', data.token);
+                    }
+                    
+                    // Save user data
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    
+                    // Show success message
+                    alert('Login successful! Redirecting...');
+                    
+                    // Redirect to home
+                    window.location.href = 'home.html';
+                } else {
+                    alert(data.message || 'Login failed');
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Log In';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('Server error. Please make sure the backend server is running.');
+                submitButton.disabled = false;
+                submitButton.textContent = 'Log In';
+            }
         });
         
         // Handle Discord login
         document.getElementById('discordLogin').addEventListener('click', function(e) {
             e.preventDefault();
-            // TODO: Implement Discord OAuth
-            alert('Discord login coming soon!');
+            // Redirect to backend Discord OAuth endpoint
+            window.location.href = `${API_URL}/auth/discord`;
         });
         
         // Handle Google login
         document.getElementById('googleLogin').addEventListener('click', function(e) {
             e.preventDefault();
-            // TODO: Implement Google OAuth
-            alert('Google login coming soon!');
+            // Redirect to backend Google OAuth endpoint
+            window.location.href = `${API_URL}/auth/google`;
         });
     </script>
 </body>
