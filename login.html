@@ -386,16 +386,24 @@
             const token = urlParams.get('token');
             const success = urlParams.get('success');
             
+            console.log('OAuth callback check:', { token: token ? 'present' : 'missing', success });
+            
             if (token && success) {
+                console.log('Saving token and redirecting...');
                 // Save token
                 localStorage.setItem('authToken', token);
+                console.log('Token saved:', localStorage.getItem('authToken') ? 'yes' : 'no');
                 // Redirect to home
-                window.location.href = 'home.html';
+                setTimeout(() => {
+                    window.location.href = 'home.html';
+                }, 100);
+                return;
             }
             
             // Check if already logged in
             const existingToken = localStorage.getItem('authToken');
             if (existingToken) {
+                console.log('Found existing token, verifying...');
                 // Verify token
                 verifyToken(existingToken);
             }
