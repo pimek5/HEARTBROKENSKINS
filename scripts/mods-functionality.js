@@ -49,61 +49,79 @@ class ModsPageManager {
         this.applyFilters();
     }
     
-    loadChampions() {
-        // Wait for champions data to be loaded
-        if (!window.contentData || window.contentData.length === 0) {
-            console.log('Waiting for champions data...');
-            setTimeout(() => this.loadChampions(), 100);
-            return;
+    async loadChampions() {
+        try {
+            console.log('Loading champions from DDragon API...');
+            
+            // Fetch latest version
+            const versionResponse = await fetch('https://ddragon.leagueoflegends.com/api/versions.json');
+            const versions = await versionResponse.json();
+            const latestVersion = versions[0];
+            
+            console.log('Latest version:', latestVersion);
+            
+            // Fetch champions data
+            const championsResponse = await fetch(`https://ddragon.leagueoflegends.com/cdn/${latestVersion}/data/en_US/champion.json`);
+            const championsData = await championsResponse.json();
+            
+            // Convert to array and sort alphabetically
+            const championsArray = Object.values(championsData.data).map(champ => ({
+                id: champ.id,
+                name: champ.name,
+                image: `https://ddragon.leagueoflegends.com/cdn/${latestVersion}/img/champion/${champ.id}.png`
+            })).sort((a, b) => a.name.localeCompare(b.name));
+            
+            console.log('Loaded champions:', championsArray.length);
+            
+            // Find the champions list container
+            const championsSection = Array.from(document.querySelectorAll('.sidebar-content')).find(el => {
+                return el.querySelector('input[placeholder*="Search champions"]');
+            });
+            
+            if (!championsSection) {
+                console.error('Champions container not found');
+                return;
+            }
+            
+            const championsListDiv = championsSection.querySelector('.p-3');
+            if (!championsListDiv) {
+                console.error('Champions list div not found');
+                return;
+            }
+            
+            // Keep the search input
+            const searchDiv = championsListDiv.querySelector('.mb-3');
+            if (!searchDiv) {
+                console.error('Search div not found');
+                return;
+            }
+            
+            // Create champion items with checkboxes
+            let championsHTML = searchDiv.outerHTML;
+            championsArray.forEach(champion => {
+                championsHTML += `
+                    <div class="flex items-center gap-2">
+                        <div class="w-4 h-4 flex items-center justify-center rounded-sm border cursor-pointer bg-transparent border-[#4A4A61] hover:border-[#783CB5]" data-champion-checkbox="${champion.name.toLowerCase()}"></div>
+                        <div class="flex items-center gap-2 flex-1">
+                            <div class="w-6 h-6 rounded overflow-hidden border border-[#25222F] flex-shrink-0">
+                                <img src="${champion.image}" alt="${champion.name}" class="h-full w-full object-cover" onerror="this.src='https://via.placeholder.com/24'">
+                            </div>
+                            <span class="text-[#CACDD9] hover:text-white cursor-pointer" data-champion="${champion.name.toLowerCase()}">${champion.name}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Update the container
+            championsListDiv.innerHTML = championsHTML;
+            
+            // Setup champion search and filters
+            this.setupChampionSearch();
+            this.setupChampionFilters();
+            
+        } catch (error) {
+            console.error('Error loading champions:', error);
         }
-        
-        // Get champions from contentData
-        const champions = window.contentData;
-        
-        // Find the champions list container - use parent div structure
-        const championsSection = Array.from(document.querySelectorAll('.sidebar-content')).find(el => {
-            return el.querySelector('input[placeholder*="Search champions"]');
-        });
-        
-        if (!championsSection) {
-            console.error('Champions container not found');
-            return;
-        }
-        
-        const championsListDiv = championsSection.querySelector('.p-3');
-        if (!championsListDiv) {
-            console.error('Champions list div not found');
-            return;
-        }
-        
-        // Keep the search input
-        const searchDiv = championsListDiv.querySelector('.mb-3');
-        if (!searchDiv) {
-            console.error('Search div not found');
-            return;
-        }
-        
-        // Sort champions alphabetically
-        const sortedChampions = [...champions].sort((a, b) => a.title.localeCompare(b.title));
-        
-        // Create champion buttons
-        let championsHTML = '';
-        sortedChampions.forEach(champion => {
-            championsHTML += `
-                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white flex items-center gap-2" data-champion="${champion.title.toLowerCase()}">
-                    <img src="${champion.image}" alt="${champion.title}" class="w-6 h-6 rounded" onerror="this.style.display='none'">
-                    <span>${champion.title}</span>
-                </button>
-            `;
-        });
-        
-        // Update the container (keep search, add champions)
-        championsListDiv.innerHTML = searchDiv.outerHTML + championsHTML;
-        
-        // Setup champion search
-        this.setupChampionSearch();
-        
-        console.log('Loaded champions:', sortedChampions.length);
     }
     
     setupChampionSearch() {
@@ -112,15 +130,45 @@ class ModsPageManager {
         
         searchInput.addEventListener('input', (e) => {
             const query = e.target.value.toLowerCase();
-            const championButtons = document.querySelectorAll('button[data-champion]');
+            const championItems = document.querySelectorAll('[data-champion]');
             
-            championButtons.forEach(button => {
-                const championName = button.dataset.champion;
-                if (championName.includes(query)) {
-                    button.style.display = 'flex';
-                } else {
-                    button.style.display = 'none';
+            championItems.forEach(item => {
+                const championName = item.dataset.champion;
+                const parentDiv = item.closest('.flex.items-center.gap-2');
+                if (parentDiv && championName.includes(query)) {
+                    parentDiv.style.display = 'flex';
+                } else if (parentDiv) {
+                    parentDiv.style.display = 'none';
                 }
+            });
+        });
+    }
+    
+    setupChampionFilters() {
+        // Setup checkbox toggles for champions
+        const checkboxes = document.querySelectorAll('[data-champion-checkbox]');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('click', () => {
+                const championName = checkbox.dataset.championCheckbox;
+                const isActive = checkbox.classList.contains('border-[#783CB5]');
+                
+                if (isActive) {
+                    // Deactivate
+                    checkbox.classList.remove('border-[#783CB5]', 'bg-[#783CB5]');
+                    checkbox.classList.add('border-[#4A4A61]', 'bg-transparent');
+                    checkbox.innerHTML = '';
+                    this.filters.champions.delete(championName);
+                } else {
+                    // Activate
+                    checkbox.classList.remove('border-[#4A4A61]', 'bg-transparent');
+                    checkbox.classList.add('border-[#783CB5]', 'bg-[#783CB5]');
+                    checkbox.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+                    this.filters.champions.add(championName);
+                }
+                
+                // Apply filters
+                this.currentPage = 1;
+                this.applyFilters();
             });
         });
     }
