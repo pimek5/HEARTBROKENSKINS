@@ -613,48 +613,78 @@
         async function fetchDiscordStats() {
             try {
                 console.log('📡 Fetching Discord statistics...');
+                console.log('🔑 Server ID:', DISCORD_SERVER_ID);
+                console.log('🔗 Invite Code:', DISCORD_INVITE_CODE);
                 
                 // Try PTB Widget API first (primary source)
                 try {
-                    const widgetResponse = await fetch(`https://ptb.discord.com/api/guilds/${DISCORD_SERVER_ID}/widget.json`);
+                    const widgetUrl = `https://ptb.discord.com/api/guilds/${DISCORD_SERVER_ID}/widget.json`;
+                    console.log('📞 Trying Widget API:', widgetUrl);
+                    
+                    const widgetResponse = await fetch(widgetUrl);
+                    console.log('📊 Widget API Response Status:', widgetResponse.status);
+                    
                     if (widgetResponse.ok) {
                         const widgetData = await widgetResponse.json();
+                        console.log('📦 Widget API Data:', widgetData);
+                        
                         const onlineCount = widgetData.presence_count || 0;
                         const memberCount = widgetData.members?.length || 0;
                         
+                        console.log(`👥 Online: ${onlineCount}, Members in API: ${memberCount}`);
+                        
                         // If we have both stats, use them
-                        if (memberCount > 0) {
+                        if (memberCount > 0 && onlineCount > 0) {
                             updateDiscordStats(memberCount, onlineCount);
                             console.log('✅ Stats from PTB Widget API (full data)');
                             return;
                         }
                         
                         // Otherwise estimate total members (online count is usually ~50% of total)
-                        const estimatedMembers = Math.round(onlineCount * 2);
-                        updateDiscordStats(estimatedMembers, onlineCount);
-                        console.log('✅ Stats from PTB Widget API (estimated members)');
-                        return;
+                        if (onlineCount > 0) {
+                            const estimatedMembers = Math.round(onlineCount * 2);
+                            updateDiscordStats(estimatedMembers, onlineCount);
+                            console.log('✅ Stats from PTB Widget API (estimated members)');
+                            return;
+                        }
                     }
                 } catch (e) {
-                    console.log('Widget API failed:', e.message);
+                    console.log('❌ Widget API Error:', e.message);
                 }
                 
                 // Try Invite API as fallback
-                const inviteResponse = await fetch(`https://discord.com/api/v10/invites/${DISCORD_INVITE_CODE}?with_counts=true`);
-                if (inviteResponse.ok) {
-                    const inviteData = await inviteResponse.json();
-                    const memberCount = inviteData.approximate_member_count || 0;
-                    const onlineCount = inviteData.approximate_presence_count || 0;
+                try {
+                    const inviteUrl = `https://discord.com/api/v10/invites/${DISCORD_INVITE_CODE}?with_counts=true`;
+                    console.log('📞 Trying Invite API:', inviteUrl);
                     
-                    updateDiscordStats(memberCount, onlineCount);
-                    console.log('✅ Stats from Invite API');
-                    return;
+                    const inviteResponse = await fetch(inviteUrl);
+                    console.log('📊 Invite API Response Status:', inviteResponse.status);
+                    
+                    if (inviteResponse.ok) {
+                        const inviteData = await inviteResponse.json();
+                        console.log('📦 Invite API Data:', inviteData);
+                        
+                        const memberCount = inviteData.approximate_member_count || 0;
+                        const onlineCount = inviteData.approximate_presence_count || 0;
+                        
+                        console.log(`👥 Members: ${memberCount}, Online: ${onlineCount}`);
+                        
+                        if (memberCount > 0 || onlineCount > 0) {
+                            updateDiscordStats(memberCount, onlineCount);
+                            console.log('✅ Stats from Invite API');
+                            return;
+                        }
+                    }
+                } catch (e) {
+                    console.log('❌ Invite API Error:', e.message);
                 }
                 
+                console.warn('⚠️ All Discord APIs failed, using fallback data');
                 throw new Error('All APIs failed');
                 
             } catch (error) {
-                console.warn('⚠️ Failed to fetch Discord stats:', error.message);
+                console.warn('⚠️ Error fetching Discord stats:', error.message);
+                console.log('📊 Using fallback: 4073 members, 1990 online');
                 // Use real fallback data from Discord server
                 updateDiscordStats(4073, 1990);
             }
