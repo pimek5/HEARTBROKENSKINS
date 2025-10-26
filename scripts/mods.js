@@ -34,6 +34,31 @@ document.addEventListener('DOMContentLoaded', function() {
         viewMode: 'grid'
     };
 
+    // Initialize collapsible sections
+    function initializeCollapsibleSections() {
+        const filterHeaders = document.querySelectorAll('.filter-header');
+        
+        filterHeaders.forEach(header => {
+            header.addEventListener('click', function() {
+                const category = this.dataset.category;
+                const filterCategory = this.closest('.filter-category');
+                const content = filterCategory.querySelector('.champions-filter, .checkbox-group');
+                
+                // Toggle active state
+                this.classList.toggle('active');
+                if (content) {
+                    content.classList.toggle('active');
+                }
+                
+                // Rotate arrow icon
+                const arrow = this.querySelector('.arrow-icon');
+                if (arrow) {
+                    arrow.style.transform = this.classList.contains('active') ? 'rotate(180deg)' : '';
+                }
+            });
+        });
+    }
+
     // Load champions from Riot API
     async function loadChampions() {
         try {
@@ -341,7 +366,8 @@ document.addEventListener('DOMContentLoaded', function() {
         applyFiltersAndSort();
     });
 
-    // Filter category toggles
+    // Filter category toggles and initialize collapsible sections
+    initializeCollapsibleSections();
     document.querySelectorAll('.filter-header').forEach(header => {
         header.addEventListener('click', () => {
             const category = header.closest('.filter-category');
