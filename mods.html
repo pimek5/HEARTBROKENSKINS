@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEARTBROKENSKINS - Mods</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="assets/logo.png" alt="HEARTBROKENSKINS" class="logo">
+                <div class="title-section">
+                    <h1>HEARTBROKENSKINS</h1>
+                    <p class="subtitle">HEXRTBRXENCHROMAS</p>
+                </div>
+            </div>
+            <nav>
+                <a href="index.html">HOME</a>
+                <a href="mods.html" class="active">MODS</a>
+                <a href="about.html">ABOUT</a>
+            </nav>
+            <div class="social-links">
+                <a href="https://twitter.com/HEXRTBRXENCHROMAS" target="_blank" class="twitter-link">
+                    <img src="assets/twitter.png" alt="Twitter">
+                </a>
+                <a href="https://discord.gg/YOUR-DISCORD" target="_blank" class="discord-link">
+                    <img src="assets/discord.png" alt="Discord">
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="mods-container">
+        <div class="sidebar">
+            <div class="champions-section">
+                <h2>CHAMPIONS <span>(174)</span></h2>
+                <div class="search-box">
+                    <input type="text" placeholder="Search champions..." id="championSearch">
+                </div>
+                <button class="add-champion-tag">
+                    <span class="crown-icon">👑</span> Add Champion Tag
+                </button>
+                <div class="champions-list" id="championsList">
+                    <!-- Champions will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <h2>ALL POSTS</h2>
+            <div class="posts-grid" id="postsGrid">
+                <!-- Posts will be loaded dynamically -->
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2025 HEARTBROKENSKINS by HEXRTBRXENCHROMAS. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="privacy-policy.html">PRIVACY POLICY</a>
+            <a href="terms-of-service.html">TERMS OF SERVICE</a>
+            <a href="admin.html">ADMIN</a>
+            <a href="https://twitter.com/HEXRTBRXENCHROMAS">TWITTER</a>
+            <a href="https://discord.gg/YOUR-DISCORD">DISCORD</a>
+        </div>
+    </footer>
+
+    <script src="scripts/main.js"></script>
+    <script src="scripts/content-data.js"></script>
+    <script src="scripts/mods.js"></script>
+</body>
+</html>
