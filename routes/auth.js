@@ -158,11 +158,22 @@ router.get('/discord', passport.authenticate('discord'));
 router.get('/discord/callback',
     passport.authenticate('discord', { failureRedirect: '/login' }),
     (req, res) => {
-        // Generate JWT token
-        const token = generateToken(req.user._id);
-        
-        // Redirect to frontend with token
-        res.redirect(`${process.env.FRONTEND_URL}/login.html?token=${token}&success=true`);
+        try {
+            // Check if user exists
+            if (!req.user) {
+                console.error('No user in Discord callback');
+                return res.redirect(`${process.env.FRONTEND_URL}/login.html?error=auth_failed`);
+            }
+
+            // Generate JWT token
+            const token = generateToken(req.user._id);
+            
+            // Redirect to frontend with token
+            res.redirect(`${process.env.FRONTEND_URL}/login.html?token=${token}&success=true`);
+        } catch (error) {
+            console.error('Discord callback error:', error);
+            res.redirect(`${process.env.FRONTEND_URL}/login.html?error=server_error`);
+        }
     }
 );
 

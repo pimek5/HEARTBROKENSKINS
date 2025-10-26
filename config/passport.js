@@ -26,10 +26,18 @@ passport.use(new DiscordStrategy({
     scope: ['identify', 'email']
 }, async (accessToken, refreshToken, profile, done) => {
     try {
+        console.log('Discord OAuth - Profile received:', {
+            id: profile.id,
+            username: profile.username,
+            email: profile.email,
+            avatar: profile.avatar
+        });
+
         // Check if user already exists
         let user = await User.findOne({ discordId: profile.id });
 
         if (user) {
+            console.log('Discord OAuth - Existing user found:', user._id);
             // Update last login
             user.lastLogin = Date.now();
             user.avatar = `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.png`;
@@ -37,6 +45,7 @@ passport.use(new DiscordStrategy({
             return done(null, user);
         }
 
+        console.log('Discord OAuth - Creating new user');
         // Create new user
         user = await User.create({
             discordId: profile.id,
@@ -47,6 +56,7 @@ passport.use(new DiscordStrategy({
             provider: 'discord'
         });
 
+        console.log('Discord OAuth - New user created:', user._id);
         done(null, user);
     } catch (error) {
         console.error('Discord auth error:', error);

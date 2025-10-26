@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
+const mongoose = require('mongoose');
 const passport = require('./config/passport');
 const connectDB = require('./config/database');
 
@@ -42,7 +43,15 @@ app.get('/health', (req, res) => {
     res.json({ 
         success: true, 
         message: 'Server is running',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        mongodb: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
+        env: {
+            hasDiscordClientId: !!process.env.DISCORD_CLIENT_ID,
+            hasDiscordSecret: !!process.env.DISCORD_CLIENT_SECRET,
+            hasDiscordCallback: !!process.env.DISCORD_CALLBACK_URL,
+            hasFrontendUrl: !!process.env.FRONTEND_URL,
+            hasMongoUri: !!process.env.MONGODB_URI
+        }
     });
 });
 
