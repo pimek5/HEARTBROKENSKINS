@@ -82,7 +82,7 @@
                                     <line x1="12" y1="3" x2="12" y2="15"></line>
                                 </svg>
                                 <p style="color: #fff; font-weight: 600; margin-bottom: 0.5rem;">Click to upload or drag and drop</p>
-                                <p style="color: rgba(255, 255, 255, 0.5); font-size: 0.9rem;">FANTOME, ZIP, RAR files up to 50MB</p>
+                                <p style="color: rgba(255, 255, 255, 0.5); font-size: 0.9rem;">FANTOME, ZIP, RAR files (no size limit)</p>
                                 <p style="color: rgba(255, 0, 0, 0.8); font-size: 0.85rem; margin-top: 0.5rem; font-weight: 500;">💎 .fantome files recommended for LoL custom skins</p>
                             </div>
                             <div id="filePreview" style="display: none; margin-top: 1rem; padding: 1rem; background: rgba(255, 0, 0, 0.1); border: 1px solid rgba(255, 0, 0, 0.3); border-radius: 8px;"></div>
@@ -212,11 +212,7 @@
                 return;
             }
             
-            // Validate file size (50MB)
-            if (file.size > 50 * 1024 * 1024) {
-                alert('File size must be less than 50MB.');
-                return;
-            }
+            // No file size limit
             
             selectedFile = file;
             
