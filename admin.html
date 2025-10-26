@@ -38,7 +38,12 @@
                 
                 <!-- Login button po prawej -->
                 <div class="header-right">
-                    <a href="login.html" class="login-btn">LOGIN</a>
+                    <a href="login.html" class="login-btn" id="loginBtn">LOGIN</a>
+                    <div class="user-profile" id="userProfile" style="display: none;">
+                        <img src="" alt="User Avatar" class="user-avatar" id="userAvatar">
+                        <span class="user-name" id="userName"></span>
+                        <button class="logout-btn" id="logoutBtn">Logout</button>
+                    </div>
                 </div>
             </div>
         </header>
@@ -324,5 +329,6 @@
     <script src="scripts/all-champions-data.js"></script>
     <script src="scripts/main-advanced.js"></script>
     <script src="scripts/admin.js"></script>
+    <script src="scripts/admin-auth.js"></script>
 </body>
 </html>

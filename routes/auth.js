@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const User = require('../models/User');
+const { isAdmin, ADMIN_DISCORD_IDS } = require('../middleware/adminAuth');
 
 // Generate JWT Token
 const generateToken = (userId) => {
@@ -228,7 +229,8 @@ router.get('/me', async (req, res) => {
                 email: user.email,
                 displayName: user.displayName,
                 avatar: user.avatar,
-                provider: user.provider
+                provider: user.provider,
+                isAdmin: ADMIN_DISCORD_IDS.includes(user.discordId)
             }
         });
     } catch (error) {
@@ -237,6 +239,23 @@ router.get('/me', async (req, res) => {
             message: 'Invalid token'
         });
     }
+});
+
+// @route   GET /api/auth/admin/check
+// @desc    Check if current user is admin
+// @access  Private
+router.get('/admin/check', isAdmin, (req, res) => {
+    res.json({
+        success: true,
+        message: 'User has admin access',
+        user: {
+            id: req.user._id,
+            username: req.user.username,
+            displayName: req.user.displayName,
+            avatar: req.user.avatar,
+            isAdmin: true
+        }
+    });
 });
 
 module.exports = router;
