@@ -401,20 +401,20 @@
             </div>
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-number">10M+</div>
-                    <div class="stat-label">Views</div>
+                    <div class="stat-number" id="stat-members">...</div>
+                    <div class="stat-label">Discord Members</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number">500+</div>
+                    <div class="stat-number" id="stat-online">...</div>
+                    <div class="stat-label">Online Now</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-skins">500+</div>
                     <div class="stat-label">Custom Skins</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number">50K+</div>
+                    <div class="stat-number" id="stat-downloads">50K+</div>
                     <div class="stat-label">Downloads</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">10K+</div>
-                    <div class="stat-label">Active Players</div>
                 </div>
             </div>
         </section>
@@ -491,7 +491,12 @@
         </footer>
     </div>
 
+    <script src="scripts/discord-data.js"></script>
     <script>
+        // Discord Server Configuration
+        const DISCORD_SERVER_ID = '1153027935553454191';
+        const DISCORD_INVITE_CODE = 'hexrtbrxenchromas';
+
         // Toggle FAQ items
         function toggleFAQ(element) {
             const faqItem = element.closest('.faq-item');
@@ -505,6 +510,75 @@
             // Open clicked item if it wasn't active
             if (!isActive) {
                 faqItem.classList.add('active');
+            }
+        }
+
+        // Format number with K/M suffix
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+
+        // Update Discord statistics
+        function updateDiscordStats(memberCount, onlineCount) {
+            const membersElement = document.getElementById('stat-members');
+            const onlineElement = document.getElementById('stat-online');
+            
+            if (membersElement) {
+                membersElement.textContent = formatNumber(memberCount);
+            }
+            if (onlineElement) {
+                onlineElement.textContent = formatNumber(onlineCount);
+            }
+            
+            console.log(`📊 Stats updated: ${memberCount} members, ${onlineCount} online`);
+        }
+
+        // Fetch Discord server statistics
+        async function fetchDiscordStats() {
+            try {
+                console.log('📡 Fetching Discord statistics...');
+                
+                // Try Widget API first
+                try {
+                    const widgetResponse = await fetch(`https://discord.com/api/guilds/${DISCORD_SERVER_ID}/widget.json`);
+                    if (widgetResponse.ok) {
+                        const widgetData = await widgetResponse.json();
+                        const onlineCount = widgetData.presence_count || 0;
+                        
+                        // Estimate total members based on online count (assuming ~20% are online)
+                        const estimatedMembers = Math.round(onlineCount / 0.2);
+                        
+                        updateDiscordStats(estimatedMembers, onlineCount);
+                        console.log('✅ Stats from Widget API');
+                        return;
+                    }
+                } catch (e) {
+                    console.log('Widget API failed:', e.message);
+                }
+                
+                // Try Invite API as fallback
+                const inviteResponse = await fetch(`https://discord.com/api/v10/invites/${DISCORD_INVITE_CODE}?with_counts=true`);
+                if (inviteResponse.ok) {
+                    const inviteData = await inviteResponse.json();
+                    const memberCount = inviteData.approximate_member_count || 0;
+                    const onlineCount = inviteData.approximate_presence_count || 0;
+                    
+                    updateDiscordStats(memberCount, onlineCount);
+                    console.log('✅ Stats from Invite API');
+                    return;
+                }
+                
+                throw new Error('All APIs failed');
+                
+            } catch (error) {
+                console.warn('⚠️ Failed to fetch Discord stats:', error.message);
+                // Use fallback data
+                updateDiscordStats(3800, 800);
             }
         }
 
@@ -573,6 +647,10 @@
         // Initialize page
         document.addEventListener('DOMContentLoaded', () => {
             loadPopularSkins();
+            fetchDiscordStats();
+            
+            // Update stats every 2 minutes
+            setInterval(fetchDiscordStats, 2 * 60 * 1000);
         });
     </script>
 </body>
