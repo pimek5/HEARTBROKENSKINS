@@ -192,67 +192,145 @@
                     </div>
                 </aside>
 
-                <section class="mods-content">
-                    <div class="mods-header">
-                        <div class="mods-controls">
-                            <div class="size-control">
-                                <span>Size:</span>
-                                <select id="pageSize">
-                                    <option value="24">24</option>
-                                    <option value="48">48</option>
-                                    <option value="96">96</option>
-                                </select>
-                            </div>
-                            <div class="showing-total">
-                                Showing: <span id="currentlyShowing">0</span>
-                            </div>
-                            <div class="sort-control">
-                                <span>Sort by:</span>
-                                <select id="sortSelect">
-                                    <option value="recently-updated">Recently updated</option>
-                                    <option value="most-downloaded">Most downloaded</option>
-                                    <option value="most-viewed">Most viewed</option>
-                                    <option value="highest-rated">Highest rated</option>
-                                </select>
-                            </div>
+                <!-- Main Content Area -->
+                <div class="flex-1 min-w-0 px-2 sm:px-4">
+                    <!-- Top Controls Bar -->
+                    <div class="flex flex-col sm:flex-row lg:flex-row justify-between items-stretch sm:items-center lg:items-center gap-3 sm:gap-4 mb-6">
+                        <!-- Search Bar -->
+                        <div class="relative w-full sm:flex-1 lg:flex-1 lg:max-w-md">
+                            <form class="w-full" id="searchForm">
+                                <div class="relative">
+                                    <input 
+                                        type="text" 
+                                        id="searchInput"
+                                        placeholder="Search mods..." 
+                                        class="bg-[#111016] border border-[#25222F] text-[#CACDD9] py-2 pl-10 pr-4 rounded-md w-full focus:outline-none focus:ring-1 focus:ring-[#783CB5] focus:border-[#783CB5]"
+                                    >
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#828699" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="11" cy="11" r="8"></circle>
+                                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-                        <div class="view-controls">
-                            <button class="view-grid active" title="Grid view">
-                                <svg viewBox="0 0 24 24"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>
-                            </button>
-                            <button class="view-list" title="List view">
-                                <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3zM3 11h18v2H3zM3 18h18v2H3z"/></svg>
-                            </button>
-                        </div>
-                    </div>
 
-                    <div class="mods-grid" id="modsGrid">
-                        <!-- Mods will be loaded dynamically -->
-                    </div>
+                        <!-- Filter and View Controls -->
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 flex-shrink-0">
+                            <!-- Free/Paid Filters -->
+                            <div class="flex flex-wrap items-center gap-1 sm:gap-2 w-full sm:w-auto">
+                                <div class="relative flex-1 sm:flex-none">
+                                    <button 
+                                        id="freeOnlyBtn"
+                                        class="flex items-center justify-center gap-2 px-3 py-2 rounded-md border w-full sm:w-auto bg-[#111016] border-[#25222F] text-[#828699] hover:border-[#783CB5] transition-colors duration-150"
+                                    >
+                                        <span class="text-sm font-medium">Free Only</span>
+                                        <div class="w-4 h-4 flex items-center justify-center rounded-sm border bg-transparent border-[#4A4A61]"></div>
+                                    </button>
+                                </div>
+                                <div class="relative flex-1 sm:flex-none">
+                                    <button 
+                                        id="paidOnlyBtn"
+                                        class="flex items-center justify-center gap-2 px-3 py-2 rounded-md border w-full sm:w-auto bg-[#111016] border-[#25222F] text-[#828699] hover:border-[#CDA15E] transition-colors duration-150"
+                                    >
+                                        <span class="text-sm font-medium">Paid Only</span>
+                                        <div class="w-4 h-4 flex items-center justify-center rounded-sm border bg-transparent border-[#4A4A61]"></div>
+                                    </button>
+                                </div>
+                            </div>
 
-                    <div class="pagination">
-                        <button class="prev-page" disabled>Previous</button>
-                        <div class="page-numbers" id="pageNumbers">
-                            <!-- Page numbers will be generated dynamically -->
-                        </div>
-                        <button class="next-page">Next</button>
-                    </div>
-                </section>
-            </div>
-                                        <input type="checkbox" value="free"> Free
-                                    </label>
-                                    <label>
-                                        <input type="checkbox" value="premium"> Premium
-                                    </label>
+                            <!-- Sort, View Size, and Layout Controls -->
+                            <div class="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto">
+                                <!-- Sort Dropdown -->
+                                <div class="relative flex-1 sm:flex-none min-w-0">
+                                    <div class="group">
+                                        <button 
+                                            id="sortButton"
+                                            class="bg-[#111016] border border-[#25222F] rounded-md px-3 py-2 text-[#828699] flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-start"
+                                        >
+                                            <span class="truncate" id="sortLabel">Latest</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="6 9 12 15 18 9"></polyline>
+                                            </svg>
+                                        </button>
+                                        <div id="sort-dropdown" class="hidden absolute z-50 right-0 mt-1 py-1 bg-[#14131B] border border-[#25222F] rounded-md shadow-lg w-48">
+                                            <button class="sort-option block w-full text-left px-4 py-2 text-sm text-[#CDA15E] bg-[#1A1823]" data-value="latest">Latest</button>
+                                            <button class="sort-option block w-full text-left px-4 py-2 text-sm text-[#CACDD9] hover:bg-[#1A1823]" data-value="oldest">Oldest</button>
+                                            <button class="sort-option block w-full text-left px-4 py-2 text-sm text-[#CACDD9] hover:bg-[#1A1823]" data-value="most-viewed">Most Viewed</button>
+                                            <button class="sort-option block w-full text-left px-4 py-2 text-sm text-[#CACDD9] hover:bg-[#1A1823]" data-value="most-downloaded">Most Downloaded</button>
+                                            <button class="sort-option block w-full text-left px-4 py-2 text-sm text-[#CACDD9] hover:bg-[#1A1823]" data-value="name-az">Name A-Z</button>
+                                            <button class="sort-option block w-full text-left px-4 py-2 text-sm text-[#CACDD9] hover:bg-[#1A1823]" data-value="name-za">Name Z-A</button>
+                                            <button class="sort-option block w-full text-left px-4 py-2 text-sm text-[#CACDD9] hover:bg-[#1A1823]" data-value="price-low">Price (Low to High)</button>
+                                            <button class="sort-option block w-full text-left px-4 py-2 text-sm text-[#CACDD9] hover:bg-[#1A1823]" data-value="price-high">Price (High to Low)</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- View Size Dropdown -->
+                                <div class="relative flex-1 sm:flex-none min-w-0">
+                                    <div class="group">
+                                        <button 
+                                            id="sizeButton"
+                                            class="bg-[#111016] border border-[#25222F] rounded-md px-3 py-2 text-[#828699] flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-start"
+                                        >
+                                            <span class="truncate" id="sizeLabel">View: 20</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="6 9 12 15 18 9"></polyline>
+                                            </svg>
+                                        </button>
+                                        <div id="size-dropdown" class="hidden absolute z-50 right-0 mt-1 py-1 bg-[#14131B] border border-[#25222F] rounded-md shadow-lg w-28">
+                                            <button class="size-option block w-full text-left px-4 py-2 text-sm text-[#CACDD9] hover:bg-[#1A1823]" data-value="12">12</button>
+                                            <button class="size-option block w-full text-left px-4 py-2 text-sm text-[#CDA15E] bg-[#1A1823]" data-value="20">20</button>
+                                            <button class="size-option block w-full text-left px-4 py-2 text-sm text-[#CACDD9] hover:bg-[#1A1823]" data-value="32">32</button>
+                                            <button class="size-option block w-full text-left px-4 py-2 text-sm text-[#CACDD9] hover:bg-[#1A1823]" data-value="48">48</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Grid/List View Toggle -->
+                                <div class="bg-[#111016] border border-[#25222F] rounded-md p-1.5 flex items-center w-full sm:w-auto justify-center">
+                                    <button 
+                                        id="gridViewBtn"
+                                        class="p-1.5 rounded flex-1 sm:flex-none bg-[#1A1823] text-[#CDA15E]" 
+                                        aria-label="Grid view"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="3" y="3" width="7" height="7"></rect>
+                                            <rect x="14" y="3" width="7" height="7"></rect>
+                                            <rect x="3" y="14" width="7" height="7"></rect>
+                                            <rect x="14" y="14" width="7" height="7"></rect>
+                                        </svg>
+                                    </button>
+                                    <button 
+                                        id="listViewBtn"
+                                        class="p-1.5 rounded flex-1 sm:flex-none text-[#828699]" 
+                                        aria-label="List view"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <line x1="8" y1="6" x2="21" y2="6"></line>
+                                            <line x1="8" y1="12" x2="21" y2="12"></line>
+                                            <line x1="8" y1="18" x2="21" y2="18"></line>
+                                            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                                            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                                            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </aside>
 
-                <section class="mods-grid" id="modsGrid">
-                    <!-- Mods will be loaded dynamically -->
-                </section>
+                    <!-- Mods Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-8" id="modsGrid">
+                        <!-- Mods will be loaded dynamically -->
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="flex justify-end items-center gap-2 mt-8 mb-16" id="paginationContainer">
+                        <!-- Pagination will be generated dynamically -->
+                    </div>
+                </div>
             </div>
         </main>
 
@@ -279,5 +357,147 @@
     <script src="scripts/main.js"></script>
     <script src="scripts/content-data.js"></script>
     <script src="scripts/mods.js"></script>
+    
+    <script>
+        // Dropdown toggles
+        const sortButton = document.getElementById('sortButton');
+        const sortDropdown = document.getElementById('sort-dropdown');
+        const sizeButton = document.getElementById('sizeButton');
+        const sizeDropdown = document.getElementById('size-dropdown');
+        
+        // Toggle sort dropdown
+        sortButton?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sortDropdown.classList.toggle('hidden');
+            sizeDropdown.classList.add('hidden');
+        });
+        
+        // Toggle size dropdown
+        sizeButton?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sizeDropdown.classList.toggle('hidden');
+            sortDropdown.classList.add('hidden');
+        });
+        
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', () => {
+            sortDropdown?.classList.add('hidden');
+            sizeDropdown?.classList.add('hidden');
+        });
+        
+        // Sort option selection
+        document.querySelectorAll('.sort-option').forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const value = option.dataset.value;
+                const label = option.textContent;
+                
+                // Update button label
+                document.getElementById('sortLabel').textContent = label;
+                
+                // Update active state
+                document.querySelectorAll('.sort-option').forEach(opt => {
+                    opt.classList.remove('text-[#CDA15E]', 'bg-[#1A1823]');
+                    opt.classList.add('text-[#CACDD9]');
+                });
+                option.classList.remove('text-[#CACDD9]');
+                option.classList.add('text-[#CDA15E]', 'bg-[#1A1823]');
+                
+                // Close dropdown
+                sortDropdown.classList.add('hidden');
+                
+                // Trigger sort (to be implemented in mods.js)
+                console.log('Sort by:', value);
+            });
+        });
+        
+        // Size option selection
+        document.querySelectorAll('.size-option').forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const value = option.dataset.value;
+                
+                // Update button label
+                document.getElementById('sizeLabel').textContent = `View: ${value}`;
+                
+                // Update active state
+                document.querySelectorAll('.size-option').forEach(opt => {
+                    opt.classList.remove('text-[#CDA15E]', 'bg-[#1A1823]');
+                    opt.classList.add('text-[#CACDD9]');
+                });
+                option.classList.remove('text-[#CACDD9]');
+                option.classList.add('text-[#CDA15E]', 'bg-[#1A1823]');
+                
+                // Close dropdown
+                sizeDropdown.classList.add('hidden');
+                
+                // Trigger page size change (to be implemented in mods.js)
+                console.log('View size:', value);
+            });
+        });
+        
+        // Free/Paid filter toggles
+        const freeOnlyBtn = document.getElementById('freeOnlyBtn');
+        const paidOnlyBtn = document.getElementById('paidOnlyBtn');
+        
+        let freeOnlyActive = false;
+        let paidOnlyActive = false;
+        
+        freeOnlyBtn?.addEventListener('click', () => {
+            freeOnlyActive = !freeOnlyActive;
+            
+            const checkbox = freeOnlyBtn.querySelector('div');
+            if (freeOnlyActive) {
+                checkbox.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#783CB5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+                checkbox.classList.add('border-[#783CB5]');
+                freeOnlyBtn.classList.add('border-[#783CB5]', 'text-[#783CB5]');
+            } else {
+                checkbox.innerHTML = '';
+                checkbox.classList.remove('border-[#783CB5]');
+                freeOnlyBtn.classList.remove('border-[#783CB5]', 'text-[#783CB5]');
+            }
+            
+            console.log('Free only:', freeOnlyActive);
+        });
+        
+        paidOnlyBtn?.addEventListener('click', () => {
+            paidOnlyActive = !paidOnlyActive;
+            
+            const checkbox = paidOnlyBtn.querySelector('div');
+            if (paidOnlyActive) {
+                checkbox.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#CDA15E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+                checkbox.classList.add('border-[#CDA15E]');
+                paidOnlyBtn.classList.add('border-[#CDA15E]', 'text-[#CDA15E]');
+            } else {
+                checkbox.innerHTML = '';
+                checkbox.classList.remove('border-[#CDA15E]');
+                paidOnlyBtn.classList.remove('border-[#CDA15E]', 'text-[#CDA15E]');
+            }
+            
+            console.log('Paid only:', paidOnlyActive);
+        });
+        
+        // Grid/List view toggle
+        const gridViewBtn = document.getElementById('gridViewBtn');
+        const listViewBtn = document.getElementById('listViewBtn');
+        
+        gridViewBtn?.addEventListener('click', () => {
+            gridViewBtn.classList.add('bg-[#1A1823]', 'text-[#CDA15E]');
+            gridViewBtn.classList.remove('text-[#828699]');
+            listViewBtn.classList.remove('bg-[#1A1823]', 'text-[#CDA15E]');
+            listViewBtn.classList.add('text-[#828699]');
+            
+            console.log('Grid view');
+        });
+        
+        listViewBtn?.addEventListener('click', () => {
+            listViewBtn.classList.add('bg-[#1A1823]', 'text-[#CDA15E]');
+            listViewBtn.classList.remove('text-[#828699]');
+            gridViewBtn.classList.remove('bg-[#1A1823]', 'text-[#CDA15E]');
+            gridViewBtn.classList.add('text-[#828699]');
+            
+            console.log('List view');
+        });
+    </script>
 </body>
 </html>
