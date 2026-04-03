@@ -41,6 +41,20 @@ async function initializeSchema() {
         )
     `);
 
+    await query("ALTER TABLE users ADD COLUMN IF NOT EXISTS username TEXT");
+    await query("ALTER TABLE users ADD COLUMN IF NOT EXISTS email TEXT");
+    await query("ALTER TABLE users ADD COLUMN IF NOT EXISTS password TEXT");
+    await query("ALTER TABLE users ADD COLUMN IF NOT EXISTS provider TEXT NOT NULL DEFAULT 'local'");
+    await query("ALTER TABLE users ADD COLUMN IF NOT EXISTS provider_id TEXT");
+    await query("ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar TEXT NOT NULL DEFAULT ''");
+    await query("ALTER TABLE users ADD COLUMN IF NOT EXISTS discord_id TEXT");
+    await query("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_guild_member BOOLEAN NOT NULL DEFAULT FALSE");
+    await query("ALTER TABLE users ADD COLUMN IF NOT EXISTS last_login_at TIMESTAMPTZ NOT NULL DEFAULT NOW()");
+    await query("ALTER TABLE users ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()");
+    await query("ALTER TABLE users ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()");
+
+    await query("UPDATE users SET username = COALESCE(NULLIF(username, ''), 'user_' || id) WHERE username IS NULL OR username = ''");
+
     await query('CREATE UNIQUE INDEX IF NOT EXISTS users_email_unique ON users (LOWER(email)) WHERE email IS NOT NULL');
     await query('CREATE UNIQUE INDEX IF NOT EXISTS users_provider_provider_id_unique ON users (provider, provider_id) WHERE provider_id IS NOT NULL');
     await query('CREATE UNIQUE INDEX IF NOT EXISTS users_discord_id_unique ON users (discord_id) WHERE discord_id IS NOT NULL');
