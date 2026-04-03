@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEARTBROKENSKINS - League of Legends Custom Skins & Chromas</title>
+    <link rel="icon" type="image/png" href="assets/logo1.png">
+    <link rel="stylesheet" href="styles/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <style>
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            padding: 8rem 2rem 6rem;
+            position: relative;
+            overflow: hidden;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hero-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 3rem;
+            line-height: 1.7;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+        }
+        
+        .hero-btn {
+            padding: 1.1rem 3rem;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .hero-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .hero-btn-primary {
+            background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
+            color: #fff;
+            border: 2px solid #ff0000;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+        }
+        
+        .hero-btn-primary:hover {
+            background: linear-gradient(135deg, #ff3333 0%, #ff0000 100%);
+            box-shadow: 0 6px 25px rgba(255, 0, 0, 0.5);
+            transform: translateY(-3px);
+        }
+        
+        .hero-btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .hero-btn-secondary:hover {
+            border-color: rgba(255, 0, 0, 0.8);
+            background: rgba(255, 0, 0, 0.1);
+            box-shadow: 0 6px 25px rgba(255, 0, 0, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        /* Section Styles */
+        .section {
+            padding: 6rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeIn 0.8s ease-out;
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 1rem;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .section-title {
+            font-size: clamp(2rem, 4vw, 2.5rem);
+            font-weight: 700;
+            color: #fff;
+            margin: 0;
+            text-shadow: 
+                0 0 10px rgba(255, 0, 0, 0.8),
+                0 0 20px rgba(255, 0, 0, 0.6),
+                0 0 30px rgba(255, 0, 0, 0.4),
+                0 0 40px rgba(255, 0, 0, 0.2);
+            letter-spacing: -0.02em;
+            filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.7));
+        }
+        
+        .section-subtitle {
+            font-size: clamp(1rem, 2vw, 1.1rem);
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+        
+        /* Popular Skins Grid */
+        .skins-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 0 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .skins-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+        
+        .skin-card {
+            background: rgba(18, 18, 18, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .skin-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 0, 0, 0.4);
+        }
+        
+        .skin-thumbnail {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        
+        .skin-card:hover .skin-thumbnail {
+            transform: scale(1.05);
+        }
+        
+        .skin-info {
+            padding: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .skin-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+        }
+        
+        .skin-meta {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .skin-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+        
+        .skin-card:hover .skin-stat {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+            padding: 0 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+        
+        .feature-card {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, rgba(18, 18, 18, 0.8) 0%, rgba(28, 28, 28, 0.6) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card:hover {
+            border-color: rgba(255, 0, 0, 0.3);
+            transform: translateY(-8px);
+        }
+        
+        .feature-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            transition: transform 0.4s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotateY(360deg);
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .feature-description {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.7;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Stats Section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+            text-align: center;
+            padding: 0 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .stat-card {
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, rgba(18, 18, 18, 0.9) 0%, rgba(28, 28, 28, 0.7) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card:hover {
+            border-color: rgba(255, 0, 0, 0.3);
+            transform: translateY(-5px);
+        }
+        
+        .stat-number {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 700;
+            color: #ff0000;
+            margin-bottom: 0.75rem;
+            text-shadow: 
+                0 0 10px rgba(255, 0, 0, 0.9),
+                0 0 20px rgba(255, 0, 0, 0.7),
+                0 0 30px rgba(255, 0, 0, 0.5),
+                0 0 40px rgba(255, 0, 0, 0.3);
+            filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.8));
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover .stat-number {
+            transform: scale(1.1);
+        }
+        
+        .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        /* FAQ Section */
+        .faq-list {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .faq-item {
+            background: linear-gradient(135deg, rgba(18, 18, 18, 0.9) 0%, rgba(28, 28, 28, 0.7) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-item:hover {
+            border-color: rgba(255, 0, 0, 0.2);
+        }
+        
+        .faq-item.active {
+            border-color: rgba(255, 0, 0, 0.3);
+        }
+        
+        .faq-question {
+            padding: 1.75rem 2rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            color: #ff0000;
+            transition: transform 0.3s ease;
+        }
+        
+        .faq-item.active .faq-question::after {
+            content: '−';
+            transform: rotate(180deg);
+        }
+        
+        .faq-question:hover {
+            background: rgba(255, 0, 0, 0.05);
+            padding-left: 2.5rem;
+        }
+        
+        .faq-answer {
+            padding: 0 2rem 2rem;
+            color: rgba(255, 255, 255, 0.75);
+            line-height: 1.8;
+            display: none;
+            animation: fadeInDown 0.3s ease;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(255,0,0,0.1) 50%, rgba(0,0,0,0.8) 100%);
+            border-top: 1px solid rgba(255, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-title {
+            font-size: clamp(2rem, 4vw, 2.5rem);
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            text-shadow: 
+                0 0 10px rgba(255, 0, 0, 0.9),
+                0 0 20px rgba(255, 0, 0, 0.7),
+                0 0 30px rgba(255, 0, 0, 0.5);
+            filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.8));
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Discord Widget Card */
+        .discord-widget-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .discord-widget-card:hover {
+            background: rgba(255,255,255,0.08) !important;
+            border-color: rgba(255,0,0,0.5) !important;
+            transform: translateY(-5px);
+        }
+        
+        .discord-widget-card:hover svg {
+            color: rgba(255,0,0,1) !important;
+            transform: translate(4px, -4px);
+        }
+        
+        /* Responsive Improvements */
+        @media (max-width: 1024px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .section {
+                padding: 4rem 1.5rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 6rem 1.5rem 4rem;
+                min-height: 500px;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                width: 100%;
+                max-width: 300px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .hero-btn {
+                width: 100%;
+            }
+            
+            .section {
+                padding: 3rem 1rem;
+            }
+            
+            .section-header {
+                margin-bottom: 2.5rem;
+            }
+            
+            .cta-section {
+                padding: 5rem 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-section {
+                padding: 5rem 1rem 3rem;
+            }
+            
+            .stat-card {
+                padding: 2rem 1rem;
+            }
+            
+            .feature-card {
+                padding: 2rem 1.5rem;
+            }
+            
+            .faq-question {
+                padding: 1.25rem 1.5rem;
+                font-size: 1rem;
+            }
+            
+            .faq-answer {
+                padding: 0 1.5rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Futuristic particles -->
+        <div class="particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+        
+        <header class="header">
+            <div class="header-content">
+                <!-- Logo po lewej -->
+                <a href="home.html" class="logo-section logo-link">
+                    <img src="assets/logo1.png" alt="HEARTBROKENSKINS" class="logo-image">
+                    <div class="logo-text">
+                        <div class="main-logo">HEARTBROKENSKINS</div>
+                        <div class="brand-logo">HEXRTBRXENCHROMAS</div>
+                    </div>
+                </a>
+                
+                <!-- Nawigacja na środku -->
+                <div class="nav-buttons">
+                    <a href="home.html" class="nav-btn active">HOME</a>
+                    <a href="mods.html" class="nav-btn">MODS</a>
+                    <a href="about.html" class="nav-btn">ABOUT</a>
+                </div>
+                
+                <!-- Login button po prawej -->
+                <div class="header-right">
+                    <a href="login.html" class="login-btn" id="loginBtn">LOGIN</a>
+                    <div class="user-profile" id="userProfile" style="display: none;">
+                        <img src="" alt="User Avatar" class="user-avatar" id="userAvatar">
+                        <span class="user-name" id="userName"></span>
+                        <button class="logout-btn" id="logoutBtn">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">League of Legends Custom Skins & Chromas</h1>
+                <p class="hero-subtitle">
+                    Transform your League experience with custom skins made by the community. 
+                    Safe to use and follows Riot Games policies.
+                </p>
+                <div class="hero-buttons">
+                    <a href="mods.html" class="hero-btn hero-btn-primary">Explore Mods</a>
+                    <a href="about.html" class="hero-btn hero-btn-secondary">Learn More</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Popular Skins Section -->
+        <section class="section">
+            <div class="section-header">
+                <p class="section-subtitle" style="font-size: 1.15rem;">Check out the most loved custom skins by the community</p>
+                <h2 class="section-title" style="font-size: 3rem; text-transform: uppercase; letter-spacing: 0.1em;">POPULAR SKINS</h2>
+            </div>
+            <div class="skins-grid" id="popularSkins">
+                <!-- Skins will be loaded dynamically -->
+            </div>
+        </section>
+
+        <!-- For Players Section -->
+        <section class="section" style="background: rgba(0,0,0,0.3);">
+            <div class="section-header">
+                <p class="section-subtitle" style="font-size: 1.15rem;">Join a growing community making League of Legends feel fresh with custom skins</p>
+                <h2 class="section-title" style="font-size: 3rem; text-transform: uppercase; letter-spacing: 0.1em;">FOR PLAYERS</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3 class="feature-title">Discover Skins</h3>
+                    <p class="feature-description">
+                        Find League custom skins by champion, theme, and style. Browse hundreds of community-created mods.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⭐</div>
+                    <h3 class="feature-title">Follow Favorites</h3>
+                    <p class="feature-description">
+                        Get alerts when your favorite mods release new versions. Never miss an update.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">Easy Installation</h3>
+                    <p class="feature-description">
+                        Install LoL custom skins in a few clicks. Simple, safe, and follows Riot policies.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Statistics Section -->
+        <section class="section">
+            <div class="section-header">
+                <p class="section-subtitle" style="font-size: 1.15rem;">Join thousands of players using League of Legends custom skins</p>
+                <h2 class="section-title" style="font-size: 3rem; text-transform: uppercase; letter-spacing: 0.1em;">OUR COMMUNITY IS GROWING</h2>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-members">...</div>
+                    <div class="stat-label">Discord Members</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-online">...</div>
+                    <div class="stat-label">Online Now</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-skins">500+</div>
+                    <div class="stat-label">Custom Skins</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-downloads">50K+</div>
+                    <div class="stat-label">Downloads</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="section" style="background: rgba(0,0,0,0.3);">
+            <div class="section-header">
+                <p class="section-subtitle" style="font-size: 1.15rem;">Got questions? We've got answers!</p>
+                <h2 class="section-title" style="font-size: 3rem; text-transform: uppercase; letter-spacing: 0.1em;">FREQUENTLY ASKED QUESTIONS</h2>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        Are League of Legends custom skins safe to use?
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes! Custom skins are safe to use and follow Riot Games' policies. They only change what you see on your screen and don't affect gameplay or other players' experience.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        Will other players see my custom skin in game?
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        No, custom skins are client-side only. Only you can see your custom skins in-game. Other players will see the default or official skins.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        How do I install League custom skins?
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Visit our Mods page, choose your favorite skin, and follow the installation instructions. Most skins come with detailed guides to help you get started.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        What if a League patch breaks my custom skin?
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        After major patches, some custom skins may need updates. Check back on our website for updated versions, or join our Discord for announcements.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Discord Server Section -->
+        <section class="section" style="background: rgba(0,0,0,0.3);">
+            <div class="section-header">
+                <p class="section-subtitle" style="font-size: 1.15rem;">Connect with the community and get support</p>
+                <h2 class="section-title" style="font-size: 3rem; text-transform: uppercase; letter-spacing: 0.1em;">JOIN OUR DISCORD SERVER</h2>
+            </div>
+            <div style="max-width: 600px; margin: 0 auto;">
+                <a href="https://discord.gg/hexrtbrxenchromas" target="_blank" rel="noopener noreferrer" 
+                   class="discord-widget-card"
+                   style="display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.05); 
+                          border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1.5rem; 
+                          transition: all 0.3s ease; text-decoration: none; position: relative; overflow: hidden;">
+                    <div style="flex-shrink: 0;">
+                        <img alt="𝐇𝐄𝐗𝐑𝐓𝐁𝐑𝐗𝐄𝐍 𝐂𝐇𝐑𝐎𝐌𝐀𝐒" 
+                             loading="lazy" 
+                             width="64" 
+                             height="64" 
+                             class="rounded-lg" 
+                             src="https://cdn.discordapp.com/icons/1153027935553454191/a_b71a953066903ae6f6312e80b6f32f6e.png" 
+                             style="border-radius: 12px; display: block;">
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <h3 style="font-size: 1.125rem; font-weight: 600; color: white; margin: 0 0 0.5rem 0; 
+                                   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                            𝐇𝐄𝐗𝐑𝐓𝐁𝐑𝐗𝐄𝐍 𝐂𝐇𝐑𝐎𝐌𝐀𝐒
+                        </h3>
+                        <div style="display: flex; align-items: center; gap: 1.5rem; font-size: 0.875rem; color: rgba(255,255,255,0.7);">
+                            <div style="display: flex; align-items: center; gap: 0.375rem;">
+                                <div style="width: 8px; height: 8px; background: #22c55e; border-radius: 50%;"></div>
+                                <span id="discord-widget-online">1990 online</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.375rem;">
+                                <div style="width: 8px; height: 8px; background: rgba(255,255,255,0.4); border-radius: 50%;"></div>
+                                <span id="discord-widget-members">4073 members</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="position: absolute; top: 1rem; right: 1rem; color: rgba(255,0,0,0.6); 
+                               font-size: 1.25rem; transition: all 0.3s ease;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                            <polyline points="15 3 21 3 21 9"></polyline>
+                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <h2 class="cta-title">What are you waiting for?</h2>
+            <p class="hero-subtitle">Join thousands of players using HEARTBROKENSKINS where creativity meets competition</p>
+            <div class="hero-buttons" style="margin-top: 2rem;">
+                <a href="mods.html" class="hero-btn hero-btn-primary">Explore Mods</a>
+                <a href="https://discord.gg/hexrtbrxenchromas" target="_blank" class="hero-btn hero-btn-secondary">Join Discord</a>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2025 HEARTBROKENSKINS by HEXRTBRXENCHROMAS. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="privacy.html" class="footer-link">Privacy Policy</a>
+                    <a href="terms.html" class="footer-link">Terms of Service</a>
+                    <a href="admin.html" class="footer-link admin-link">Admin</a>
+                    <div class="footer-social">
+                        <a href="https://twitter.com/p1mek" target="_blank" class="footer-social-link">Twitter</a>
+                        <a href="https://discord.gg/hexrtbrxenchromas" target="_blank" class="footer-social-link">Discord</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="scripts/discord-data.js"></script>
+    <script>
+        // Discord Server Configuration
+        const DISCORD_SERVER_ID = '1153027935553454191';
+        const DISCORD_INVITE_CODE = 'hexrtbrxenchromas';
+
+        // Toggle FAQ items
+        function toggleFAQ(element) {
+            const faqItem = element.closest('.faq-item');
+            const isActive = faqItem.classList.contains('active');
+            
+            // Close all FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Open clicked item if it wasn't active
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
+        }
+
+        // Format number with K/M suffix
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+
+        // Update Discord statistics
+        function updateDiscordStats(memberCount, onlineCount) {
+            const membersElement = document.getElementById('stat-members');
+            const onlineElement = document.getElementById('stat-online');
+            const widgetOnlineElement = document.getElementById('discord-widget-online');
+            const widgetMembersElement = document.getElementById('discord-widget-members');
+            
+            if (membersElement) {
+                membersElement.textContent = formatNumber(memberCount);
+            }
+            if (onlineElement) {
+                onlineElement.textContent = formatNumber(onlineCount);
+            }
+            if (widgetOnlineElement) {
+                widgetOnlineElement.textContent = `${onlineCount} online`;
+            }
+            if (widgetMembersElement) {
+                widgetMembersElement.textContent = `${memberCount} members`;
+            }
+            
+            console.log(`📊 Stats updated: ${memberCount} members, ${onlineCount} online`);
+        }
+
+        // Fetch Discord server statistics
+        async function fetchDiscordStats() {
+            try {
+                console.log('📡 Fetching Discord statistics...');
+                console.log('🔑 Server ID:', DISCORD_SERVER_ID);
+                console.log('🔗 Invite Code:', DISCORD_INVITE_CODE);
+                
+                // Try PTB Widget API first (primary source)
+                try {
+                    const widgetUrl = `https://ptb.discord.com/api/guilds/${DISCORD_SERVER_ID}/widget.json`;
+                    console.log('📞 Trying Widget API:', widgetUrl);
+                    
+                    const widgetResponse = await fetch(widgetUrl);
+                    console.log('📊 Widget API Response Status:', widgetResponse.status);
+                    
+                    if (widgetResponse.ok) {
+                        const widgetData = await widgetResponse.json();
+                        console.log('📦 Widget API Data:', widgetData);
+                        
+                        const onlineCount = widgetData.presence_count || 0;
+                        const memberCount = widgetData.members?.length || 0;
+                        
+                        console.log(`👥 Online: ${onlineCount}, Members in API: ${memberCount}`);
+                        
+                        // If we have both stats, use them
+                        if (memberCount > 0 && onlineCount > 0) {
+                            updateDiscordStats(memberCount, onlineCount);
+                            console.log('✅ Stats from PTB Widget API (full data)');
+                            return;
+                        }
+                        
+                        // Otherwise estimate total members (online count is usually ~50% of total)
+                        if (onlineCount > 0) {
+                            const estimatedMembers = Math.round(onlineCount * 2);
+                            updateDiscordStats(estimatedMembers, onlineCount);
+                            console.log('✅ Stats from PTB Widget API (estimated members)');
+                            return;
+                        }
+                    }
+                } catch (e) {
+                    console.log('❌ Widget API Error:', e.message);
+                }
+                
+                // Try Invite API as fallback
+                try {
+                    const inviteUrl = `https://discord.com/api/v10/invites/${DISCORD_INVITE_CODE}?with_counts=true`;
+                    console.log('📞 Trying Invite API:', inviteUrl);
+                    
+                    const inviteResponse = await fetch(inviteUrl);
+                    console.log('📊 Invite API Response Status:', inviteResponse.status);
+                    
+                    if (inviteResponse.ok) {
+                        const inviteData = await inviteResponse.json();
+                        console.log('📦 Invite API Data:', inviteData);
+                        
+                        const memberCount = inviteData.approximate_member_count || 0;
+                        const onlineCount = inviteData.approximate_presence_count || 0;
+                        
+                        console.log(`👥 Members: ${memberCount}, Online: ${onlineCount}`);
+                        
+                        if (memberCount > 0 || onlineCount > 0) {
+                            updateDiscordStats(memberCount, onlineCount);
+                            console.log('✅ Stats from Invite API');
+                            return;
+                        }
+                    }
+                } catch (e) {
+                    console.log('❌ Invite API Error:', e.message);
+                }
+                
+                console.warn('⚠️ All Discord APIs failed, using fallback data');
+                throw new Error('All APIs failed');
+                
+            } catch (error) {
+                console.warn('⚠️ Error fetching Discord stats:', error.message);
+                console.log('📊 Using fallback: 4073 members, 1990 online');
+                // Use real fallback data from Discord server
+                updateDiscordStats(4073, 1990);
+            }
+        }
+
+        // Load popular skins (example data)
+        function loadPopularSkins() {
+            const skinsContainer = document.getElementById('popularSkins');
+            const exampleSkins = [
+                {
+                    title: 'Yasuo Custom Skin',
+                    champion: 'Yasuo',
+                    views: '3.2K',
+                    downloads: '1.4K',
+                    thumbnail: 'https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Yasuo_0.jpg'
+                },
+                {
+                    title: 'Ahri Custom Skin',
+                    champion: 'Ahri',
+                    views: '2.9K',
+                    downloads: '1.2K',
+                    thumbnail: 'https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ahri_0.jpg'
+                },
+                {
+                    title: 'Zed Custom Skin',
+                    champion: 'Zed',
+                    views: '2.7K',
+                    downloads: '1.1K',
+                    thumbnail: 'https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Zed_0.jpg'
+                },
+                {
+                    title: 'Jinx Custom Skin',
+                    champion: 'Jinx',
+                    views: '3.1K',
+                    downloads: '1.5K',
+                    thumbnail: 'https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Jinx_0.jpg'
+                },
+                {
+                    title: 'Lux Custom Skin',
+                    champion: 'Lux',
+                    views: '2.8K',
+                    downloads: '1.3K',
+                    thumbnail: 'https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Lux_0.jpg'
+                },
+                {
+                    title: 'Ezreal Custom Skin',
+                    champion: 'Ezreal',
+                    views: '2.6K',
+                    downloads: '1.0K',
+                    thumbnail: 'https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ezreal_0.jpg'
+                }
+            ];
+
+            skinsContainer.innerHTML = exampleSkins.map(skin => `
+                <div class="skin-card" onclick="window.location.href='mods.html'">
+                    <img src="${skin.thumbnail}" alt="${skin.title}" class="skin-thumbnail">
+                    <div class="skin-info">
+                        <h3 class="skin-title">${skin.title}</h3>
+                        <div class="skin-meta">
+                            <span class="skin-stat">👁 ${skin.views}</span>
+                            <span class="skin-stat">⬇ ${skin.downloads}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPopularSkins();
+            fetchDiscordStats();
+            
+            // Update stats every 2 minutes
+            setInterval(fetchDiscordStats, 2 * 60 * 1000);
+        });
+    </script>
+    <script src="scripts/auth-handler.js"></script>
+</body>
+</html>

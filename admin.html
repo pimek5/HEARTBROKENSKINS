@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - HEARTBROKENSKINS</title>
+    <link rel="icon" type="image/png" href="assets/logo1.png">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+</head>
+<body>
+    <div class="container">
+        <!-- Futuristic particles -->
+        <div class="particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+        
+        <header class="header">
+            <div class="header-content">
+                <!-- Logo po lewej -->
+                <a href="home.html" class="logo-section logo-link">
+                    <img src="assets/logo1.png" alt="HEARTBROKENSKINS" class="logo-image">
+                    <div class="logo-text">
+                        <div class="main-logo">HEARTBROKENSKINS</div>
+                        <div class="brand-logo">ADMIN PANEL</div>
+                    </div>
+                </a>
+                
+                <!-- Nawigacja na środku -->
+                <div class="nav-buttons">
+                    <a href="home.html" class="nav-btn">HOME</a>
+                    <a href="mods.html" class="nav-btn">MODS</a>
+                    <a href="about.html" class="nav-btn">ABOUT</a>
+                </div>
+                
+                <!-- Login button po prawej -->
+                <div class="header-right">
+                    <a href="login.html" class="login-btn" id="loginBtn">LOGIN</a>
+                    <div class="user-profile" id="userProfile" style="display: none;">
+                        <img src="" alt="User Avatar" class="user-avatar" id="userAvatar">
+                        <span class="user-name" id="userName"></span>
+                        <button class="logout-btn" id="logoutBtn">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="main admin-main">
+            <!-- Login Form -->
+            <div class="admin-login" id="loginForm" style="display: block;">
+                <div class="login-container">
+                    <div class="login-header">
+                        <h2>🔐 Admin Access</h2>
+                        <p>Secure authentication required</p>
+                    </div>
+                    
+                    <form class="login-form" onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="username" placeholder="Enter username" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" placeholder="Enter password" required>
+                        </div>
+                        
+                        <button type="submit" class="login-btn">
+                            <span class="btn-text">Access Admin Panel</span>
+                            <span class="btn-glow"></span>
+                        </button>
+                        
+                        <div class="login-error" id="loginError" style="display: none;">
+                            ❌ Invalid credentials. Access denied.
+                        </div>
+                    </form>
+                    
+                    <div class="login-footer">
+                        <p>🛡️ Protected area - Authorized personnel only</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Panel -->
+            <div class="admin-panel" id="adminPanel" style="display: none;">
+                <div class="admin-header">
+                    <h1>⚡ Admin Dashboard</h1>
+                    <div class="admin-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon">👑</div>
+                            <div class="stat-info">
+                                <div class="stat-number" id="totalChampions">0</div>
+                                <div class="stat-label">Total Champions</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">👥</div>
+                            <div class="stat-info">
+                                <div class="stat-number" id="totalUsers">0</div>
+                                <div class="stat-label">Active Users</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">🔄</div>
+                            <div class="stat-info">
+                                <div class="stat-number" id="lastUpdate">Never</div>
+                                <div class="stat-label">Last Update</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-content">
+                    <!-- Main Admin Content -->
+                    <div class="admin-main-content">
+                        <div class="admin-section">
+                            <h3>📝 Posts Management</h3>
+                            <div class="admin-tools">
+                                <button class="admin-btn primary" onclick="showCreatePostModal()">
+                                    ✏️ Create New Post
+                                </button>
+                                <button class="admin-btn" onclick="refreshPosts()">
+                                    🔄 Refresh Posts
+                                </button>
+                                <button class="admin-btn" onclick="exportPosts()">
+                                    📥 Export Posts
+                                </button>
+                                <button class="admin-btn debug-btn" onclick="openDebugPanel()" title="Open debug storage panel">
+                                    🔍 Debug Storage
+                                </button>
+                            </div>
+                            
+                            <div class="posts-list" id="postsList">
+                                <!-- Posts will be loaded here -->
+                            </div>
+                        </div>
+                        
+                        <div class="admin-section">
+                            <h3>🎮 Champion Management</h3>
+                            <div class="admin-tools">
+                                <button class="admin-btn" onclick="refreshChampions()">
+                                    🔄 Refresh Champions Data
+                                </button>
+                                <button class="admin-btn" onclick="exportChampions()">
+                                    📥 Export Champions List
+                                </button>
+                                <button class="admin-btn" onclick="updateAPI()">
+                                    🚀 Update API Version
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="admin-section">
+                            <h3>📊 Analytics</h3>
+                            <div class="analytics-grid">
+                                <div class="analytics-card">
+                                    <h4>Most Popular Champions</h4>
+                                    <div class="champion-rank">
+                                        <span>1. No Data</span>
+                                        <span>0 views</span>
+                                    </div>
+                                    <div class="champion-rank">
+                                        <span>2. No Data</span>
+                                        <span>0 views</span>
+                                    </div>
+                                    <div class="champion-rank">
+                                        <span>3. No Data</span>
+                                        <span>0 views</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="analytics-card">
+                                    <h4>Site Performance</h4>
+                                    <div class="performance-metric">
+                                        <span>Page Load Time</span>
+                                        <span class="metric-warning">0.0s</span>
+                                    </div>
+                                    <div class="performance-metric">
+                                        <span>API Response</span>
+                                        <span class="metric-warning">0.0s</span>
+                                    </div>
+                                    <div class="performance-metric">
+                                        <span>Uptime</span>
+                                        <span class="metric-warning">0.0%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="admin-section">
+                            <h3>👥 User & Role Management</h3>
+                            <div class="admin-tools">
+                                <button class="admin-btn primary" onclick="showCreateRoleModal()">
+                                    ✨ Create New Role
+                                </button>
+                                <button class="admin-btn" onclick="showManageRolesModal()">
+                                    🎭 Manage User Roles
+                                </button>
+                                <button class="admin-btn" onclick="refreshUsers()">
+                                    🔄 Refresh Users
+                                </button>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                                <div id="rolesList" style="grid-column: 1 / -1;">
+                                    <!-- Roles will be displayed here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="admin-section">
+                            <h3>⚙️ System Controls</h3>
+                            <div class="system-controls">
+                                <button class="admin-btn danger" onclick="clearCache()">
+                                    🗑️ Clear Cache
+                                </button>
+                                <button class="admin-btn" onclick="backupData()">
+                                    💾 Backup Data
+                                </button>
+                                <button class="admin-btn" onclick="logout()">
+                                    🚪 Logout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Create/Edit Post Modal -->
+        <div class="modal-overlay" id="postModal" style="display: none;">
+            <div class="modal-container">
+                <div class="modal-header">
+                    <h2 id="modalTitle">📝 Create New Post</h2>
+                    <button class="modal-close" onclick="closePostModal()">✕</button>
+                </div>
+                
+                <form class="modal-form" id="postForm" onsubmit="handlePostSubmit(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="postTitle">Title *</label>
+                            <input type="text" id="postTitle" name="title" placeholder="Enter post title" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="postCategory">Category</label>
+                            <select id="postCategory" name="category">
+                                <option value="champion-mod">Champion Mod</option>
+                                <option value="map-mod">Map Mod</option>
+                                <option value="sound-effects">Sound Effects</option>
+                                <option value="font">Font</option>
+                                <option value="announcer">Announcer</option>
+                                <option value="hud-ui">HUD/UI</option>
+                                <option value="other">Other</option>
+                                <option value="recalls">Recalls</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="postDescription">Description *</label>
+                        <input type="text" id="postDescription" name="description" placeholder="Brief description" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="postImage">Image URL</label>
+                        <input type="url" id="postImage" name="image" placeholder="https://example.com/image.jpg">
+                        <div class="image-preview" id="imagePreview" style="display: none;">
+                            <img id="previewImg" src="" alt="Preview">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="postType">Type</label>
+                        <select id="postType" name="type" onchange="togglePriceField()">
+                            <option value="free">Free</option>
+                            <option value="premium">Premium</option>
+                            <option value="featured">Featured</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group price-field" style="display: none;">
+                        <label for="postPrice">Price</label>
+                        <div class="price-input-group">
+                            <input type="text" id="postPrice" name="price" placeholder="Enter price (e.g. 15, 10.50, 25.99)" 
+                                   class="price-input-large" pattern="[0-9]+([.][0-9]{1,2})?" 
+                                   title="Enter a valid price (numbers only, max 2 decimal places)">
+                            <select id="postCurrency" name="currency" class="currency-select">
+                                <option value="PLN">PLN</option>
+                                <option value="EUR">EUR</option>
+                                <option value="USD">$</option>
+                            </select>
+                        </div>
+                        <small>💰 Enter the price for premium content (e.g. 15, 10.50, 25.99)</small>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="postTags">Tags</label>
+                            <input type="text" id="postTags" name="tags" placeholder="tag1, tag2, tag3">
+                            <div class="champion-tags-helper">
+                                <button type="button" class="champion-tag-btn" onclick="toggleChampionDropdown()">
+                                    👑 Add Champion Tag
+                                </button>
+                                <div class="champion-dropdown" id="championDropdown" style="display: none;">
+                                    <input type="text" id="championTagSearch" placeholder="Search champions..." 
+                                           oninput="filterChampionTags(this.value)">
+                                    <div class="champion-tag-list" id="championTagList">
+                                        <!-- Champion options will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+                            <small>Separate tags with commas</small>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="postContent">Content</label>
+                        <textarea id="postContent" name="content" rows="4" placeholder="Full post content..."></textarea>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button type="button" class="admin-btn secondary" onclick="closePostModal()">Cancel</button>
+                        <button type="submit" class="admin-btn primary">
+                            <span id="submitBtnText">Create Post</span>
+                        </button>
+                    </div>
+                    
+                    <input type="hidden" id="postId" name="id">
+                </form>
+            </div>
+        </div>
+
+        <!-- Create Role Modal -->
+        <div class="modal" id="createRoleModal" style="display: none;">
+            <div class="modal-content" style="max-width: 500px;">
+                <div class="modal-header">
+                    <h2>✨ Create New Role</h2>
+                    <button type="button" class="close-modal" onclick="closeCreateRoleModal()">×</button>
+                </div>
+                <form onsubmit="handleCreateRole(event)" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div class="form-group">
+                        <label for="roleName">Role Name</label>
+                        <input type="text" id="roleName" placeholder="Enter role name (e.g., VIP, ARTIST)" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="roleColor">Role Color</label>
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <input type="color" id="roleColor" value="#8a2be2" style="width: 60px; height: 40px; border: none; border-radius: 8px; cursor: pointer;">
+                            <input type="text" id="roleColorHex" value="#8a2be2" placeholder="#8a2be2" pattern="^#[0-9A-Fa-f]{6}$" style="flex: 1;">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="roleDescription">Description</label>
+                        <textarea id="roleDescription" rows="3" placeholder="Role description and permissions..." required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Permissions</label>
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem; padding: 1rem; background: rgba(0, 0, 0, 0.3); border-radius: 8px;">
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" id="permUpload" style="cursor: pointer;">
+                                <span>Can upload skins</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" id="permDownload" style="cursor: pointer;" checked>
+                                <span>Can download skins</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" id="permComment" style="cursor: pointer;" checked>
+                                <span>Can comment</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" id="permAdmin" style="cursor: pointer;">
+                                <span>Admin access</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button type="button" class="admin-btn secondary" onclick="closeCreateRoleModal()">Cancel</button>
+                        <button type="submit" class="admin-btn primary">Create Role</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Manage User Roles Modal -->
+        <div class="modal" id="manageRolesModal" style="display: none;">
+            <div class="modal-content" style="max-width: 700px;">
+                <div class="modal-header">
+                    <h2>🎭 Manage User Roles</h2>
+                    <button type="button" class="close-modal" onclick="closeManageRolesModal()">×</button>
+                </div>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <input type="text" id="userSearch" placeholder="Search users by username or ID..." style="width: 100%; padding: 1rem; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 0, 0, 0.3); border-radius: 8px; color: #fff;" oninput="filterUsers(this.value)">
+                </div>
+                
+                <div id="usersList" style="max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem;">
+                    <!-- Users will be displayed here -->
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2025 HEARTBROKENSKINS by HEXRTBRXENCHROMAS. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="home.html" class="footer-link">Back to Home</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="scripts/posts-data.js"></script>
+    <script src="scripts/all-champions-data.js"></script>
+    <script src="scripts/main-advanced.js"></script>
+    <script src="scripts/admin.js"></script>
+    <script src="scripts/admin-auth.js"></script>
+</body>
+</html>

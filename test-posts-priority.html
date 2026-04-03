@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Posts Priority</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .test-section {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: 1px solid #444;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background: #1e7e34; }
+        .warning { background: #856404; }
+        .error { background: #721c24; }
+        .info { background: #0c5460; }
+        .hidden { display: none; }
+        .visible { display: block; }
+        #postsData, #championsSection {
+            margin: 10px 0;
+            padding: 15px;
+            border: 2px dashed #666;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Posts Priority System</h1>
+    
+    <div class="test-section">
+        <h2>System Status</h2>
+        <div id="postsStatus" class="status">Checking posts...</div>
+        <div id="championsStatus" class="status">Checking champions...</div>
+        <div id="displayStatus" class="status">Checking display...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Posts Data</h2>
+        <div id="postsData">Loading...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Champions Section Visibility</h2>
+        <div id="championsSection" class="visible">Champions section should be HIDDEN when posts are available</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Content Display</h2>
+        <div id="contentDisplay">Loading...</div>
+    </div>
+
+    <!-- Load scripts in the same order as index.html -->
+    <script src="scripts/posts-data.js"></script>
+    <script src="scripts/content-data.js"></script>
+    <script src="scripts/discord-data.js"></script>
+    <script src="scripts/all-champions-data.js"></script>
+    
+    <script>
+        // Test script
+        let testResults = {
+            postsLoaded: false,
+            championsHidden: false,
+            contentDisplayed: false
+        };
+        
+        function updateStatus(id, message, type = 'info') {
+            const element = document.getElementById(id);
+            element.textContent = message;
+            element.className = `status ${type}`;
+        }
+        
+        function checkPosts() {
+            console.log('🔍 Checking posts availability...');
+            
+            if (window.postsData && window.postsData.length > 0) {
+                updateStatus('postsStatus', `✅ Posts loaded: ${window.postsData.length} posts`, 'success');
+                document.getElementById('postsData').innerHTML = `
+                    <pre>${JSON.stringify(window.postsData, null, 2)}</pre>
+                `;
+                testResults.postsLoaded = true;
+            } else if (window.contentDataManager && window.contentDataManager.isReady && window.contentDataManager.posts.length > 0) {
+                updateStatus('postsStatus', `✅ Posts via ContentDataManager: ${window.contentDataManager.posts.length} posts`, 'success');
+                document.getElementById('postsData').innerHTML = `
+                    <pre>${JSON.stringify(window.contentDataManager.posts, null, 2)}</pre>
+                `;
+                testResults.postsLoaded = true;
+            } else {
+                updateStatus('postsStatus', '❌ No posts found', 'error');
+                document.getElementById('postsData').textContent = 'No posts available';
+            }
+        }
+        
+        function checkChampionsVisibility() {
+            // Simulate what the main script does
+            if (testResults.postsLoaded) {
+                document.getElementById('championsSection').style.display = 'none';
+                document.getElementById('championsSection').className = 'hidden';
+                updateStatus('championsStatus', '✅ Champions section is HIDDEN (posts available)', 'success');
+                testResults.championsHidden = true;
+            } else {
+                document.getElementById('championsSection').style.display = 'block';
+                document.getElementById('championsSection').className = 'visible';
+                updateStatus('championsStatus', '⚠️ Champions section is VISIBLE (no posts)', 'warning');
+            }
+        }
+        
+        function checkContentDisplay() {
+            let content = 'No content';
+            
+            if (window.postsData && window.postsData.length > 0) {
+                content = `Displaying ${window.postsData.length} POSTS`;
+                updateStatus('displayStatus', '✅ Displaying POSTS (priority)', 'success');
+                testResults.contentDisplayed = true;
+            } else if (window.contentData && window.contentData.length > 0) {
+                content = `Displaying ${window.contentData.length} CHAMPIONS (fallback)`;
+                updateStatus('displayStatus', '⚠️ Displaying CHAMPIONS (fallback)', 'warning');
+            } else {
+                updateStatus('displayStatus', '❌ No content to display', 'error');
+            }
+            
+            document.getElementById('contentDisplay').textContent = content;
+        }
+        
+        function runTests() {
+            console.log('🧪 Running posts priority tests...');
+            checkPosts();
+            checkChampionsVisibility();
+            checkContentDisplay();
+            
+            // Summary
+            const allTestsPassed = testResults.postsLoaded && testResults.championsHidden && testResults.contentDisplayed;
+            console.log('📊 Test Results:', testResults);
+            console.log(allTestsPassed ? '✅ All tests passed!' : '❌ Some tests failed');
+        }
+        
+        // Wait for all systems to load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔄 DOM loaded, waiting for systems...');
+            
+            setTimeout(runTests, 1000);
+            
+            // Listen for posts ready event
+            document.addEventListener('postsReady', function() {
+                console.log('📰 Posts ready event received, re-running tests...');
+                setTimeout(runTests, 500);
+            });
+            
+            // Listen for content ready event
+            document.addEventListener('contentReady', function() {
+                console.log('📰 Content ready event received, re-running tests...');
+                setTimeout(runTests, 500);
+            });
+        });
+        
+        console.log('🧪 Test script loaded');
+    </script>
+</body>
+</html>

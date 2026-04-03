@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEARTBROKENSKINS - Mods</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+        <title>Mods - HEARTBROKENSKINS</title>
+    <link rel="icon" type="image/png" href="assets/logo1.png">
+    <link rel="stylesheet" href="styles/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+</head>
+<body>
+    <div class="container">
+        <div class="particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+        
+        <header class="header">
+            <div class="header-content">
+                <!-- Logo po lewej -->
+                <a href="home.html" class="logo-section logo-link">
+                    <img src="assets/logo1.png" alt="HEARTBROKENSKINS" class="logo-image">
+                    <div class="logo-text">
+                        <div class="main-logo">HEARTBROKENSKINS</div>
+                        <div class="brand-logo">HEXRTBRXENCHROMAS</div>
+                    </div>
+                </a>
+                
+                <!-- Nawigacja na środku -->
+                <div class="nav-buttons">
+                    <a href="home.html" class="nav-btn">HOME</a>
+                    <a href="mods.html" class="nav-btn active">MODS</a>
+                    <a href="about.html" class="nav-btn">ABOUT</a>
+                </div>
+                
+                <!-- Login button po prawej -->
+                <div class="header-right">
+                    <a href="login.html" class="login-btn" id="loginBtn">LOGIN</a>
+                    <div class="user-profile" id="userProfile" style="display: none;">
+                        <img src="" alt="User Avatar" class="user-avatar" id="userAvatar">
+                        <span class="user-name" id="userName"></span>
+                        <button class="logout-btn" id="logoutBtn">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="mods-layout">
+                <aside class="hidden lg:block w-64 shrink-0">
+                    <div class="bg-[#111016] border border-[#25222F] rounded-lg mb-4 overflow-hidden">
+                        <button class="w-full px-4 py-3 flex items-center justify-between text-white hover:bg-[#1A1823] transition-colors sidebar-toggle">
+                            <div class="flex items-center gap-2">
+                                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" class="text-lg" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M246.15,133.18,146.83,33.86A19.85,19.85,0,0,0,132.69,28H40A12,12,0,0,0,28,40v92.69a19.85,19.85,0,0,0,5.86,14.14l99.32,99.32a20,20,0,0,0,28.28,0l84.69-84.69A20,20,0,0,0,246.15,133.18Zm-98.83,93.17L52,131V52h79l95.32,95.32ZM104,88A16,16,0,1,1,88,72,16,16,0,0,1,104,88Z"></path>
+                                </svg>
+                                <span class="font-semibold">Categories</span>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-300 collapse-arrow">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <div class="sidebar-content hidden">
+                            <div class="p-3 space-y-1.5 max-h-[300px] overflow-y-auto">
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">Champion Mod</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">Map Mod</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">Sound Effects</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">Font</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">Announcer</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">HUD/UI</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">Other</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">Recalls</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">Chroma</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-[#111016] border border-[#25222F] rounded-lg mb-4 overflow-hidden">
+                        <button class="w-full px-4 py-3 flex items-center justify-between text-white hover:bg-[#1A1823] transition-colors sidebar-toggle">
+                            <div class="flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="4" y1="21" x2="4" y2="14"></line>
+                                    <line x1="4" y1="10" x2="4" y2="3"></line>
+                                    <line x1="12" y1="21" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12" y2="3"></line>
+                                    <line x1="20" y1="21" x2="20" y2="16"></line>
+                                    <line x1="20" y1="12" x2="20" y2="3"></line>
+                                    <line x1="1" y1="14" x2="7" y2="14"></line>
+                                    <line x1="9" y1="8" x2="15" y2="8"></line>
+                                    <line x1="17" y1="16" x2="23" y2="16"></line>
+                                </svg>
+                                <span class="font-semibold">Themes</span>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-300 collapse-arrow">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <div class="sidebar-content hidden">
+                            <div class="p-3 space-y-1.5 max-h-[300px] overflow-y-auto">
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">Anime</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">Game</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">Edgy</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">NSFW</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">Meme</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">Riot Style</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">Chibi</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">Other</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-[#111016] border border-[#25222F] rounded-lg mb-4 overflow-hidden">
+                        <button class="w-full px-4 py-3 flex items-center justify-between text-white hover:bg-[#1A1823] transition-colors sidebar-toggle">
+                            <div class="flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M16 18l6-6-6-6"></path>
+                                    <path d="M8 6l-6 6 6 6"></path>
+                                </svg>
+                                <span class="font-semibold">Features</span>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-300 collapse-arrow">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <div class="sidebar-content hidden">
+                            <div class="p-3 space-y-1.5 max-h-[300px] overflow-y-auto">
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">Animations</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">Model</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">Visual Effects</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">Sound Effects</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">Voice Over</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-[#111016] border border-[#25222F] rounded-lg mb-4 overflow-hidden">
+                        <button class="w-full px-4 py-3 flex items-center justify-between text-white hover:bg-[#1A1823] transition-colors sidebar-toggle">
+                            <div class="flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <circle cx="12" cy="12" r="4"></circle>
+                                </svg>
+                                <span class="font-semibold">Colors</span>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-300 collapse-arrow">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <div class="sidebar-content hidden">
+                            <div class="p-3 space-y-1.5 max-h-[300px] overflow-y-auto">
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">black</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">white</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">red</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">blue</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">green</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">yellow</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">purple</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">orange</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">other</button>
+                                <button class="w-full text-left px-2.5 py-1.5 rounded text-sm transition-all duration-200 text-[#CACDD9] hover:bg-[#1A1823] hover:text-white">rainbow</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-[#111016] border border-[#25222F] rounded-lg mb-4 overflow-hidden">
+                        <button class="w-full px-4 py-3 flex items-center justify-between text-white hover:bg-[#1A1823] transition-colors sidebar-toggle">
+                            <div class="flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" class="text-lg fill-current" width="20" height="20">
+                                    <path d="M917.21 707.16C896.38 855 780.57 973.21 635.93 999.04c84.06-114.09 73.44-278.53 22-405.48 10.01.1 19.91-.95 29.33-3.02 38.1-8.26 70.11-32.91 88.25-66.2 27.64-48.06 18.21-115.67-19.81-154.08-83.73 18.74-155.68 67.07-205.13 134.85-7.4 86.73-7.14 174.77.77 261.39-17.55 17.2-34.69 34.84-51.34 52.93-16.65-18.09-33.79-35.73-51.34-52.93 7.91-86.62 8.17-174.66.77-261.39C399.98 437.32 328.03 389 244.3 370.26c-38.02 38.41-47.45 106.02-19.81 154.08 18.14 33.29 50.14 57.94 88.25 66.2 9.42 2.07 19.32 3.11 29.33 3.02-51.45 126.92-62.06 291.43 22 405.48C219.43 973.21 103.62 855 82.79 707.16c47.72-42.06 76.42-107.99 71.11-175.73a564 564 0 0 1-10.54-74.95c-4.01-54.82.07-111.16 12.09-164.51 66.28-388.03 622.88-387.99 689.12 0 12.02 53.35 16.1 109.69 12.09 164.51a562 562 0 0 1-10.54 74.96c-5.32 67.74 23.39 133.67 71.11 175.73Z"></path>
+                                </svg>
+                                <span class="font-semibold">Champions</span>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-300 collapse-arrow">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <div class="sidebar-content hidden">
+                            <div class="p-3 space-y-2 max-h-[300px] overflow-y-auto">
+                                <div class="mb-3">
+                                    <div class="relative">
+                                        <input type="text" placeholder="Search champions..." class="bg-[#161518] border border-[#25222F] text-[#CACDD9] py-1.5 pl-8 pr-3 rounded-md w-full text-sm focus:outline-none focus:ring-1 focus:ring-[#783CB5] focus:border-[#783CB5]" value="">
+                                        <div class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#828699" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <circle cx="11" cy="11" r="8"></circle>
+                                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Champion list will be loaded dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Main Content Area -->
+                <div class="flex-1 min-w-0 px-2 sm:px-4">
+                    <!-- Top Controls Bar -->
+                    <div class="flex flex-col sm:flex-row lg:flex-row justify-between items-stretch sm:items-center lg:items-center gap-3 sm:gap-4 mb-6">
+                        <!-- Search Bar -->
+                        <div class="relative w-full sm:flex-1 lg:flex-1 lg:max-w-md">
+                            <form class="w-full" id="searchForm">
+                                <div class="relative">
+                                    <input 
+                                        type="text" 
+                                        id="searchInput"
+                                        placeholder="Search mods..." 
+                                        class="bg-[#0d0d0d] border border-[#1c1c1c] text-white py-2.5 pl-10 pr-4 rounded w-full focus:outline-none focus:ring-2 focus:ring-[#ff0000] focus:border-[#ff0000] transition-all"
+                                    >
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="11" cy="11" r="8"></circle>
+                                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Filter and View Controls -->
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 flex-shrink-0">
+                            <!-- Free/Paid Filters -->
+                            <div class="flex flex-wrap items-center gap-1 sm:gap-2 w-full sm:w-auto">
+                                <div class="relative flex-1 sm:flex-none">
+                                    <button 
+                                        id="freeOnlyBtn"
+                                        class="flex items-center justify-center gap-2 px-3 py-2.5 rounded border w-full sm:w-auto bg-[#0d0d0d] border-[#1c1c1c] text-[#999] hover:border-[#ff0000] hover:text-white transition-all duration-200"
+                                    >
+                                        <span class="text-sm font-medium">Free Only</span>
+                                        <div class="w-4 h-4 flex items-center justify-center rounded border bg-transparent border-[#333]"></div>
+                                    </button>
+                                </div>
+                                <div class="relative flex-1 sm:flex-none">
+                                    <button 
+                                        id="paidOnlyBtn"
+                                        class="flex items-center justify-center gap-2 px-3 py-2.5 rounded border w-full sm:w-auto bg-[#0d0d0d] border-[#1c1c1c] text-[#999] hover:border-[#ff0000] hover:text-white transition-all duration-200"
+                                    >
+                                        <span class="text-sm font-medium">Paid Only</span>
+                                        <div class="w-4 h-4 flex items-center justify-center rounded border bg-transparent border-[#333]"></div>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Sort, View Size, and Layout Controls -->
+                            <div class="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto">
+                                <!-- Sort Dropdown -->
+                                <div class="relative flex-1 sm:flex-none min-w-0">
+                                    <div class="group">
+                                        <button 
+                                            id="sortButton"
+                                            class="bg-[#0d0d0d] border border-[#1c1c1c] rounded px-3 py-2.5 text-[#999] hover:text-white hover:border-[#ff0000] transition-all duration-200 flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-start"
+                                        >
+                                            <span class="truncate text-sm" id="sortLabel">Latest</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="6 9 12 15 18 9"></polyline>
+                                            </svg>
+                                        </button>
+                                        <div id="sort-dropdown" class="hidden absolute z-50 right-0 mt-1 py-1 bg-[#0d0d0d] border border-[#1c1c1c] rounded shadow-lg w-48">
+                                            <button class="sort-option block w-full text-left px-4 py-2 text-sm text-[#ff0000] bg-[#121212]" data-value="latest">Latest</button>
+                                            <button class="sort-option block w-full text-left px-4 py-2 text-sm text-[#999] hover:bg-[#121212] hover:text-white transition-colors" data-value="oldest">Oldest</button>
+                                            <button class="sort-option block w-full text-left px-4 py-2 text-sm text-[#999] hover:bg-[#121212] hover:text-white transition-colors" data-value="most-viewed">Most Viewed</button>
+                                            <button class="sort-option block w-full text-left px-4 py-2 text-sm text-[#999] hover:bg-[#121212] hover:text-white transition-colors" data-value="most-downloaded">Most Downloaded</button>
+                                            <button class="sort-option block w-full text-left px-4 py-2 text-sm text-[#999] hover:bg-[#121212] hover:text-white transition-colors" data-value="name-az">Name A-Z</button>
+                                            <button class="sort-option block w-full text-left px-4 py-2 text-sm text-[#999] hover:bg-[#121212] hover:text-white transition-colors" data-value="name-za">Name Z-A</button>
+                                            <button class="sort-option block w-full text-left px-4 py-2 text-sm text-[#999] hover:bg-[#121212] hover:text-white transition-colors" data-value="price-low">Price (Low to High)</button>
+                                            <button class="sort-option block w-full text-left px-4 py-2 text-sm text-[#999] hover:bg-[#121212] hover:text-white transition-colors" data-value="price-high">Price (High to Low)</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- View Size Dropdown -->
+                                <div class="relative flex-1 sm:flex-none min-w-0">
+                                    <div class="group">
+                                        <button 
+                                            id="sizeButton"
+                                            class="bg-[#0d0d0d] border border-[#1c1c1c] rounded px-3 py-2.5 text-[#999] hover:text-white hover:border-[#ff0000] transition-all duration-200 flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-start"
+                                        >
+                                            <span class="truncate text-sm" id="sizeLabel">View: 20</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="6 9 12 15 18 9"></polyline>
+                                            </svg>
+                                        </button>
+                                        <div id="size-dropdown" class="hidden absolute z-50 right-0 mt-1 py-1 bg-[#0d0d0d] border border-[#1c1c1c] rounded shadow-lg w-28">
+                                            <button class="size-option block w-full text-left px-4 py-2 text-sm text-[#999] hover:bg-[#121212] hover:text-white transition-colors" data-value="12">12</button>
+                                            <button class="size-option block w-full text-left px-4 py-2 text-sm text-[#ff0000] bg-[#121212]" data-value="20">20</button>
+                                            <button class="size-option block w-full text-left px-4 py-2 text-sm text-[#999] hover:bg-[#121212] hover:text-white transition-colors" data-value="32">32</button>
+                                            <button class="size-option block w-full text-left px-4 py-2 text-sm text-[#999] hover:bg-[#121212] hover:text-white transition-colors" data-value="48">48</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mods Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 sm:gap-4 mb-8" id="modsGrid">
+                        <!-- Mods will be loaded dynamically -->
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="flex justify-end items-center gap-2 mt-8 mb-16" id="paginationContainer">
+                        <!-- Pagination will be generated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-copyright">
+                    © 2025 HEARTBROKENSKINS by HEXRTBRXENCHROMAS. All rights reserved.
+                </div>
+                <div class="footer-links">
+                    <a href="privacy-policy.html" class="footer-link">PRIVACY POLICY</a>
+                    <span class="footer-separator">|</span>
+                    <a href="terms-of-service.html" class="footer-link">TERMS OF SERVICE</a>
+                    <span class="footer-separator">|</span>
+                    <a href="admin.html" class="footer-link">ADMIN</a>
+                    <span class="footer-separator">|</span>
+                    <a href="https://twitter.com/p1mek" class="footer-link">TWITTER</a>
+                    <span class="footer-separator">|</span>
+                    <a href="https://discord.gg/hexrtbrxenchromas" class="footer-link">DISCORD</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="scripts/main.js"></script>
+    <script src="scripts/all-champions-data.js"></script>
+    <script src="scripts/content-data.js"></script>
+    <script src="scripts/mods-functionality.js"></script>
+    
+    <script>
+        // Dropdown toggles
+        const sortButton = document.getElementById('sortButton');
+        const sortDropdown = document.getElementById('sort-dropdown');
+        const sizeButton = document.getElementById('sizeButton');
+        const sizeDropdown = document.getElementById('size-dropdown');
+        
+        // Toggle sort dropdown
+        sortButton?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sortDropdown.classList.toggle('hidden');
+            sizeDropdown.classList.add('hidden');
+        });
+        
+        // Toggle size dropdown
+        sizeButton?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sizeDropdown.classList.toggle('hidden');
+            sortDropdown.classList.add('hidden');
+        });
+        
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', () => {
+            sortDropdown?.classList.add('hidden');
+            sizeDropdown?.classList.add('hidden');
+        });
+        
+        // Sort option selection
+        document.querySelectorAll('.sort-option').forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const value = option.dataset.value;
+                const label = option.textContent;
+                
+                // Update button label
+                document.getElementById('sortLabel').textContent = label;
+                
+                // Update active state
+                document.querySelectorAll('.sort-option').forEach(opt => {
+                    opt.classList.remove('text-[#ff0000]', 'bg-[#121212]');
+                    opt.classList.add('text-[#999]');
+                });
+                option.classList.remove('text-[#999]');
+                option.classList.add('text-[#ff0000]', 'bg-[#121212]');
+                
+                // Close dropdown
+                sortDropdown.classList.add('hidden');
+                
+                // Trigger sort (to be implemented in mods.js)
+                console.log('Sort by:', value);
+            });
+        });
+        
+        // Size option selection
+        document.querySelectorAll('.size-option').forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const value = option.dataset.value;
+                
+                // Update button label
+                document.getElementById('sizeLabel').textContent = `View: ${value}`;
+                
+                // Update active state
+                document.querySelectorAll('.size-option').forEach(opt => {
+                    opt.classList.remove('text-[#ff0000]', 'bg-[#121212]');
+                    opt.classList.add('text-[#999]');
+                });
+                option.classList.remove('text-[#999]');
+                option.classList.add('text-[#ff0000]', 'bg-[#121212]');
+                
+                // Close dropdown
+                sizeDropdown.classList.add('hidden');
+                
+                // Trigger page size change (to be implemented in mods.js)
+                console.log('View size:', value);
+            });
+        });
+        
+        // Free/Paid filter toggles
+        const freeOnlyBtn = document.getElementById('freeOnlyBtn');
+        const paidOnlyBtn = document.getElementById('paidOnlyBtn');
+        
+        let freeOnlyActive = false;
+        let paidOnlyActive = false;
+        
+        freeOnlyBtn?.addEventListener('click', () => {
+            freeOnlyActive = !freeOnlyActive;
+            
+            const checkbox = freeOnlyBtn.querySelector('div');
+            if (freeOnlyActive) {
+                checkbox.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff0000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+                checkbox.classList.add('border-[#ff0000]');
+                freeOnlyBtn.classList.add('border-[#ff0000]', 'text-white');
+                freeOnlyBtn.classList.remove('text-[#999]');
+            } else {
+                checkbox.innerHTML = '';
+                checkbox.classList.remove('border-[#ff0000]');
+                freeOnlyBtn.classList.remove('border-[#ff0000]', 'text-white');
+                freeOnlyBtn.classList.add('text-[#999]');
+            }
+            
+            console.log('Free only:', freeOnlyActive);
+        });
+        
+        paidOnlyBtn?.addEventListener('click', () => {
+            paidOnlyActive = !paidOnlyActive;
+            
+            const checkbox = paidOnlyBtn.querySelector('div');
+            if (paidOnlyActive) {
+                checkbox.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff0000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+                checkbox.classList.add('border-[#ff0000]');
+                paidOnlyBtn.classList.add('border-[#ff0000]', 'text-white');
+                paidOnlyBtn.classList.remove('text-[#999]');
+            } else {
+                checkbox.innerHTML = '';
+                checkbox.classList.remove('border-[#ff0000]');
+                paidOnlyBtn.classList.remove('border-[#ff0000]', 'text-white');
+                paidOnlyBtn.classList.add('text-[#999]');
+            }
+            
+            console.log('Paid only:', paidOnlyActive);
+        });
+    </script>
+    <script src="scripts/auth-handler.js"></script>
+</body>
+</html>

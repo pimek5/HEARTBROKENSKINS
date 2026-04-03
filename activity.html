@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity - HEARTBROKENSKINS</title>
+    <link rel="icon" type="image/png" href="assets/logo1.png">
+    <link rel="stylesheet" href="styles/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <a href="home.html" class="logo-section logo-link">
+                    <img src="assets/logo1.png" alt="HEARTBROKENSKINS" class="logo-image">
+                    <div class="logo-text">
+                        <div class="main-logo">HEARTBROKENSKINS</div>
+                    </div>
+                </a>
+                
+                <div class="nav-buttons">
+                    <a href="home.html" class="nav-btn">HOME</a>
+                    <a href="mods.html" class="nav-btn">MODS</a>
+                    <a href="about.html" class="nav-btn">ABOUT</a>
+                </div>
+                
+                <div class="header-right">
+                    <a href="login.html" class="login-btn" id="loginBtn">LOGIN</a>
+                    <div class="user-profile" id="userProfile" style="display: none;">
+                        <img src="" alt="User Avatar" class="user-avatar" id="userAvatar">
+                        <span class="user-name" id="userName"></span>
+                        <button class="logout-btn" id="logoutBtn">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content" style="padding: 4rem 2rem; min-height: calc(100vh - 200px);">
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <h1 style="font-size: 2.5rem; margin-bottom: 1rem; color: #fff;">Activity</h1>
+                <p style="color: rgba(255, 255, 255, 0.6); margin-bottom: 3rem;">Track your downloads and interactions</p>
+                
+                <!-- Activity Filters -->
+                <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+                    <button class="activity-filter active" data-filter="all" style="padding: 0.75rem 1.5rem; background: rgba(255, 0, 0, 0.2); color: #ff0000; border: 1px solid rgba(255, 0, 0, 0.4); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                        All Activity
+                    </button>
+                    <button class="activity-filter" data-filter="downloads" style="padding: 0.75rem 1.5rem; background: rgba(255, 255, 255, 0.05); color: rgba(255, 255, 255, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                        Downloads
+                    </button>
+                    <button class="activity-filter" data-filter="favorites" style="padding: 0.75rem 1.5rem; background: rgba(255, 255, 255, 0.05); color: rgba(255, 255, 255, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                        Favorites
+                    </button>
+                    <button class="activity-filter" data-filter="comments" style="padding: 0.75rem 1.5rem; background: rgba(255, 255, 255, 0.05); color: rgba(255, 255, 255, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                        Comments
+                    </button>
+                </div>
+                
+                <!-- Activity List -->
+                <div style="background: rgba(18, 18, 18, 0.6); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 15px; overflow: hidden;">
+                    <div id="activityList">
+                        <div style="text-align: center; padding: 4rem 2rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="rgba(255, 255, 255, 0.3)" stroke-width="2" style="margin: 0 auto 1rem;">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                            </svg>
+                            <p style="color: rgba(255, 255, 255, 0.6); font-size: 1.1rem; margin-bottom: 0.5rem;">No activity yet</p>
+                            <p style="color: rgba(255, 255, 255, 0.4); font-size: 0.95rem;">Start downloading and interacting with skins to see your activity here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2025 HEARTBROKENSKINS. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="scripts/auth-handler.js"></script>
+    <script>
+        // Activity filter switching
+        document.querySelectorAll('.activity-filter').forEach(filter => {
+            filter.addEventListener('click', () => {
+                // Update active filter
+                document.querySelectorAll('.activity-filter').forEach(f => {
+                    f.classList.remove('active');
+                    f.style.background = 'rgba(255, 255, 255, 0.05)';
+                    f.style.color = 'rgba(255, 255, 255, 0.7)';
+                    f.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                });
+                filter.classList.add('active');
+                filter.style.background = 'rgba(255, 0, 0, 0.2)';
+                filter.style.color = '#ff0000';
+                filter.style.borderColor = 'rgba(255, 0, 0, 0.4)';
+                
+                // Filter activity (to be implemented)
+                const filterType = filter.getAttribute('data-filter');
+                console.log('Filter by:', filterType);
+            });
+            
+            // Hover effects
+            filter.addEventListener('mouseenter', () => {
+                if (!filter.classList.contains('active')) {
+                    filter.style.background = 'rgba(255, 0, 0, 0.1)';
+                    filter.style.borderColor = 'rgba(255, 0, 0, 0.2)';
+                }
+            });
+            
+            filter.addEventListener('mouseleave', () => {
+                if (!filter.classList.contains('active')) {
+                    filter.style.background = 'rgba(255, 255, 255, 0.05)';
+                    filter.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Data Sync Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        
+        .test-card {
+            background: #2a2a2a;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #444;
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .success { background: #1e7e34; }
+        .warning { background: #856404; }
+        .error { background: #721c24; }
+        
+        .data-display {
+            background: #333;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+        
+        .refresh-btn {
+            background: #8a2be2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        
+        .refresh-btn:hover {
+            background: #9932cc;
+        }
+        
+        .real-time {
+            color: #28a745;
+        }
+        
+        .fallback {
+            color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎮 Discord Data Sync Test</h1>
+    
+    <div class="test-card">
+        <h2>Discord Data Manager Status</h2>
+        <div id="manager-status" class="status">Checking...</div>
+        
+        <h3>Current Discord Data:</h3>
+        <div id="discord-data" class="data-display">Loading...</div>
+        
+        <h3>Live Elements Test:</h3>
+        <p>Members: <span id="discord-member-count">Loading...</span></p>
+        <p>Online: <span id="discord-online-count">Loading...</span></p>
+        <p>Server: <span class="discord-server-name">Loading...</span></p>
+        
+        <button class="refresh-btn" onclick="manualRefresh()">🔄 Manual Refresh</button>
+        <button class="refresh-btn" onclick="toggleUpdates()">⏸️ Toggle Updates</button>
+    </div>
+    
+    <div class="test-card">
+        <h2>Console Output</h2>
+        <div id="console-output" class="data-display" style="max-height: 300px; overflow-y: auto;">
+            Console messages will appear here...
+        </div>
+    </div>
+
+    <script src="scripts/discord-data.js"></script>
+    <script>
+        let updateCount = 0;
+        let updatesEnabled = true;
+        
+        // Override console.log to display in page
+        const originalConsoleLog = console.log;
+        const originalConsoleWarn = console.warn;
+        const originalConsoleError = console.error;
+        
+        function addToConsoleOutput(message, type = 'log') {
+            const output = document.getElementById('console-output');
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? '#ff6b6b' : type === 'warn' ? '#ffc107' : '#fff';
+            output.innerHTML += `<div style="color: ${color}; margin: 2px 0;">[${timestamp}] ${message}</div>`;
+            output.scrollTop = output.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            originalConsoleLog.apply(console, args);
+            addToConsoleOutput(args.join(' '), 'log');
+        };
+        
+        console.warn = function(...args) {
+            originalConsoleWarn.apply(console, args);
+            addToConsoleOutput(args.join(' '), 'warn');
+        };
+        
+        console.error = function(...args) {
+            originalConsoleError.apply(console, args);
+            addToConsoleOutput(args.join(' '), 'error');
+        };
+        
+        function updateStatus() {
+            const statusEl = document.getElementById('manager-status');
+            const dataEl = document.getElementById('discord-data');
+            
+            if (window.discordDataManager) {
+                const data = window.discordDataManager.getData();
+                const isRealTime = data.isRealTime;
+                const source = data.dataSource;
+                
+                statusEl.className = `status ${isRealTime ? 'success' : 'warning'}`;
+                statusEl.innerHTML = `
+                    ✅ Discord Data Manager: <strong>Active</strong><br>
+                    📡 Data Source: <strong>${source}</strong><br>
+                    🔄 Real-time: <strong class="${isRealTime ? 'real-time' : 'fallback'}">${isRealTime ? 'Yes' : 'No'}</strong><br>
+                    📊 Updates: <strong>${updateCount}</strong>
+                `;
+                
+                dataEl.textContent = JSON.stringify(data, null, 2);
+            } else {
+                statusEl.className = 'status error';
+                statusEl.innerHTML = '❌ Discord Data Manager: <strong>Not Available</strong>';
+                dataEl.textContent = 'Discord Data Manager not loaded';
+            }
+        }
+        
+        function manualRefresh() {
+            console.log('🔄 Manual refresh requested by user');
+            if (window.discordDataManager) {
+                window.discordDataManager.refresh();
+            } else {
+                console.warn('⚠️ Cannot refresh: Discord Data Manager not available');
+            }
+        }
+        
+        function toggleUpdates() {
+            updatesEnabled = !updatesEnabled;
+            const btn = document.querySelector('button[onclick="toggleUpdates()"]');
+            btn.textContent = updatesEnabled ? '⏸️ Toggle Updates' : '▶️ Toggle Updates';
+            console.log(updatesEnabled ? '▶️ Updates enabled' : '⏸️ Updates disabled');
+        }
+        
+        // Wait for Discord Data Manager to be ready
+        function initTest() {
+            console.log('🧪 Starting Discord data sync test...');
+            
+            const checkManager = () => {
+                if (window.discordDataManager) {
+                    console.log('✅ Discord Data Manager detected!');
+                    
+                    // Register for updates
+                    window.discordDataManager.onUpdate((data) => {
+                        if (updatesEnabled) {
+                            updateCount++;
+                            console.log(`📡 Update #${updateCount} received:`, {
+                                members: data.memberCount,
+                                online: data.onlineMembers,
+                                source: data.dataSource
+                            });
+                            updateStatus();
+                        }
+                    });
+                    
+                    updateStatus();
+                    
+                    // Test automatic DOM updates
+                    setTimeout(() => {
+                        console.log('🔍 Testing automatic DOM updates...');
+                        window.discordDataManager.updateDOMElements();
+                    }, 2000);
+                    
+                } else {
+                    console.log('⏳ Discord Data Manager not ready yet, checking again...');
+                    setTimeout(checkManager, 500);
+                }
+            };
+            
+            checkManager();
+        }
+        
+        // Initialize test when page loads
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initTest);
+        } else {
+            initTest();
+        }
+        
+        // Update status every 5 seconds
+        setInterval(updateStatus, 5000);
+        
+        console.log('🧪 Discord sync test page loaded');
+    </script>
+</body>
+</html>

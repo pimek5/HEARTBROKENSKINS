@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Storage - HEARTBROKENSKINS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: #fff;
+            padding: 20px;
+        }
+        .debug-section {
+            background: rgba(0,0,0,0.5);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: 1px solid #333;
+        }
+        pre {
+            background: #000;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            color: #0f0;
+            font-size: 12px;
+        }
+        button {
+            background: #dc143c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #b91c3c;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Storage Debug Panel</h1>
+    
+    <div class="debug-section">
+        <h2>🗄️ LocalStorage Content</h2>
+        <button onclick="checkLocalStorage()">Check LocalStorage</button>
+        <button onclick="clearLocalStorage()">Clear LocalStorage</button>
+        <pre id="localStorageContent">Click "Check LocalStorage" to see content...</pre>
+    </div>
+
+    <div class="debug-section">
+        <h2>📊 Posts Data in Memory</h2>
+        <button onclick="checkPostsData()">Check Posts Data</button>
+        <button onclick="loadPostsSystem()">Load Posts System</button>
+        <pre id="postsDataContent">Click "Load Posts System" first...</pre>
+    </div>
+
+    <div class="debug-section">
+        <h2>🔗 GitHub Posts Database</h2>
+        <button onclick="checkGitHubData()">Check GitHub Data</button>
+        <pre id="githubDataContent">Click "Check GitHub Data" to see content...</pre>
+    </div>
+
+    <div class="debug-section">
+        <h2>⚡ Actions</h2>
+        <button onclick="addTestPost()">Add Test Post</button>
+        <button onclick="syncToGitHub()">Show GitHub JSON</button>
+        <pre id="actionsOutput">Actions output will appear here...</pre>
+    </div>
+
+    <script src="scripts/posts-data.js"></script>
+    <script>
+        function checkLocalStorage() {
+            const content = document.getElementById('localStorageContent');
+            const postsKey = 'heartbrokenskins_posts';
+            const postsData = localStorage.getItem(postsKey);
+            
+            let output = `📋 LocalStorage Keys:\n`;
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                output += `- ${key}\n`;
+            }
+            
+            output += `\n🎯 Posts Data (${postsKey}):\n`;
+            if (postsData) {
+                try {
+                    const parsed = JSON.parse(postsData);
+                    output += JSON.stringify(parsed, null, 2);
+                } catch (e) {
+                    output += `❌ Error parsing: ${e.message}\n${postsData}`;
+                }
+            } else {
+                output += '❌ No posts data found in localStorage';
+            }
+            
+            content.textContent = output;
+        }
+
+        function clearLocalStorage() {
+            localStorage.clear();
+            document.getElementById('localStorageContent').textContent = '✅ LocalStorage cleared!';
+            document.getElementById('actionsOutput').textContent = '🧹 LocalStorage has been cleared';
+        }
+
+        async function checkPostsData() {
+            const content = document.getElementById('postsDataContent');
+            
+            let output = `📊 Current Posts in Memory:\n`;
+            output += `Posts Array: ${window.postsData ? window.postsData.length : 'undefined'} posts\n`;
+            output += `Next ID: ${window.PostsManager ? window.PostsManager.nextId : 'undefined'}\n\n`;
+            
+            if (window.postsData && window.postsData.length > 0) {
+                output += `Posts Details:\n`;
+                window.postsData.forEach((post, index) => {
+                    output += `${index + 1}. ID:${post.id} - "${post.title}" (${post.type})\n`;
+                });
+                output += `\nFull JSON:\n`;
+                output += JSON.stringify(window.postsData, null, 2);
+            } else {
+                output += `❌ No posts in memory`;
+            }
+            
+            content.textContent = output;
+        }
+
+        async function loadPostsSystem() {
+            const content = document.getElementById('postsDataContent');
+            content.textContent = '⏳ Loading posts system...';
+            
+            try {
+                if (window.PostsManager) {
+                    await window.PostsManager.loadFromGitHub();
+                    checkPostsData();
+                } else {
+                    content.textContent = '❌ PostsManager not loaded. Include posts-data.js first.';
+                }
+            } catch (error) {
+                content.textContent = `❌ Error loading posts system: ${error.message}`;
+            }
+        }
+
+        async function checkGitHubData() {
+            const content = document.getElementById('githubDataContent');
+            content.textContent = '⏳ Fetching GitHub data...';
+            
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/pimek5/HEARTBROKENSKINS/main/posts-database.json?v=' + Date.now());
+                const data = await response.json();
+                
+                let output = `📡 GitHub posts-database.json:\n`;
+                output += `Status: ${response.status} ${response.statusText}\n`;
+                output += `Posts Count: ${data.posts ? data.posts.length : 'undefined'}\n`;
+                output += `Next ID: ${data.nextId || 'undefined'}\n`;
+                output += `Last Updated: ${data.lastUpdated || 'undefined'}\n\n`;
+                output += `Full Content:\n`;
+                output += JSON.stringify(data, null, 2);
+                
+                content.textContent = output;
+            } catch (error) {
+                content.textContent = `❌ Error fetching GitHub data: ${error.message}`;
+            }
+        }
+
+        function addTestPost() {
+            const output = document.getElementById('actionsOutput');
+            
+            if (window.PostsManager) {
+                const testPost = {
+                    title: 'Test Post ' + Date.now(),
+                    description: 'This is a test post created for debugging',
+                    category: 'test',
+                    type: 'Free',
+                    tags: ['test', 'debug'],
+                    content: 'Test content'
+                };
+                
+                window.PostsManager.addPost(testPost);
+                output.textContent = '✅ Test post added! Check Posts Data to see it.';
+            } else {
+                output.textContent = '❌ PostsManager not available';
+            }
+        }
+
+        function syncToGitHub() {
+            const output = document.getElementById('actionsOutput');
+            
+            if (window.PostsManager && window.postsData) {
+                const githubData = {
+                    posts: window.postsData,
+                    nextId: window.PostsManager.nextId,
+                    lastUpdated: new Date().toISOString(),
+                    version: "1.0"
+                };
+                
+                output.textContent = `📋 Copy this JSON to GitHub posts-database.json:\n\n${JSON.stringify(githubData, null, 2)}`;
+            } else {
+                output.textContent = '❌ No posts data to sync';
+            }
+        }
+
+        // Auto-load on page load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                checkLocalStorage();
+                loadPostsSystem();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
