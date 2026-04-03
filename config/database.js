@@ -1,22 +1,81 @@
-const mongoose = require('mongoose');
+const { Pool } = require('pg');
+
+let pool;
+let databaseReady = false;
+
+function getConnectionString() {
+    return process.env.DATABASE_URL
+        || process.env.POSTGRES_URL
+        || process.env.POSTGRESQL_URL
+        || process.env.PG_URL
+        || null;
+}
+
+function isDatabaseReady() {
+    return databaseReady;
+}
+
+async function query(text, params = []) {
+    if (!pool) {
+        throw new Error('Database pool is not initialized');
+    }
+
+    return pool.query(text, params);
+}
+
+async function initializeSchema() {
+    await query(`
+        CREATE TABLE IF NOT EXISTS users (
+            id BIGSERIAL PRIMARY KEY,
+            username TEXT NOT NULL,
+            email TEXT,
+            password TEXT,
+            provider TEXT NOT NULL DEFAULT 'local',
+            provider_id TEXT,
+            avatar TEXT NOT NULL DEFAULT '',
+            discord_id TEXT,
+            is_guild_member BOOLEAN NOT NULL DEFAULT FALSE,
+            last_login_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+            updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )
+    `);
+
+    await query('CREATE UNIQUE INDEX IF NOT EXISTS users_email_unique ON users (LOWER(email)) WHERE email IS NOT NULL');
+    await query('CREATE UNIQUE INDEX IF NOT EXISTS users_provider_provider_id_unique ON users (provider, provider_id) WHERE provider_id IS NOT NULL');
+    await query('CREATE UNIQUE INDEX IF NOT EXISTS users_discord_id_unique ON users (discord_id) WHERE discord_id IS NOT NULL');
+}
 
 async function connectDB() {
-    const mongoUri = process.env.MONGODB_URI;
+    const connectionString = getConnectionString();
 
-    if (!mongoUri) {
-        console.warn('MONGODB_URI is not set. Running without MongoDB connection.');
+    if (!connectionString) {
+        console.warn('DATABASE_URL is not set. Running without PostgreSQL connection.');
         return;
     }
 
     try {
-        await mongoose.connect(mongoUri, {
-            autoIndex: true
+        pool = new Pool({
+            connectionString,
+            ssl: process.env.NODE_ENV === 'production'
+                ? { rejectUnauthorized: false }
+                : false
         });
-        console.log('MongoDB connected successfully.');
+
+        await query('SELECT 1');
+        await initializeSchema();
+        databaseReady = true;
+        console.log('PostgreSQL connected successfully.');
     } catch (error) {
-        console.error('MongoDB connection error:', error.message);
+        databaseReady = false;
+        console.error('PostgreSQL connection error:', error.message);
         console.warn('Server will continue running, but database features may fail.');
     }
 }
 
-module.exports = connectDB;
+module.exports = {
+    connectDB,
+    isDatabaseReady,
+    query,
+    getConnectionString
+};

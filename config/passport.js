@@ -1,7 +1,7 @@
 const passport = require('passport');
 const { Strategy: DiscordStrategy } = require('passport-discord');
-const mongoose = require('mongoose');
 const User = require('../models/User');
+const { isDatabaseReady } = require('./database');
 
 const isDiscordConfigured = Boolean(
     process.env.DISCORD_CLIENT_ID
@@ -45,7 +45,7 @@ async function checkGuildMembership(discordUserId) {
 }
 
 passport.serializeUser((user, done) => {
-    done(null, user.id || user._id || null);
+    done(null, user.id || null);
 });
 
 passport.deserializeUser(async (id, done) => {
@@ -54,11 +54,11 @@ passport.deserializeUser(async (id, done) => {
             return done(null, false);
         }
 
-        if (mongoose.connection.readyState !== 1) {
+        if (!isDatabaseReady()) {
             return done(null, { id });
         }
 
-        const user = await User.findById(id).lean();
+        const user = await User.findById(id);
         return done(null, user || false);
     } catch (error) {
         return done(error, null);
@@ -95,18 +95,14 @@ if (isDiscordConfigured) {
                         lastLoginAt: new Date()
                     };
 
-                    if (mongoose.connection.readyState !== 1) {
+                    if (!isDatabaseReady()) {
                         return done(null, {
                             id: profile.id,
                             ...baseUserData
                         });
                     }
 
-                    const user = await User.findOneAndUpdate(
-                        { provider: 'discord', providerId: profile.id },
-                        { $set: baseUserData },
-                        { new: true, upsert: true }
-                    );
+                    const user = await User.upsertDiscordUser(baseUserData);
 
                     return done(null, user);
                 } catch (error) {

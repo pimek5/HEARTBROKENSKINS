@@ -2,9 +2,9 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
-const mongoose = require('mongoose');
 const User = require('../models/User');
 const { requireAuth } = require('../middleware/auth');
+const { isDatabaseReady } = require('../config/database');
 
 const router = express.Router();
 
@@ -23,7 +23,7 @@ function ensureDiscordConfigured(res) {
 function buildJwt(user) {
     return jwt.sign(
         {
-            id: user._id || user.id,
+            id: user.id,
             username: user.username,
             email: user.email || null,
             provider: user.provider || 'discord',
@@ -37,7 +37,7 @@ function buildJwt(user) {
 
 function toSafeUser(user) {
     return {
-        id: user._id || user.id,
+        id: user.id,
         username: user.username,
         email: user.email || null,
         provider: user.provider,
@@ -49,7 +49,7 @@ function toSafeUser(user) {
 
 router.post('/register', async (req, res) => {
     try {
-        if (mongoose.connection.readyState !== 1) {
+        if (!isDatabaseReady()) {
             return res.status(503).json({
                 success: false,
                 message: 'Database is currently unavailable'
@@ -65,9 +65,7 @@ router.post('/register', async (req, res) => {
             });
         }
 
-        const existingUser = await User.findOne({
-            $or: [{ email: email.toLowerCase() }, { username }]
-        }).lean();
+        const existingUser = await User.findExistingByEmailOrUsername(email.toLowerCase(), username);
 
         if (existingUser) {
             return res.status(409).json({
@@ -78,12 +76,10 @@ router.post('/register', async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
-        const user = await User.create({
+        const user = await User.createLocalUser({
             username,
             email: email.toLowerCase(),
-            password: hashedPassword,
-            provider: 'local',
-            isGuildMember: false
+            password: hashedPassword
         });
 
         const token = buildJwt(user);
@@ -104,7 +100,7 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     try {
-        if (mongoose.connection.readyState !== 1) {
+        if (!isDatabaseReady()) {
             return res.status(503).json({
                 success: false,
                 message: 'Database is currently unavailable'
@@ -120,13 +116,7 @@ router.post('/login', async (req, res) => {
             });
         }
 
-        const user = await User.findOne({
-            $or: [
-                { email: username.toLowerCase() },
-                { username },
-                { providerId: username }
-            ]
-        }).select('+password');
+        const user = await User.findByLogin(username.toLowerCase());
 
         if (!user || !user.password) {
             return res.status(401).json({
@@ -143,8 +133,7 @@ router.post('/login', async (req, res) => {
             });
         }
 
-        user.lastLoginAt = new Date();
-        await user.save();
+        await User.updateLastLogin(user.id);
 
         const token = buildJwt(user);
 
@@ -164,8 +153,8 @@ router.post('/login', async (req, res) => {
 
 router.get('/me', requireAuth, async (req, res) => {
     try {
-        if (mongoose.connection.readyState === 1) {
-            const dbUser = await User.findById(req.user.id).lean();
+        if (isDatabaseReady()) {
+            const dbUser = await User.findById(req.user.id);
             if (dbUser) {
                 return res.json({ success: true, user: toSafeUser(dbUser) });
             }
