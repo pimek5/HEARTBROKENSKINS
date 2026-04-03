@@ -1,0 +1,50 @@
+name: Posts Database Sync
+
+on:
+  repository_dispatch:
+    types: [save-posts]
+  workflow_dispatch:
+    inputs:
+      posts_data:
+        description: 'Posts data JSON to save'
+        required: true
+        type: string
+
+jobs:
+  save-posts:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Save posts data
+      run: |
+        echo "💾 Saving posts data to posts-database.json..."
+        
+        # Get the posts data from workflow input or event payload
+        if [ "${{ github.event.inputs.posts_data }}" != "" ]; then
+          echo "${{ github.event.inputs.posts_data }}" > posts-database.json
+        elif [ "${{ github.event.client_payload.posts_data }}" != "" ]; then
+          echo '${{ github.event.client_payload.posts_data }}' > posts-database.json
+        else
+          echo "❌ No posts data provided"
+          exit 1
+        fi
+        
+        echo "✅ Posts data saved to posts-database.json"
+        cat posts-database.json | head -20
+        
+    - name: Commit and push changes
+      run: |
+        git config --global user.name 'Posts Database Bot'
+        git config --global user.email 'posts-bot@heartbrokenskins.github.io'
+        git add posts-database.json
+        
+        if git diff --staged --quiet; then
+          echo "ℹ️ No changes in posts database"
+        else
+          git commit -m "Update posts database - $(date '+%Y-%m-%d %H:%M:%S')"
+          git push
+          echo "✅ Posts database updated and pushed to GitHub"
+        fi

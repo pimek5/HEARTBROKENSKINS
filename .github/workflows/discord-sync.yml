@@ -1,0 +1,143 @@
+name: Discord Data Sync
+
+on:
+  schedule:
+    # Uruchamiaj co 30 minut
+    - cron: '*/30 * * * *'
+  workflow_dispatch: # Pozwala na ręczne uruchomienie
+  push:
+    branches: [ main ]
+
+jobs:
+  sync-discord:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Create Discord sync script
+      run: |
+        cat << 'EOF' > discord-sync.js
+        const https = require('https');
+        const fs = require('fs');
+        
+        const DISCORD_TOKEN = process.env.DISCORD_BOT_TOKEN;
+        const GUILD_ID = '1284531138449231905'; // Twoje Guild ID
+        
+        // Funkcja do wykonywania requestów do Discord API
+        function discordRequest(endpoint) {
+          return new Promise((resolve, reject) => {
+            const options = {
+              hostname: 'discord.com',
+              path: `/api/v10${endpoint}`,
+              method: 'GET',
+              headers: {
+                'Authorization': `Bot ${DISCORD_TOKEN}`,
+                'Content-Type': 'application/json',
+                'User-Agent': 'HeartbrokenSkins/1.0'
+              }
+            };
+            
+            const req = https.request(options, (res) => {
+              let data = '';
+              
+              res.on('data', (chunk) => {
+                data += chunk;
+              });
+              
+              res.on('end', () => {
+                if (res.statusCode === 200) {
+                  try {
+                    resolve(JSON.parse(data));
+                  } catch (e) {
+                    reject(new Error(`JSON parse error: ${e.message}`));
+                  }
+                } else {
+                  reject(new Error(`HTTP ${res.statusCode}: ${data}`));
+                }
+              });
+            });
+            
+            req.on('error', reject);
+            req.end();
+          });
+        }
+        
+        async function fetchDiscordData() {
+          try {
+            console.log('Pobieranie danych Discord...');
+            
+            // Pobierz informacje o serwerze
+            const guild = await discordRequest(`/guilds/${GUILD_ID}?with_counts=true`);
+            
+            // Pobierz kanały
+            const channels = await discordRequest(`/guilds/${GUILD_ID}/channels`);
+            
+            // Pobierz informacje o boostach
+            const boosts = await discordRequest(`/guilds/${GUILD_ID}/premium-subscriptions`);
+            
+            // Policz różne typy kanałów
+            const textChannels = channels.filter(c => c.type === 0).length;
+            const voiceChannels = channels.filter(c => c.type === 2).length;
+            const totalChannels = textChannels + voiceChannels;
+            
+            // Przygotuj dane do eksportu
+            const discordData = {
+              serverName: guild.name,
+              memberCount: guild.approximate_member_count || guild.member_count || 0,
+              onlineMembers: guild.approximate_presence_count || 0,
+              totalChannels: totalChannels,
+              textChannels: textChannels,
+              voiceChannels: voiceChannels,
+              boostLevel: guild.premium_tier || 0,
+              boostCount: guild.premium_subscription_count || 0,
+              lastUpdated: new Date().toISOString(),
+              ownerId: guild.owner_id,
+              serverIcon: guild.icon,
+              features: guild.features || []
+            };
+            
+            console.log('Dane Discord pobrane:', discordData);
+            
+            // Zapisz do pliku JSON
+            fs.writeFileSync('discord-data.json', JSON.stringify(discordData, null, 2));
+            console.log('discord-data.json utworzony pomyślnie');
+            
+            // Stwórz również plik JavaScript z danymi
+            const jsContent = `// Automatycznie wygenerowane dane Discord - ${new Date().toISOString()}
+        window.discordData = ${JSON.stringify(discordData, null, 2)};`;
+            
+            fs.writeFileSync('scripts/discord-data.js', jsContent);
+            console.log('scripts/discord-data.js utworzony pomyślnie');
+            
+          } catch (error) {
+            console.error('Błąd podczas pobierania danych Discord:', error);
+            process.exit(1);
+          }
+        }
+        
+        fetchDiscordData();
+        EOF
+        
+    - name: Run Discord sync
+      env:
+        DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+      run: node discord-sync.js
+      
+    - name: Commit and push if changed
+      run: |
+        git config --global user.name 'Discord Sync Bot'
+        git config --global user.email 'discord-sync@heartbrokenskins.github.io'
+        git add discord-data.json scripts/discord-data.js
+        if git diff --staged --quiet; then
+          echo "Brak zmian w danych Discord"
+        else
+          git commit -m "Update Discord data - $(date '+%Y-%m-%d %H:%M:%S')"
+          git push
+        fi
