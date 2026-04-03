@@ -180,10 +180,10 @@ router.get('/me', requireAuth, async (req, res) => {
     }
 });
 
-router.get('/discord', passport.authenticate('discord'));
+router.get('/discord', passport.authenticate('discord', { session: false }));
 
 router.get('/discord/callback', (req, res, next) => {
-    passport.authenticate('discord', (err, user, info) => {
+    passport.authenticate('discord', { session: false }, (err, user, info) => {
         if (err) {
             return next(err);
         }
@@ -211,8 +211,6 @@ router.post('/logout', (req, res) => {
     if (typeof req.logout === 'function') {
         req.logout(() => {});
     }
-
-    req.session?.destroy(() => {});
 
     return res.json({
         success: true,
