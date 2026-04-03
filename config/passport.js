@@ -3,6 +3,12 @@ const { Strategy: DiscordStrategy } = require('passport-discord');
 const mongoose = require('mongoose');
 const User = require('../models/User');
 
+const isDiscordConfigured = Boolean(
+    process.env.DISCORD_CLIENT_ID
+    && process.env.DISCORD_CLIENT_SECRET
+    && process.env.DISCORD_CALLBACK_URL
+);
+
 async function checkGuildMembership(discordUserId) {
     const guildId = process.env.DISCORD_REQUIRED_GUILD_ID;
     const botToken = process.env.DISCORD_BOT_TOKEN;
@@ -59,54 +65,60 @@ passport.deserializeUser(async (id, done) => {
     }
 });
 
-passport.use(
-    new DiscordStrategy(
-        {
-            clientID: process.env.DISCORD_CLIENT_ID,
-            clientSecret: process.env.DISCORD_CLIENT_SECRET,
-            callbackURL: process.env.DISCORD_CALLBACK_URL,
-            scope: ['identify', 'email']
-        },
-        async (accessToken, refreshToken, profile, done) => {
-            try {
-                const membership = await checkGuildMembership(profile.id);
+if (isDiscordConfigured) {
+    passport.use(
+        new DiscordStrategy(
+            {
+                clientID: process.env.DISCORD_CLIENT_ID,
+                clientSecret: process.env.DISCORD_CLIENT_SECRET,
+                callbackURL: process.env.DISCORD_CALLBACK_URL,
+                scope: ['identify', 'email']
+            },
+            async (accessToken, refreshToken, profile, done) => {
+                try {
+                    const membership = await checkGuildMembership(profile.id);
 
-                if (!membership.allowed) {
-                    return done(null, false, { message: membership.reason });
+                    if (!membership.allowed) {
+                        return done(null, false, { message: membership.reason });
+                    }
+
+                    const baseUserData = {
+                        username: profile.username || `discord_${profile.id}`,
+                        email: profile.email || undefined,
+                        provider: 'discord',
+                        providerId: profile.id,
+                        discordId: profile.id,
+                        avatar: profile.avatar
+                            ? `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.png`
+                            : '',
+                        isGuildMember: true,
+                        lastLoginAt: new Date()
+                    };
+
+                    if (mongoose.connection.readyState !== 1) {
+                        return done(null, {
+                            id: profile.id,
+                            ...baseUserData
+                        });
+                    }
+
+                    const user = await User.findOneAndUpdate(
+                        { provider: 'discord', providerId: profile.id },
+                        { $set: baseUserData },
+                        { new: true, upsert: true }
+                    );
+
+                    return done(null, user);
+                } catch (error) {
+                    return done(error, null);
                 }
-
-                const baseUserData = {
-                    username: profile.username || `discord_${profile.id}`,
-                    email: profile.email || undefined,
-                    provider: 'discord',
-                    providerId: profile.id,
-                    discordId: profile.id,
-                    avatar: profile.avatar
-                        ? `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.png`
-                        : '',
-                    isGuildMember: true,
-                    lastLoginAt: new Date()
-                };
-
-                if (mongoose.connection.readyState !== 1) {
-                    return done(null, {
-                        id: profile.id,
-                        ...baseUserData
-                    });
-                }
-
-                const user = await User.findOneAndUpdate(
-                    { provider: 'discord', providerId: profile.id },
-                    { $set: baseUserData },
-                    { new: true, upsert: true }
-                );
-
-                return done(null, user);
-            } catch (error) {
-                return done(error, null);
             }
-        }
-    )
-);
+        )
+    );
+} else {
+    console.warn('Discord OAuth is disabled because required environment variables are missing.');
+}
+
+passport.isDiscordConfigured = isDiscordConfigured;
 
 module.exports = passport;

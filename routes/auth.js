@@ -8,6 +8,18 @@ const { requireAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
+function ensureDiscordConfigured(res) {
+    if (passport.isDiscordConfigured) {
+        return true;
+    }
+
+    res.status(503).json({
+        success: false,
+        message: 'Discord OAuth is not configured on the server'
+    });
+    return false;
+}
+
 function buildJwt(user) {
     return jwt.sign(
         {
@@ -180,9 +192,19 @@ router.get('/me', requireAuth, async (req, res) => {
     }
 });
 
-router.get('/discord', passport.authenticate('discord', { session: false }));
+router.get('/discord', (req, res, next) => {
+    if (!ensureDiscordConfigured(res)) {
+        return;
+    }
+
+    return passport.authenticate('discord', { session: false })(req, res, next);
+});
 
 router.get('/discord/callback', (req, res, next) => {
+    if (!ensureDiscordConfigured(res)) {
+        return;
+    }
+
     passport.authenticate('discord', { session: false }, (err, user, info) => {
         if (err) {
             return next(err);
